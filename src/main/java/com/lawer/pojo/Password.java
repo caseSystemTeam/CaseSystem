@@ -13,6 +13,7 @@ public class Password {
 		this.ps2 = ps2;
 		this.ps3 = ps3;
 	}
+
 	@Override
 	public String toString() {
 		return "password [ps1=" + ps1 + ", ps2=" + ps2 + ", ps3=" + ps3 + "]";
