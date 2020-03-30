@@ -12,34 +12,39 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.lawer.pojo.User;
 import com.lawer.pojo.Password;
 import com.lawer.service.UserService;
+import org.springframework.web.bind.annotation.RestController;
 
 @Controller
+@RequestMapping("userCon")
 public class UserController {
 	@Autowired
 	private UserService loginService;
 	
 	//跳转到登录页面
-	@RequestMapping("login.action")
+	@RequestMapping("login")
 	public String Login(){
-		return "jsp/login.jsp";
+		return "html/login";
+	}
+	//跳转到登录页面
+	@RequestMapping("register")
+	public String Register(){
+		return "html/register";
 	}
 	//判断用户是否成功登录
-	@RequestMapping("index.action")
-	public String loginCheck(User us,HttpServletRequest request){
-		User user=loginService.findUser(us);  //判断数据库中是否存在该用户
-		if(user!=null){
-			request.getSession().setAttribute("us", user);
-			return "/jsp/index.jsp";
-			
+	@RequestMapping("index")
+	@ResponseBody
+	public String loginCheck(@RequestBody User us,HttpServletRequest request){
+//		User user=loginService.findUser(us);  //判断数据库中是否存在该用户
+		if(us!=null && us.getUsername().equals("lawer") && us.getPassword().equals("123")){
+			request.getSession().setAttribute("us", us);
+			return "1";
 		}
-		String error="用户名或密码错误";
-		request.setAttribute("error", error);
-		return "/jsp/login.jsp";
+		return "0";
 		
 	}
 	//跳转到主页
-	@RequestMapping("toindex.action")
-	public String toIndex(User us,HttpServletRequest request){
+	@RequestMapping("toindex")
+	public String toIndex(@RequestBody User us,HttpServletRequest request){
 		
 		return "/jsp/index.jsp";
 		
