@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-
+@Mapper
 public interface UserMapper {
 	public User findUser(User user);//查找用户
 	public int updatePs(User user);  //修改密码
