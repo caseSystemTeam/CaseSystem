@@ -14,6 +14,11 @@ import com.lawer.pojo.Password;
 import com.lawer.service.UserService;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 用户管理
+ * @author 张涛
+ * date: 2020.3.30 14:23:48
+ */
 @Controller
 @RequestMapping("userCon")
 public class UserController {
@@ -44,10 +49,8 @@ public class UserController {
 	}
 	//跳转到主页
 	@RequestMapping("toindex")
-	public String toIndex(@RequestBody User us,HttpServletRequest request){
-		
-		return "/jsp/index.jsp";
-		
+	public String toIndex(){
+		return "/html/frame";
 	}
 	//退出登录
 	@RequestMapping("logout.action")
