@@ -23,75 +23,37 @@
     <link rel="stylesheet" type="text/css" href="/css/model/base.css">
     <link rel="stylesheet" type="text/css" href="/css/model/iconfont.css">
     <script type="text/javascript" src="/framework/jquery-1.11.3.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/layui/css/layui.css">
-
-    <link rel="stylesheet" type="text/css" href="/layui/css/layui.css">
     <script type="text/javascript" src="/layui/layui.js"></script>
-    <script type="text/javascript" src="/js/vue.js"></script>
     <!-- 滚动条插件 -->
-    <link rel="stylesheet" type="text/css" href="/css/model/jquery.mCustomScrollbar.css">
-    <script src="/framework/jquery-ui-1.10.4.min.js"></script>
-    <script src="/framework/jquery.mousewheel.min.js"></script>
-    <script src="/framework/jquery.mCustomScrollbar.min.js"></script>
-    <script src="/framework/cframe.js"></script><!-- 仅供所有子页面使用 -->
+    <link rel="stylesheet" type="text/css" href="../../css/model/jquery.mCustomScrollbar.css">
+    <script src="../../framework/jquery-ui-1.10.4.min.js"></script>
+    <script src="../../framework/jquery.mousewheel.min.js"></script>
+    <script src="../../framework/jquery.mCustomScrollbar.min.js"></script>
+    <script src="../../framework/cframe.js"></script><!-- 仅供所有子页面使用 -->
     <!-- 公共样式 结束 -->
+    <link rel="stylesheet" type="text/css" src="../../elementui/css/elementui.css">
 
-    <!--本页的js文件 -->
-    <script src="/pagejs/casePlan.js"></script>
-
-
-    <style>
-        .layui-form{
-            margin-right: 30%;
-        }
-        .layui-form-label{
-            width: 100px;
-        }
-        .layui-input-block{
-            margin-left: 130px;
-        }
-    </style>
 
 </head>
 
 <body>
-    <div id="app">
-		
 
-        <button type="button" class="layui-btn" v-on:click="uploadFile" id="SingleUploadFile"><i class="layui-icon"></i>上传文件</button>
-		 
-		<div class="layui-upload">
-		  <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button> 
-		  <div class="layui-upload-list">
-		    <table class="layui-table">
-		      <thead>
-		        <tr><th>文件名</th>
-		        <th>大小</th>
-		        <th>状态</th>
-		        <th>操作</th>
-		      </tr></thead>
-		      <tbody id="demoList"></tbody>
-		    </table>
-		  </div>
-		  <button type="button" class="layui-btn" id="testListAction">开始上传</button>
-		</div> 
+    <div id="app" class="cBody">
+
+
 
     </div>
+    <!--app结束 -->
+
+    <!--本页的js文件 要放在最后，因为vue是挂在div后边的，要先加载div才能用vue -->
+    <script type="text/javascript" src="/elementui/js/vue.js"></script>
+    <script type="text/javascript" src="/elementui/js/elementui.js"></script>
+    <script type="text/javascript" src="/elementui/js/axios.js"></script>
+    <!--本页的JS文件 -->
+    <script src="/pagejs/casePlan.js"></script>
     
     <script>
-    	// //拖拽上传
-        // layui.use('upload', function() {
-        //     var upload = layui.upload;
-        //     upload.render({
-        //         elem: '#SingleUploadFile'
-        //         , url: 'case/SingleUpload' //改成您自己的上传接口
-        //         , done: function (res) {
-        //             layer.msg('上传成功');
-        //             layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', res.files.file);
-        //             console.log(res)
-        //         }
-        //     });
-        // });
+
     	
     </script>
 </body>
