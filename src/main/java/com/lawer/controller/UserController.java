@@ -3,6 +3,8 @@ package com.lawer.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.lawer.pojo.BusUser;
+import com.lawer.pojo.Business;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +16,8 @@ import com.lawer.pojo.Password;
 import com.lawer.service.UserService;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 /**
  * 用户管理
  * @author 张涛
@@ -23,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("userCon")
 public class UserController {
 	@Autowired
-	private UserService loginService;
+	private UserService userService;
 	
 	//跳转到登录页面
 	@RequestMapping("login")
@@ -39,11 +43,12 @@ public class UserController {
 	@RequestMapping("index")
 	@ResponseBody
 	public String loginCheck(@RequestBody User us,HttpServletRequest request){
-//		User user=loginService.findUser(us);  //判断数据库中是否存在该用户
-		if(us!=null && us.getUsername().equals("lawer") && us.getPassword().equals("123")){
-			request.getSession().setAttribute("us", us);
+		User user=userService.findUser(us);  //判断数据库中是否存在该用户
+		if(user!=null && us.getUsername().equals(user.getUsername())&&us.getPassword().equals(user.getPassword())){
+			request.getSession().setAttribute("us",user);
 			return "1";
 		}
+
 		return "0";
 		
 	}
@@ -53,11 +58,47 @@ public class UserController {
 		return "/html/frame";
 	}
 	//退出登录
-	@RequestMapping("logout.action")
+	@RequestMapping("logout")
 	public String Logout(HttpSession httpSession){
 		httpSession.invalidate();   //清除session数据
-		return "/jsp/login.jsp";
+		return "/html/login";
 	}
+
+	//检查用户名是否存在
+	@RequestMapping("checkName")
+	@ResponseBody
+	public String checkUserName(String username,HttpServletRequest request){
+
+		return userService.checkUserName(username);
+	}
+
+	//企业用户注册
+	@RequestMapping(value = "addBusUser")
+	@ResponseBody
+	public int addBusUser(@RequestBody BusUser busUser,HttpServletRequest request){
+		String userId = UUID.randomUUID().toString();
+		String businessId = UUID.randomUUID().toString();
+		User user =new User();
+		Business bus = new Business();
+		user.setId(userId);
+		user.setUsername(busUser.getUsername());
+		user.setName(busUser.getZname());
+		user.setPassword(busUser.getPassword());
+		user.setGender(busUser.getGender());
+		user.setPhonenumber(busUser.getPhoneNumber());
+		user.setBusId(businessId);
+        bus.setId(businessId);
+        bus.setLawerid(userId);
+        bus.setLawerName(busUser.getZname());
+        bus.setName(busUser.getName());
+        bus.setTelphone(busUser.getPhoneNumber());
+		if( userService.addBusiness(bus)==0 || userService.addUser(user)==0){
+			return 0;
+		}
+
+		return 1;
+	}
+
 	//修改密码
 	@RequestMapping("updateps.action")
 	@ResponseBody
@@ -69,7 +110,7 @@ public class UserController {
 			//将用户密码修改成新密码
 			user.setPassword(ps.getPs2());
 			//修改数据库中的用户密码
-			int i=loginService.updatePs(user);
+			int i=userService.updatePs(user);
 			session.setAttribute("us", user);
 			return i;
 		}
@@ -95,7 +136,7 @@ public class UserController {
 	@ResponseBody
 	public int upInfor(@RequestBody User user,HttpSession session,HttpServletRequest request){
 		
-		int i=loginService.upinfor(user);
+		int i=userService.upinfor(user);
 		return i;
 	}
 

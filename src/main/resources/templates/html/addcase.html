@@ -23,6 +23,7 @@
     <script type="text/javascript" src="/framework/jquery-1.11.3.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/layui/css/layui.css">
     <script type="text/javascript" src="/layui/layui.js"></script>
+
     <!-- 滚动条插件 -->
     <link rel="stylesheet" type="text/css" href="/css/model/jquery.mCustomScrollbar.css">
     <script src="/framework/jquery-ui-1.10.4.min.js"></script>
@@ -49,67 +50,20 @@
 <div class="cBody">
     <form id="addForm" class="layui-form" action="">
         <div class="layui-form-item">
-            <label class="layui-form-label">分管名称</label>
-            <div class="layui-input-block">
-                <input type="text" name="title" required lay-verify="required|ZHCheck" placeholder="例:穷在闹市银川(只允许输入中文)" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">地区</label>
-            <div class="layui-input-inline">
-                <select name="provid" id="provid" lay-filter="provid">
-                </select>
-            </div>
-            <div class="layui-input-inline">
-                <select name="cityid" id="cityid" lay-filter="cityid">
-                    <option value="">请选择市</option>
-                </select>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">负责人</label>
+            <label class="layui-form-label">案件名称</label>
             <div class="layui-input-inline shortInput">
-                <input type="text" name="realName" required lay-verify="required|ZHCheck" placeholder="例:张三(只允许输入中文)" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item layui-form-text">
-            <label class="layui-form-label">备注</label>
-            <div class="layui-input-block">
-                <textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+                <input type="text" name="title" required lay-verify="required|ZHCheck" placeholder="请输入案件名称" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">是否开通</label>
-            <div class="layui-input-block">
-                <input type="radio" name="sex" value="nan" title="启用" checked>
-                <input type="radio" name="sex" value="nv" title="禁用">
+            <label class="layui-form-label">拟定金额</label>
+            <div class="layui-input-inline shortInput">
+                <input type="text" name="money" required lay-verify="required|ZHCheck" placeholder="请输入金额" autocomplete="off"  class="layui-input" >
             </div>
         </div>
-        <script>
-            //初始化加载radio选中状态
-            //					$(function(){
-            //						$('[name=sex]').each(function(i,item){
-            //							console.log($(item).val())
-            //						    if($(item).val()=="nv"){
-            //						        $(item).prop('checked',true);
-            //						    }
-            //						});
-            //					})
-            function changeRadio(){
-                $('[name=sex]').each(function(i,item){
-                    console.log($(item).val())
-                    if($(item).val()=="nv"){
-                        $(item).prop('checked',true);
-                        layui.use('form',function(){
-                            var form = layui.form;
-                            form.render();
-                        });
-                    }
-                });
-            }
-        </script>
+
         <div class="layui-form-item layui-form-text">
-            <label class="layui-form-label">富文本编辑器</label>
+            <label class="layui-form-label">案件详情</label>
             <div class="layui-input-block">
                 <textarea id="editor" style="display: none;"></textarea>
                 <script>
@@ -153,43 +107,40 @@
 
 
         <div class="layui-form-item">
+            <label class="layui-form-label">负责人</label>
+            <div class="layui-input-inline shortInput">
+                <input type="text" name="realName" required lay-verify="required|ZHCheck" placeholder="例:张三(只允许输入中文)" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">组长</label>
+            <div class="layui-input-inline shortInput">
+                <input type="text" name="realName" required lay-verify="required|ZHCheck" placeholder="例:张三(只允许输入中文)" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">成员1</label>
+            <div class="layui-input-inline shortInput">
+                <input type="text" name="realName" required lay-verify="required|ZHCheck" placeholder="例:张三(只允许输入中文)" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">成员2</label>
+            <div class="layui-input-inline shortInput">
+                <input type="text" name="realName" required lay-verify="required|ZHCheck" placeholder="例:张三(只允许输入中文)" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
             <div class="layui-input-block">
                 <button class="layui-btn" lay-submit lay-filter="submitBut">立即提交</button>
                 <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-                <a class="layui-btn" href="javascript:changeRadio()">radio</a>
+
             </div>
         </div>
     </form>
-
-    <!-- 三级省市 插件 -->
-    <script src="/framework/area.js"></script>
-    <script src="/framework/province.js"></script>
-    <script>
-        layui.use('form', function() {
-            var form = layui.form;
-            //监听提交
-            form.on('submit(submitBut)', function(data) {
-                layer.msg(JSON.stringify(data.field));
-                return false;
-            });
-            form.verify({
-                //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
-                ZHCheck: [
-                    /^[\u0391-\uFFE5]+$/
-                    ,'只允许输入中文'
-                ]
-            });
-        });
-        //默认城市为：宁夏 - 银川
-        var defaults = {
-            s1: 'provid',
-            s2: 'cityid',
-            s3: 'areaid',
-            v1: 510000,
-            v2: 510100,
-            v3: null
-        };
-    </script>
 
 </div>
 </body>

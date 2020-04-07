@@ -59,4 +59,18 @@ select name from laweruser where id=#{lawerid}
 select * from laweruser where id=#{id}
 </select>
 
+ <select id="checkUserName" parameterType="string" resultType="user">
+  select * from laweruser where username =#{username}
+ </select>
+
+ <insert id="addBusiness" parameterType="business" >
+  insert into business(id,name,lawerid,lawername,telphone)
+  values(#{id},#{name},#{lawerid},#{lawerName},#{telphone})
+ </insert>
+
+ <insert id="addUser" parameterType="user">
+  insert into laweruser(id,username,name,password,gender,phonenumber,busid)
+  values (#{id},#{username},#{name},#{password},#{gender},#{phonenumber},#{busId})
+ </insert>
+
 </mapper>
