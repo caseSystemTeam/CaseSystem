@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+    <meta name="renderer" content="webkit">
+    <!--国产浏览器高速模式-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- 作者 -->
+    <meta name="author" content="穷在闹市" />
+    <!-- 定义页面的最新版本 -->
+    <meta name="revised" content="穷在闹市.v3, 2019/05/01" />
+    <!-- 网站简介 -->
+    <meta name="description" content="网站简介" />
+    <meta name="keywords" content="搜索关键字，以半角英文逗号隔开" />
+
+    <title>案件执行进度</title>
+
+    <!-- 公共样式 开始 -->
+    <link rel="stylesheet" type="text/css" href="/css/model/base.css">
+    <link rel="stylesheet" type="text/css" href="/css/model/iconfont.css">
+    <script type="text/javascript" src="/framework/jquery-1.11.3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/layui/css/layui.css">
+    <script type="text/javascript" src="/layui/layui.js"></script>
+    <!-- 滚动条插件 -->
+    <link rel="stylesheet" type="text/css" href="../../css/model/jquery.mCustomScrollbar.css">
+    <script src="../../framework/jquery-ui-1.10.4.min.js"></script>
+    <script src="../../framework/jquery.mousewheel.min.js"></script>
+    <script src="../../framework/jquery.mCustomScrollbar.min.js"></script>
+    <script src="../../framework/cframe.js"></script><!-- 仅供所有子页面使用 -->
+    <!-- 公共样式 结束 -->
+    <!-- ElementUI的样式文件，以及自定义的样式文件-->
+    <link rel="stylesheet" type="text/css" href="/elementui/css/elementui.css">
+    <link rel="stylesheet" type="text/css" href="/css/MyBase.css">
+
+
+</head>
+
+<body>
+
+    <div id="app" class="cBody">
+
+        <el-steps :active="3" align-center>
+            <el-step title="咨询结果" description="这是一段很长很长很长的描述性文字"></el-step>
+            <el-step title="律师分配" description="这是一段很长很长很长的描述性文字"></el-step>
+            <el-step title="诉状书写" description="这是一段很长很长很长的描述性文字"></el-step>
+            <el-step title="立案审理" description="这是一段很长很长很长的描述性文字"></el-step>
+            <el-step title="开庭审判" description="这是一段很长很长很长的描述性文字"></el-step>
+            <el-step title="庭审结果" description="这是一段很长很长很长的描述性文字"></el-step>
+        </el-steps>
+        <!--咨询结果卡片开始 -->
+        <div class="common-position">
+            <el-card class="box-card">
+                <div slot="header" class="clearfix">
+                    <span>咨询结果</span>
+                    <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+                </div>
+                <div class="text item">
+                    <!--卡片内容 开始 -->
+
+                    <el-form label-position="right" label-width="120px">
+
+                        <el-form-item label="提交人：">
+                            <!-- el-col是element-UI的布局组件-->
+                            <el-col :span="8">
+                                <el-input ></el-input>
+                            </el-col>
+                        </el-form-item>
+
+                        <el-form-item label="提交时间：">
+                            <el-col :span="8">
+                                <el-input ></el-input>
+                            </el-col>
+                        </el-form-item>
+
+                        <el-form-item label="涉案金额：">
+                            <el-col :span="8">
+                                <el-input >
+                                    <template slot="append">元</template>
+                                </el-input>
+                            </el-col>
+                        </el-form-item>
+
+                        <el-form-item label="咨询结果：">
+                            <el-col :span="16">
+                                <textarea id="editor" style="display: none;"></textarea>
+                            </el-col>
+                        </el-form-item>
+                    </el-form>
+
+                    <!--卡片内容 结束 -->
+                </div>
+            </el-card>
+        </div>
+
+        <!--咨询结果卡片结束 -->
+
+
+        <!--律师分配卡片开始 -->
+        <div class="common-position">
+            <el-card class="box-card">
+                <div slot="header" class="clearfix">
+                    <span>律师分配</span>
+                    <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+                </div>
+                <div class="text item">
+                    <!-- 卡片开始内容-->
+
+                    <el-form ref="form" :model="form" label-width="120px">
+                        <el-row>
+                        <el-col :span="6"><div class="grid-content bg-purple"></div>
+                            <el-form-item label="选择组长：">
+                                <el-select v-model="value" placeholder="请选择">
+                                    <el-option>
+
+                                    </el-option>
+                                </el-select>
+                            </el-form-item >
+
+                            </el-col>
+                            <el-col :span="6"><div class="grid-content bg-purple-light"></div></el-col>
+                            <el-col :span="6"><div class="grid-content bg-purple"></div>
+                                <el-form-item label="组员1：">
+                                    <el-select v-model="value" placeholder="请选择">
+                                        <el-option>
+
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item >
+                            </el-col>
+                            <el-col :span="6"><div class="grid-content bg-purple-light"></div></el-col>
+                        </el-row>
+
+                        <el-row>
+                            <el-col :span="6"><div class="grid-content bg-purple"></div>
+                                <el-form-item label="组员2：">
+                                    <el-select v-model="value" placeholder="请选择">
+                                        <el-option>
+
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item >
+
+                            </el-col>
+                            <el-col :span="6"><div class="grid-content bg-purple-light"></div></el-col>
+                            <el-col :span="6"><div class="grid-content bg-purple"></div>
+                                <el-form-item label="组员3：">
+                                    <el-select v-model="value" placeholder="请选择">
+                                        <el-option>
+
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item >
+                            </el-col>
+                            <el-col :span="6"><div class="grid-content bg-purple-light"></div></el-col>
+                        </el-row>
+
+                        <el-row type="flex" class="row-bg" justify="center">
+                            <el-col :span="6"><div class="grid-content"></div>
+                                <el-button type="primary" @click="onSubmit">提交选择</el-button>
+                            </el-col>
+                        </el-row>
+
+                    </el-form>
+
+                    <!-- 卡片结束内容-->
+                </div>
+            </el-card>
+
+        </div>
+        <!--律师分配卡片结束 -->
+
+
+        <!--诉状书写卡片开始 -->
+        <div class="common-position">
+            <el-card class="box-card">
+                <div slot="header" class="clearfix">
+                    <span>诉状书写</span>
+                    <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+                </div>
+                <div class="text item">
+                    <!-- 卡片开始内容-->
+
+                    <el-card class="box-card">
+                        <el-row>
+                            <el-col :span="12"><div class="grid-content bg-purple"></div>
+                                <el-upload
+                                        class="upload-demo"
+                                        drag
+                                        action="https://jsonplaceholder.typicode.com/posts/"
+                                        multiple>
+                                    <i class="el-icon-upload"></i>
+                                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                                    <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                                </el-upload>
+
+                            </el-col>
+                            <el-col :span="12"><div class="grid-content bg-purple-light"></div>
+                                <!--当前案件下需要的文件列表 -->
+                                <el-card class="box-card">
+                                    <el-table
+                                            style="width: 100%">
+                                        <el-table-column
+                                                label="文件名"
+                                                width="180">
+                                        </el-table-column>
+                                        <el-table-column
+                                                label="上传日期"
+                                                width="180">
+                                        </el-table-column>
+                                        <el-table-column
+                                                label="上传人">
+                                        </el-table-column>
+                                        <el-table-column
+                                                label="操作">
+                                        </el-table-column>
+                                    </el-table>
+                                </el-card>
+                            </el-col>
+                        </el-row>
+                    </el-card>
+
+                    <div class="common-position">
+                        <el-card class="box-card">
+                            <el-table
+                                    style="width: 100%">
+                                <el-table-column
+                                        label="版本"
+                                        width="180">
+                                </el-table-column>
+                                <el-table-column
+                                        label="操作人"
+                                        width="180">
+                                </el-table-column>
+                                <el-table-column
+                                        label="状态">
+                                </el-table-column>
+                                <el-table-column
+                                        label="修改意见">
+                                </el-table-column>
+                            </el-table>
+                        </el-card>
+                    </div>
+
+
+
+
+
+
+
+
+
+                    <!-- 卡片结束内容-->
+                </div>
+            </el-card>
+
+        </div>
+
+        <!--诉状书写卡片结束 -->
+
+
+        <!--立案审理卡片开始 -->
+        <div class="common-position">
+            <el-card class="box-card">
+                <div slot="header" class="clearfix">
+                    <span>通用模板</span>
+                    <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+                </div>
+                <div class="text item">
+                    <!-- 卡片开始内容-->
+
+                    <!-- 卡片结束内容-->
+                </div>
+            </el-card>
+
+        </div>
+        <!--立案审理卡片结束 -->
+
+
+    </div>
+    <!--app结束 -->
+</body>
+
+    <!--本页的js文件 要放在最后，因为vue是挂在div后边的，要先加载div才能用vue -->
+    <script type="text/javascript" src="/elementui/js/vue.js"></script>
+    <script type="text/javascript" src="/elementui/js/elementui.js"></script>
+    <script type="text/javascript" src="/elementui/js/axios.js"></script>
+    <!--本页的JS文件 -->
+    <script src="/pagejs/casePlan.js"></script>
+
+    <script>
+        layui.use('layedit', function(){
+            var layedit = layui.layedit;
+            layedit.build('editor',{
+                tool:[]
+            }); //建立编辑器
+        });
+
+
+    </script>
+
+
+</html>
