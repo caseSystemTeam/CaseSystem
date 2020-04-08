@@ -1,6 +1,8 @@
 package com.lawer.controller;
 
 import com.lawer.pojo.CaseFile;
+import com.lawer.service.CommonService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,17 +15,17 @@ import java.util.List;
 @RequestMapping("comm")
 public class CommonController {
 
+    @Autowired
+    CommonService commonService;
     @RequestMapping("/SingleUpload")
     public String SingleUpload(@RequestParam("caseId") String caseId, @RequestParam("uploadfile") List<MultipartFile> uploadfile
             , HttpServletRequest request){
-
         FileUpAndDown fileCon = new FileUpAndDown();
-        int id = Integer.valueOf(caseId);
-        CaseFile lf = fileCon.fileUpLoad(id, uploadfile, request);
+        CaseFile lf = fileCon.fileUpLoad(caseId, uploadfile, request);
 
         if(lf!=null) {
-            //lawfileService.addFile(lf);
+            commonService.addFile(lf);
         }
-        return "forward:anjianProgress.action?id="+id;
+        return "forward:userCon/toindex";
     }
 }

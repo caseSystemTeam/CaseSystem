@@ -1,29 +1,29 @@
 package com.lawer.pojo;
 
 public class CaseFile {
-    private int id;
-    private int fielid;
+    private String id;
+    private String fileid;
     private String filename;
     private String url;
     private String createTime;
-    private int caseId;
-    private int upId;
+    private String caseId;
+    private String upId;
     private String type;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public int getFielid() {
-        return fielid;
+    public String getFielid() {
+        return fileid;
     }
 
-    public void setFielid(int fielid) {
-        this.fielid = fielid;
+    public void setFielid(String fielid) {
+        this.fileid = fielid;
     }
 
     public String getFilename() {
@@ -50,19 +50,19 @@ public class CaseFile {
         this.createTime = createTime;
     }
 
-    public int getCaseId() {
+    public String getCaseId() {
         return caseId;
     }
 
-    public void setCaseId(int caseId) {
+    public void setCaseId(String caseId) {
         this.caseId = caseId;
     }
 
-    public int getUpId() {
+    public String getUpId() {
         return upId;
     }
 
-    public void setUpId(int upId) {
+    public void setUpId(String upId) {
         this.upId = upId;
     }
 
@@ -78,7 +78,7 @@ public class CaseFile {
     public String toString() {
         return "CaseFile{" +
                 "id=" + id +
-                ", fielid=" + fielid +
+                ", fileid=" + fileid +
                 ", filename='" + filename + '\'' +
                 ", url='" + url + '\'' +
                 ", createTime='" + createTime + '\'' +

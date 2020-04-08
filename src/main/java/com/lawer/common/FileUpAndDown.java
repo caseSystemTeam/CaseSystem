@@ -11,12 +11,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 public class FileUpAndDown {
 
-	public CaseFile fileUpLoad(int id, List<MultipartFile> uploadfile, HttpServletRequest request) {
+	public CaseFile fileUpLoad(String caseId, List<MultipartFile> uploadfile, HttpServletRequest request) {
 		//判断上传的文件是否存在
 			String originalFileName;
 			String dirPath ;
@@ -39,15 +41,20 @@ public class FileUpAndDown {
 								}
 							}
 							//构建新的文件名字
-							newFileName = String.valueOf(id)+"_"+UUID.randomUUID()+"_"+originalFileName;
+							newFileName = caseId+"_"+UUID.randomUUID()+"_"+originalFileName;
 							try {
 								//上传至指定位置
 								fileurl = dirPath+newFileName ;
 								file.transferTo(new File(fileurl));
 								//构建返回数据
-								lf.setFielid(id);
+								lf.setFielid(UUID.randomUUID().toString());
+								lf.setCaseId(caseId);
 								lf.setFilename(originalFileName);
 								lf.setUrl(fileurl);
+								Date now=new Date();
+								SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+								String time=dateFormat.format(now);
+								lf.setCreateTime(time);
 							}catch(Exception e) {
 								e.printStackTrace();
 								

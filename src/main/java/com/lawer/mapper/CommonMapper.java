@@ -1,6 +1,7 @@
 package com.lawer.mapper;
 
 import com.lawer.pojo.CaseFile;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 

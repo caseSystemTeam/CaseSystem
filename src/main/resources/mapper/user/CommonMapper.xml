@@ -10,8 +10,8 @@
 	
 	<!-- 根据案件ID添加新的文件路径信息 -->
 	<insert id="addFile" parameterType="com.lawer.pojo.CaseFile" >
-		insert into file (caseId,filename,url)
-		values(#{caseId},#{filename},#{url})
+		insert into file (caseId,fileid,filename,url,createTime)
+		values(#{caseId},#{fileid},#{filename},#{url},#{createTime})
 	</insert>
 	
 	<!-- 根据案件ID删除该案件下的文件路径信息 -->

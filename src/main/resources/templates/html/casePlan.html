@@ -189,9 +189,12 @@
                             <el-col :span="12"><div class="grid-content bg-purple"></div>
                                 <el-upload
                                         class="upload-demo"
-                                        drag
-                                        action="https://jsonplaceholder.typicode.com/posts/"
-                                        multiple>
+                                        :drag="true"
+                                        action="/comm/SingleUpload"
+                                        :before-upload="beforeFileUpload"
+                                        :data="{'caseId':'2'}"
+                                        name="uploadfile"
+                                        >
                                     <i class="el-icon-upload"></i>
                                     <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                                     <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
@@ -202,16 +205,20 @@
                                 <!--当前案件下需要的文件列表 -->
                                 <el-card class="box-card">
                                     <el-table
+                                            :data="fileList"
                                             style="width: 100%">
                                         <el-table-column
+                                                prop="filename"
                                                 label="文件名"
                                                 width="180">
                                         </el-table-column>
                                         <el-table-column
+                                                prop="createTime"
                                                 label="上传日期"
                                                 width="180">
                                         </el-table-column>
                                         <el-table-column
+                                                prop="upId"
                                                 label="上传人">
                                         </el-table-column>
                                         <el-table-column
@@ -226,6 +233,7 @@
                     <div class="common-position">
                         <el-card class="box-card">
                             <el-table
+
                                     style="width: 100%">
                                 <el-table-column
                                         label="版本"
@@ -244,12 +252,6 @@
                             </el-table>
                         </el-card>
                     </div>
-
-
-
-
-
-
 
 
 
