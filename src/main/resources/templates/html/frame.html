@@ -33,7 +33,10 @@
 		
 		<link rel="stylesheet" type="text/css" href="/css/model/frameStyle.css">
 		<script type="text/javascript" src="/framework/frame.js" ></script>
-		
+		<script src="/js/home.js"></script>
+		<script type="text/javascript" src="/js/frame/frame.js"></script>
+
+
 	</head>
 
 	<body>
@@ -88,12 +91,12 @@
 		<div class="main">
 			<!-- 头部栏 - 开始 -->
 			<div class="frameTop">
-				<img class="jt" src="/images/top_jt.png"/>
+
 				<div class="topMenu">
 					<ul>
-						<li><a href="javascript:void(0)" onclick="menuCAClick('/page/peopleinfo',this)"><i class="iconfont icon-yonghu1"></i>管理员</a></li>
-						<li><a href="javascript:void(0)" onclick="menuCAClick('/page/modifyPassword',this)"><i class="iconfont icon-xiugaimima"></i>修改密码</a></li>
-						<li><a href="/userCon/login"><i class="iconfont icon-084tuichu"></i>注销</a></li>
+						<li><a href="javascript:void(0)" onclick="menuCAClick('/page/peopleinfo',this)" id="username"><i class="iconfont icon-yonghu1" ></i>默认用户</a></li>
+						<li><a href="javascript:void(0)" onclick="menuCAClick('/page/modifyPassword',this)"><i class="iconfont icon-xiugaimima" id="uppword"></i>修改密码</a></li>
+						<li><a href="/userCon/logout"><i class="iconfont icon-084tuichu"></i>注销</a></li>
 					</ul>
 				</div>
 			</div>
@@ -110,6 +113,9 @@
 			</div>
 			<!-- 核心区域 - 结束 -->
 		</div>
+	<script>
+
+	</script>
 	</body>
 
 </html>

@@ -1,7 +1,8 @@
 package com.lawer.service;
 
 import com.lawer.pojo.CaseFile;
-
+import com.lawer.pojo.User;
+import java.util.Map;
 import java.util.List;
 
 public interface CaseService {
@@ -11,6 +12,10 @@ public interface CaseService {
 	void deleteFileById(String fileid);
 
 
+	/**
+	 * 案件管理业务层接口
+	 */
+    public void addCase(Map<String,Object> map, User user); //添加案件
 
 
 }

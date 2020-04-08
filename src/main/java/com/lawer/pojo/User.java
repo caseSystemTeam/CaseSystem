@@ -1,7 +1,7 @@
 package com.lawer.pojo;
 
 public class User {
-	private int id;
+	private String id;
 	private String username;
 	private String name;
 	private String password;
@@ -10,6 +10,10 @@ public class User {
 	private String position;
 	private int solve;
 	private int ftag;
+	private String busId;
+
+
+
 	public int getFtag() {
 		return ftag;
 	}
@@ -24,14 +28,12 @@ public class User {
 				+ profile + ", gender=" + gender + ", position=" + position + ", solve=" + solve + ", ftag=" + ftag
 				+ ", unsolve=" + unsolve + ", phonenumber=" + phonenumber + "]";
 	}
-	public User() {
-		super();
-	}
+
 	
-	public int getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getName() {
@@ -90,6 +92,12 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
 
+	public String getBusId() {
+		return busId;
+	}
+
+	public void setBusId(String busId) {
+		this.busId = busId;
+	}
 }
