@@ -24,12 +24,9 @@ public class LoginInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2) throws Exception {
 		String url=arg0.getRequestURI();
 		//当页面处于登录页面和进行登录判断时允许通过
-
-		System.out.println(url);
 		if(url.indexOf("login")>=0||url.indexOf("register")>=0 ||(url.indexOf("index")>=0&&url.indexOf("toindex")<0)){
 			return true;
 		}
-
 		//从session中获取用户信息
 		User user=(User)arg0.getSession().getAttribute("us");
 		if(user!=null){

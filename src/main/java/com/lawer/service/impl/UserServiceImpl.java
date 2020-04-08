@@ -1,6 +1,7 @@
 package com.lawer.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import com.lawer.pojo.Business;
 import com.lawer.service.UserService;
@@ -102,6 +103,11 @@ public class UserServiceImpl implements UserService {
 			return 0;
 		}
 		return 1;
+	}
+
+	@Override
+	public List<Map<String, Object>> getAllLawer(String busId) {
+		return mapper.getAllLawer(busId);
 	}
 
 }

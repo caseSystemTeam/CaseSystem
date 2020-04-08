@@ -1,6 +1,7 @@
 package com.lawer.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.lawer.pojo.Business;
 import com.lawer.pojo.User;
@@ -18,4 +19,5 @@ public interface UserService {
 	public String checkUserName(String username); //检查用户名是否存在
 	public int addBusiness(Business bus); //添加律所信息
 	public int addUser(User user); //添加用户信息
+	public List<Map<String,Object>> getAllLawer(String busId); //查询当前律所的所有律师
 }

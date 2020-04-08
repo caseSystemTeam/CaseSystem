@@ -1,8 +1,11 @@
 package com.lawer.controller;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.lawer.common.ResultGson;
 import com.lawer.pojo.BusUser;
 import com.lawer.pojo.Business;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,9 @@ import com.lawer.pojo.Password;
 import com.lawer.service.UserService;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -42,10 +48,12 @@ public class UserController {
 	//判断用户是否成功登录
 	@RequestMapping("index")
 	@ResponseBody
-	public String loginCheck(@RequestBody User us,HttpServletRequest request){
+	public String loginCheck(@RequestBody User us, HttpServletRequest request, HttpServletResponse response){
 		User user=userService.findUser(us);  //判断数据库中是否存在该用户
 		if(user!=null && us.getUsername().equals(user.getUsername())&&us.getPassword().equals(user.getPassword())){
 			request.getSession().setAttribute("us",user);
+			Cookie cookie = new Cookie("lawername",user.getName());
+			response.addCookie(cookie);
 			return "1";
 		}
 
@@ -98,6 +106,26 @@ public class UserController {
 
 		return 1;
 	}
+
+	//检查用户名是否存在
+	@RequestMapping("getAllLawer")
+	@ResponseBody
+	public ResultGson getAllLawer(HttpSession session){
+
+		User user=(User)session.getAttribute("us");
+		String busId=user.getBusId();
+		List<Map<String,Object>> list=null;
+		try{
+			list = userService.getAllLawer(busId);
+		}catch (Exception e){
+			return ResultGson.error("操作失败");
+		}
+		Map<String,Object> map = new HashMap<>();
+		map.put("data",list);
+
+		return ResultGson.ok(map);
+	}
+
 
 	//修改密码
 	@RequestMapping("updateps.action")

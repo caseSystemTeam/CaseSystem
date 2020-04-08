@@ -1,76 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lawer.mapper.UserMapper">
 
-<select id="findUser" parameterType="user" resultType="user">
+    <select id="findUser" parameterType="user" resultType="user">
 select * from laweruser where username = #{username} and password = #{password}  
 </select>
 
-<update id="updatePs" parameterType="user" >
+    <update id="updatePs" parameterType="user">
 update laweruser set password = #{password} where username= #{username}
 </update>
 
-<update id="upinfor" parameterType="user">
-update laweruser 
-<set>
-<if test="name!=null and name !=''">
-name=#{name},
-</if>
-<if test="gender!=null and gender !=''">
-gender=#{gender},
-</if>
-<if test="phonenumber!=null and phonenumber !=''">
-phonenumber=#{phonenumber},
-</if>
-<if test="ftag!=null ">
-ftag=#{ftag},
-</if>
-<if test="unsolve!=null ">
-unsolve=#{unsolve},
-</if>
-</set>
- where id= #{id}
-</update>
+    <update id="upinfor" parameterType="user">
+        update laweruser
+        <set>
+            <if test="name!=null and name !=''">
+                name=#{name},
+            </if>
+            <if test="gender!=null and gender !=''">
+                gender=#{gender},
+            </if>
+            <if test="phonenumber!=null and phonenumber !=''">
+                phonenumber=#{phonenumber},
+            </if>
+            <if test="ftag!=null ">
+                ftag=#{ftag},
+            </if>
+            <if test="unsolve!=null ">
+                unsolve=#{unsolve},
+            </if>
+        </set>
+        where id= #{id}
+    </update>
 
-<select id="sNum">
+    <select id="sNum">
 select count(*)  from laweruser where id &lt; (select id from laweruser where ftag=1)
 </select>
 
-<select id="sCount">
+    <select id="sCount">
 select count(*) from laweruser
 </select>
 
-<select id="getList" resultType="user">
+    <select id="getList" resultType="user">
 select * from laweruser
 </select>
 
-<!--根据name查询id  -->
-<select id="IdByname" parameterType="string" resultType="int" >
+    <!--根据name查询id  -->
+    <select id="IdByname" parameterType="string" resultType="int">
 select id from laweruser where name=#{name}
 </select>
 
-<select id="nameById" parameterType="int" resultType="string" >
+    <select id="nameById" parameterType="int" resultType="string">
 select name from laweruser where id=#{lawerid}
 </select>
 
-<select id="userById" parameterType="int" resultType="user" >
+    <select id="userById" parameterType="int" resultType="user">
 select * from laweruser where id=#{id}
 </select>
 
- <select id="checkUserName" parameterType="string" resultType="user">
+    <select id="checkUserName" parameterType="string" resultType="user">
   select * from laweruser where username =#{username}
  </select>
 
- <insert id="addBusiness" parameterType="business" >
+    <insert id="addBusiness" parameterType="business">
   insert into business(id,name,lawerid,lawername,telphone)
   values(#{id},#{name},#{lawerid},#{lawerName},#{telphone})
  </insert>
 
- <insert id="addUser" parameterType="user">
+    <insert id="addUser" parameterType="user">
   insert into laweruser(id,username,name,password,gender,phonenumber,busid)
   values (#{id},#{username},#{name},#{password},#{gender},#{phonenumber},#{busId})
  </insert>
+
+    <select id="getAllLawer" parameterType="string" resultType="Map">
+  select * from laweruser where busId =#{busId}
+ </select>
 
 </mapper>
