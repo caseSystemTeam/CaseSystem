@@ -37,10 +37,10 @@ public class CaseController {
     //查询当前案件下所有的文件
     @RequestMapping("/getFileAll")
     @ResponseBody
-    public String getFileAll(@RequestParam("caseId")String caseId){
+    public String getFileAll(@RequestParam("caseId")String caseId) {
         List<CaseFile> list = caseService.getFileAll(caseId);
         String json = null;
-        try{
+        try {
             json = jsonutil.writeValueAsString(list);
         } catch (Exception e) {
             e.printStackTrace();
@@ -48,6 +48,7 @@ public class CaseController {
         }
         //将返回数据转成json格式
         return json;
+    }
 
     @RequestMapping("addCase")
     @ResponseBody
