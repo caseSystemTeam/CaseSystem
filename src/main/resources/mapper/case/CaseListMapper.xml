@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lawer.mapper.CaseListMapper">
+
+
+
+    <!--查询律所所有案件信息  -->
+    <select id="getAllCase"  resultType="Map">
+select aj.*,lu.name as lawername,lu.position from anjian aj left join laweruser lu on aj.lawerid =lu.id
+where aj.business_id=#{map.busId}
+        <if test="map.name !=null and map.name !=''">
+            and aj.name like concat('%',#{map.name},'%')
+        </if>
+        <if test="map.lawerid !=null and map.lawerid !=''">
+            and aj.lawerid = #{map.lawerid}
+        </if>
+        <if test="map.jstatus !=null and map.jstatus !=''">
+            and aj.jstatus = #{map.jstatus}
+        </if>
+        <if test="map.tricktime !=null and map.tricktime !=''">
+            AND unix_timestamp(aj.rtime) between unix_timestamp(#{map.tricktime}) and
+            unix_timestamp(#{map.tricktime2})
+        </if>
+        order by aj.rtime desc
+        <if test="map.pageSize!=null and map.skipCount!=null ">
+            LIMIT #{map.skipCount},#{map.pageSize}
+        </if>
+</select>
+<!--查询律所案件数量-->
+<select id="getACaseCount" resultType="int">
+   select count(1) from anjian aj
+    where aj.business_id=#{map.busId}
+    <if test="map.name !=null and map.name !=''">
+        and aj.name like concat('%',#{map.name},'%')
+    </if>
+    <if test="map.lawerid !=null and map.lawerid !=''">
+        and aj.lawerid = #{map.lawerid}
+    </if>
+    <if test="map.jstatus !=null and map.jstatus !=''">
+        and aj.jstatus = #{map.jstatus}
+    </if>
+    <if test="map.tricktime !=null and map.tricktime !=''">
+        AND unix_timestamp(aj.rtime) between unix_timestamp(#{map.tricktime}) and
+        unix_timestamp(#{map.tricktime2})
+    </if>
+</select>
+
+    <!--查询个人案件信息  -->
+    <select id="getCaseById"  resultType="Map">
+        select aj.*,lu.name as lawername,lu.position from anjian aj left join laweruser lu on aj.lawerid =lu.id
+        where aj.business_id=#{map.busId} and aj.lawerid = #{map.lawerid}
+        <if test="map.name !=null and map.name !=''">
+            <trim prefix="AND(" suffix=")">
+                aj.name like concat('%',#{map.name},'%')
+                OR aj.cusname like concat('%',#{map.name},'%')
+            </trim>
+
+        </if>
+        <if test="map.jstatus !=null and map.jstatus !=''">
+            and aj.jstatus = #{map.jstatus}
+        </if>
+        <if test="map.tricktime !=null and map.tricktime !=''">
+            <choose>
+                <when test="map.jstatus==0">
+                    AND unix_timestamp(aj.rtime) between unix_timestamp(#{map.tricktime}) and
+                    unix_timestamp(#{map.tricktime2})
+                </when>
+                <otherwise>
+                    AND unix_timestamp(aj.ftime) between unix_timestamp(#{map.tricktime}) and
+                    unix_timestamp(#{map.tricktime2})
+                </otherwise>
+
+            </choose>
+        </if>
+        order by aj.rtime desc
+        <if test="map.pageSize!=null and map.skipCount!=null ">
+            LIMIT #{map.skipCount},#{map.pageSize}
+        </if>
+    </select>
+
+    <!--查询个人案件数量-->
+    <select id="getCaseCount" resultType="int">
+        select count(1) from anjian aj
+        where aj.business_id=#{map.busId} and aj.lawerid = #{map.lawerid}
+        <if test="map.name !=null and map.name !=''">
+            <trim prefix="AND(" suffix=")">
+                aj.name like concat('%',#{map.name},'%')
+                OR aj.cusname like concat('%',#{map.name},'%')
+            </trim>
+        </if>
+
+        <if test="map.jstatus !=null and map.jstatus !=''">
+            and aj.jstatus = #{map.jstatus}
+        </if>
+
+        <if test="map.tricktime !=null and map.tricktime !=''">
+            <choose>
+                <when test="map.jstatus==0">
+                    AND unix_timestamp(aj.rtime) between unix_timestamp(#{map.tricktime}) and
+                    unix_timestamp(#{map.tricktime2})
+                </when>
+                <otherwise>
+                    AND unix_timestamp(aj.ftime) between unix_timestamp(#{map.tricktime}) and
+                    unix_timestamp(#{map.tricktime2})
+                </otherwise>
+
+            </choose>
+        </if>
+    </select>
+
+
+
+</mapper>

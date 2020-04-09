@@ -58,13 +58,26 @@
             <div class="layui-col-xs1">
                 <div class="layui-btn " style="height: 35px;line-height: 35px;border: 1px solid #dcdfe6;background-color: #f5f7fa;margin-left: -1px;color:black" >元</div>
             </div>
-
         </div>
 
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">案件详情</label>
             <div class="layui-input-block">
                 <textarea id="editor" required style="display: none;" name="content"></textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">申述人姓名</label>
+            <div class="layui-input-inline shortInput">
+                <input type="text" name="cusname" required  placeholder="请输入申述人姓名" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">申述人联系方式</label>
+            <div class="layui-input-inline shortInput">
+                <input type="text" name="cus_telphone" required  placeholder="请输入申述人联系方式" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" maxlength=11 autocomplete="off" class="layui-input">
             </div>
         </div>
 

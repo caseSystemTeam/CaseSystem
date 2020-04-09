@@ -51,7 +51,7 @@ function menuFAClick(_this){
 
 //二级菜单点击后的处理方法
 function menuCAClick(url,_this){
-	console.info("this",_this);
+
 	//处理frameMain url地址
 	$("#mainIframe").attr("src",url);
 	

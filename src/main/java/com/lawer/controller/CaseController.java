@@ -49,7 +49,7 @@ public class CaseController {
         //将返回数据转成json格式
         return json;
     }
-
+   //添加案件
     @RequestMapping("addCase")
     @ResponseBody
     public ResultGson addCase(@RequestBody  String json, HttpSession session){
