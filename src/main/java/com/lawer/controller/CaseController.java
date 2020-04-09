@@ -47,6 +47,7 @@ public class CaseController {
         }
         //将返回数据转成json格式
         return json;
+    }
 
     }
     @RequestMapping("addCase")
