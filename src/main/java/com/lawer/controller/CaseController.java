@@ -6,7 +6,6 @@ import com.lawer.pojo.CaseFile;
 import com.alibaba.fastjson.JSON;
 import com.lawer.common.ResultGson;
 import com.lawer.pojo.User;
-
 import com.lawer.service.CaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,10 +36,10 @@ public class CaseController {
     //查询当前案件下所有的文件
     @RequestMapping("/getFileAll")
     @ResponseBody
-    public String getFileAll(@RequestParam("caseId")String caseId){
+    public String getFileAll(@RequestParam("caseId")String caseId) {
         List<CaseFile> list = caseService.getFileAll(caseId);
         String json = null;
-        try{
+        try {
             json = jsonutil.writeValueAsString(list);
         } catch (Exception e) {
             e.printStackTrace();
@@ -49,17 +48,18 @@ public class CaseController {
         //将返回数据转成json格式
         return json;
 
+    }
     @RequestMapping("addCase")
     @ResponseBody
     public ResultGson addCase(@RequestBody  String json, HttpSession session){
         Map<String, Object> mapJson = JSON.parseObject(json);
         User user =(User)session.getAttribute("us");
-       try{
-           caseService.addCase(mapJson,user);
-       }catch (Exception e){
-           e.printStackTrace();
-           return ResultGson.error("执行出错");
-       }
+        try{
+            caseService.addCase(mapJson,user);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultGson.error("执行出错");
+        }
         return ResultGson.ok("执行成功");
     }
 

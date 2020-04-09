@@ -11,6 +11,11 @@
       #{map.jstatus},#{map.p_status},#{map.filelist},#{map.busId})
     </insert>
 
+    <!-- 根据案件ID查询案件包含的文件路径信息 -->
+    <select id="getFileAll" resultType="com.lawer.pojo.CaseFile" parameterType="String">
+		select fileid,filename,url,createTime,caseId,filetype,upId from file where caseId=#{caseId}
+	</select>
+
 
 
 
