@@ -49,7 +49,6 @@ public class CaseController {
         return json;
     }
 
-    }
     @RequestMapping("addCase")
     @ResponseBody
     public ResultGson addCase(@RequestBody  String json, HttpSession session){
