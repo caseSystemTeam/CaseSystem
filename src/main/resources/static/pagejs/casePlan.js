@@ -28,10 +28,28 @@ var vm = new Vue({
         cartView: function () {
 
         },
+        //上传文件相关的钩子方法开始----------------------------------------
         beforeFileUpload:function (file) {
-
-            return false;
+            //这里不返回true，是不能上传文件的
+            return true;
         },
+        FileUploadSuccess:function(result){
+            this.$message({
+                message: '文件上传成功！',
+                type: 'success'
+            });
+            //刷新已上传文件列表
+            this.getFileAll(this.caseId);
+        },
+        FileUploadError:function(data){
+            this.$message({
+                message: '文件上传失败，请检查是否符合文件要求',
+                type: 'warning'
+            });
+        },
+        //上传文件相关的钩子方法结束----------------------------------------
+
+        //已上传文件处理相关的方法开始*************************
         getFileAll:function(caseId) {
             caseId = this.caseId;
             var aa = this;
@@ -45,7 +63,6 @@ var vm = new Vue({
                 success: function(result){ // 当请求成功时运行的函数
                     //result返回的是string类型的数组
                    aa.fileList = JSON.parse(result);
-                   console.log("点击执行！！！");
                 },
                 error:function(result){ //失败的函数
                     console.log("请求文件列表出错")
@@ -62,13 +79,16 @@ var vm = new Vue({
                     'filepath':data.url
                 },
                 success: function(result){ // 当请求成功时运行的函数
-                   alert("ajax执行成功！！")
+                    let  data = JSON.parse(result);
+                   alert("result的结果"+data.data.fileHtml);
+                    window.open(data.data.fileHtml);
                 },
                 error:function(result){ //失败的函数
-                    alert("ajax执行失败！！")
+                    alert("ajax执行失败！！");
                 }
             });
         }
+        //已上传文件处理相关的方法结束*************************
        
     }
 });

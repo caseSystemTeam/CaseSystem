@@ -17,8 +17,8 @@ import org.w3c.dom.Document;
 
 public class FileConvert {
 
-    public String WordTOHtml(String filepath,String filename) {
-        filepath = "D:\\";
+    public String WordTOHtml(String path,String filename) {
+        String filepath = "D:\\";
         filename = "22.doc";
         try {
             InputStream input = new FileInputStream(filepath + filename);
@@ -57,12 +57,13 @@ public class FileConvert {
             serializer.transform(domSource, streamResult);
             outStream.close();
             String content = new String(outStream.toByteArray());
+            //暂时把新成成的文件扔到upload下边
             FileUtils.writeStringToFile(new File(filepath, "人员选择系分.html"), content, "utf-8");
         }catch (Exception e){
             e.printStackTrace();
         }
 
-        return "";
+        return filepath+"人员选择系分.html";
     }
 
 }

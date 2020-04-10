@@ -190,8 +190,11 @@
                                 <el-upload
                                         class="upload-demo"
                                         :drag="true"
+                                        :show-file-list="false"
                                         action="/comm/SingleUpload"
                                         :before-upload="beforeFileUpload"
+                                        :on-success="FileUploadSuccess"
+                                        :on-error="FileUploadError"
                                         :data="{'caseId':'2'}"
                                         name="uploadfile"
                                         >
@@ -206,6 +209,7 @@
                                 <el-card class="box-card">
                                     <el-table
                                             :data="fileList"
+                                            height="400"
                                             style="width: 100%">
                                         <el-table-column
                                                 prop="filename"
