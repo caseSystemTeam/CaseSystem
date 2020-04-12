@@ -18,12 +18,12 @@ public class CaseFile {
         this.id = id;
     }
 
-    public String getFielid() {
+    public String getFileid() {
         return fileid;
     }
 
-    public void setFielid(String fielid) {
-        this.fileid = fielid;
+    public void setFileid(String fileid) {
+        this.fileid = fileid;
     }
 
     public String getFilename() {
@@ -77,13 +77,13 @@ public class CaseFile {
     @Override
     public String toString() {
         return "CaseFile{" +
-                "id=" + id +
-                ", fileid=" + fileid +
+                "id='" + id + '\'' +
+                ", fileid='" + fileid + '\'' +
                 ", filename='" + filename + '\'' +
                 ", url='" + url + '\'' +
                 ", createTime='" + createTime + '\'' +
-                ", caseId=" + caseId +
-                ", upId=" + upId +
+                ", caseId='" + caseId + '\'' +
+                ", upId='" + upId + '\'' +
                 ", type='" + type + '\'' +
                 '}';
     }

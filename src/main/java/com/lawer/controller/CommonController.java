@@ -28,7 +28,8 @@ public class CommonController {
     public String SingleUpload(@RequestParam("caseId") String caseId, @RequestParam("uploadfile") List<MultipartFile> uploadfile
             , HttpServletRequest request){
         FileUpAndDown fileCon = new FileUpAndDown();
-        CaseFile lf = fileCon.fileUpLoad(caseId, uploadfile, request);
+        String targetPath = "D:\\upload\\";
+        CaseFile lf = fileCon.fileUpLoad(caseId, uploadfile, request,targetPath);
         String result = null;
         if(lf!=null) {
             commonService.addFile(lf);
@@ -41,26 +42,59 @@ public class CommonController {
 
     @RequestMapping("/WatchFile")
     @ResponseBody
-    public String watchFile(String filepath,String filename){
+    public String watchFile(String filepath,String fileid){
         //根据\找到当前文件所在文件夹的目录
         int index = filepath.lastIndexOf("\\");
-        String path = filepath.substring(0,index+1);
-        System.out.println("切割后的字符串："+path);
-        path = path.replace("\\","\\\\");
-        System.out.println("转变后的路径："+path);
+        //根据URL获取文件根路径
+        String rootpath = filepath.substring(0,index+1);
+        //需要根据操作系统来配置
+        rootpath = rootpath.replace("\\","\\\\");
 
-        String json = null;
-        FileConvert util = new FileConvert();
+        //根据'.'确认文件后缀名
+        int index2 = filepath.lastIndexOf(".");
+        String fileFormat = filepath.substring(index2+1,filepath.length()); //左闭又开
+
+        String json = null; //向前台返回的josn格式信息
+       FileConvert util = new FileConvert(); //文件转换类
         Map<String,Object> map = new HashMap<>();
+        String filePathHtml =null;  //html文件地址
+        //需要跟配置文件的相匹配，暂时写在这里
+        String targetPath = "D:\\upload\\";
+
+        //根据文件后缀名确定转换方式
         try{
-            //文件转换，返回结果是新文件的存储路径
-            String fileHtml = util.WordTOHtml(path,filename);
-            map.put("fileHtml",fileHtml);
-            json = ResultGson.ok(map).toJson();
+            if("doc".equals(fileFormat)){
+                //文件转换，返回结果是新文件的存储路径
+                filePathHtml= util.WordTOHtml(rootpath,filepath,targetPath,fileid);
+                //filePathHtml= util.WordTOHtml(rootpath,filepath,targetPath,"哈哈哈哈哈哈");
+                map.put("filePathHtml",filePathHtml);
+                map.put("type","office");
+            }else if("docx".equals(fileFormat)){
+                //文件转换，返回结果是新文件的存储路径
+                filePathHtml = util.WordTOHtmlDocx(filepath,targetPath,fileid);
+                map.put("filePathHtml",filePathHtml);
+                map.put("type","office");
+            }else if ("txt".equals(fileFormat)||"pdf".equals(fileFormat)||"jpg".equals(fileFormat)||"png".equals(fileFormat)||"jpeg".equals(fileFormat)){
+                //如果是txt格式的，则切割出文件名，然后返回/upload/文件名的路径
+                int index3 = filepath.lastIndexOf("\\");
+                filePathHtml = "/upload/"+filepath.substring(index3+1,filepath.length());
+                map.put("filePathHtml",filePathHtml);
+                map.put("type","common");
+            }else{
+                map.put("type","nosupport");
+                json = ResultGson.ok(map).toJson();
+                return json;
+            }
         }catch (Exception e){
-            json = ResultGson.error("文件转换出错，请检查文件是否是标准word、excel、pdf格式").toJson();
-            //System.out.println("文件转换出错");
+            e.printStackTrace();
+            json = ResultGson.error("文件转换出错，请检查文件是否是标准word、excel格式").toJson();
+            return json;
         }
+        //将新转换的文件路径信息封装到返回信息中
+        //map中的type，封装了返回url的类型
+        // office说明是word、excel，则返回值是对应的/upload/文件名.html
+        //txt类型，则直接返回服务器上的txt文件
+        json = ResultGson.ok(map).toJson();
         return json;
     }
 

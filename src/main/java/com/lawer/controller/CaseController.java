@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.io.File;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
@@ -21,6 +23,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("case")
 public class CaseController {
+
     private ObjectMapper jsonutil = new ObjectMapper();
 
     @Autowired
@@ -61,6 +64,23 @@ public class CaseController {
             return ResultGson.error("执行出错");
         }
         return ResultGson.ok("执行成功");
+    }
+
+    @RequestMapping("deleteFileById")
+    @ResponseBody
+    public ResultGson deleteFileById(@RequestParam("fileid") String fileid,String filepath){
+        filepath = filepath.replace("\"","\\");
+        File file = new File(filepath);//根据指定的文件名创建File对象
+        if (  file.exists() && file.isFile() ){ //要删除的文件存在且是文件
+            if ( file.delete()){
+                caseService.deleteFileById(fileid);
+            }else{
+                return ResultGson.error("删除文件失败");
+            }
+        }else{
+            caseService.deleteFileById(fileid);
+        }
+        return ResultGson.ok("删除成功");
     }
 
 }

@@ -18,10 +18,10 @@ import java.util.UUID;
 
 public class FileUpAndDown {
 
-	public CaseFile fileUpLoad(String caseId, List<MultipartFile> uploadfile, HttpServletRequest request) {
+	public CaseFile fileUpLoad(String caseId, List<MultipartFile> uploadfile, HttpServletRequest request,String dirPath) {
 		//判断上传的文件是否存在
 			String originalFileName;
-			String dirPath ;
+			//String dirPath ;
 			String newFileName;
 			String fileurl = null;
 			CaseFile lf=null;
@@ -30,7 +30,8 @@ public class FileUpAndDown {
 						for(MultipartFile file:uploadfile){
 							originalFileName = file.getOriginalFilename();
 							//设置上传文件的保存地址目录
-							dirPath = request.getServletContext().getRealPath("/upload/");
+							//dirPath = request.getServletContext().getRealPath("/upload/");
+							//dirPath = request.getServletContext().getRealPath("D:\\upload\\");
 							File filePath = new File(dirPath);
 							//如果目标地址不存在，就创建这个地址
 							if(!filePath.exists()) {
@@ -47,7 +48,7 @@ public class FileUpAndDown {
 								fileurl = dirPath+newFileName ;
 								file.transferTo(new File(fileurl));
 								//构建返回数据
-								lf.setFielid(UUID.randomUUID().toString());
+								lf.setFileid(UUID.randomUUID().toString());
 								lf.setCaseId(caseId);
 								lf.setFilename(originalFileName);
 								lf.setUrl(fileurl);

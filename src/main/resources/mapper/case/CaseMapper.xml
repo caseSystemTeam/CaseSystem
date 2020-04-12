@@ -16,6 +16,11 @@
 		select fileid,filename,url,createTime,caseId,filetype,upId from file where caseId=#{caseId}
 	</select>
 
+    <!-- 根据案件ID删除对应的文件信息 -->
+    <delete id="deleteFileById"  parameterType="String">
+		delete from file where fileid =#{fileid}
+	</delete>
+
 
 
 

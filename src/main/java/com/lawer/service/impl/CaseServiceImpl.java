@@ -32,7 +32,7 @@ public class CaseServiceImpl implements CaseService {
 
 	@Override
 	public void deleteFileById(String fileid) {
-
+		caseMapper.deleteFileById(fileid);
 	}
 	
 	/**
