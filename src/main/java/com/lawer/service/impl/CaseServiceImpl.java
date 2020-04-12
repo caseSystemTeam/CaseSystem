@@ -1,5 +1,8 @@
 package com.lawer.service.impl;
 
+
+
+
 import com.lawer.mapper.CaseMapper;
 import com.lawer.pojo.CaseFile;
 import com.lawer.service.CaseService;
@@ -18,10 +21,10 @@ import java.util.UUID;
 public class CaseServiceImpl implements CaseService {
 
 	@Autowired
-	CaseMapper caseMapper;
+	private CaseMapper mapper;
 	@Override
 	public List<CaseFile> getFileAll(String caseId) {
-		List<CaseFile> list = caseMapper.getFileAll(caseId);
+		List<CaseFile> list = mapper.getFileAll(caseId);
 		return list;
 	}
 
@@ -49,7 +52,7 @@ public class CaseServiceImpl implements CaseService {
         map.put("fstatus",1);
         map.put("jstatus",0);
         map.put("p_status",2);
-        caseMapper.addCase(map);
+		mapper.addCase(map);
 
 
     }

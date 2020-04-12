@@ -57,12 +57,12 @@ public class CaseController {
     public ResultGson addCase(@RequestBody  String json, HttpSession session){
         Map<String, Object> mapJson = JSON.parseObject(json);
         User user =(User)session.getAttribute("us");
-        try{
-            caseService.addCase(mapJson,user);
-        }catch (Exception e){
-            e.printStackTrace();
-            return ResultGson.error("执行出错");
-        }
+       try{
+           caseService.addCase(mapJson,user);
+       }catch (Exception e){
+           e.printStackTrace();
+           return ResultGson.error("执行出错");
+       }
         return ResultGson.ok("执行成功");
     }
 
