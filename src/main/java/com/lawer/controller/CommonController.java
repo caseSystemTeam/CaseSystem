@@ -1,6 +1,7 @@
 package com.lawer.controller;
 
 import com.lawer.common.FileConvert;
+import com.lawer.common.PoiExcelToHtmlUtil;
 import com.lawer.common.ResultGson;
 import com.lawer.pojo.CaseFile;
 import com.lawer.service.CommonService;
@@ -55,9 +56,10 @@ public class CommonController {
         String fileFormat = filepath.substring(index2+1,filepath.length()); //左闭又开
 
         String json = null; //向前台返回的josn格式信息
-       FileConvert util = new FileConvert(); //文件转换类
+        FileConvert util = new FileConvert(); //文件转换类
         Map<String,Object> map = new HashMap<>();
         String filePathHtml =null;  //html文件地址
+
         //需要跟配置文件的相匹配，暂时写在这里
         String targetPath = "D:\\upload\\";
 
@@ -75,12 +77,18 @@ public class CommonController {
                 map.put("filePathHtml",filePathHtml);
                 map.put("type","office");
             }else if ("txt".equals(fileFormat)||"pdf".equals(fileFormat)||"jpg".equals(fileFormat)||"png".equals(fileFormat)||"jpeg".equals(fileFormat)){
-                //如果是txt格式的，则切割出文件名，然后返回/upload/文件名的路径
+                //如果是txt、jpg、pdf这种浏览器支持浏览的格式，则切割出文件名，然后返回/upload/文件名的路径
                 int index3 = filepath.lastIndexOf("\\");
                 filePathHtml = "/upload/"+filepath.substring(index3+1,filepath.length());
                 map.put("filePathHtml",filePathHtml);
                 map.put("type","common");
-            }else{
+            }else if ("xls".equals(fileFormat)||"xlsx".equals(fileFormat)){
+                //filePathHtml = util.excelToHtml(rootpath,filepath,targetPath,fileid);
+                filePathHtml = PoiExcelToHtmlUtil.excelToHtml(filepath,fileid,targetPath);
+                map.put("filePathHtml",filePathHtml);
+                map.put("type","office");
+            }
+            else{
                 map.put("type","nosupport");
                 json = ResultGson.ok(map).toJson();
                 return json;

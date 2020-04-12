@@ -43,19 +43,29 @@ public class FileConvert {
             WordToHtmlConverter wordToHtmlConverter = new WordToHtmlConverter(
                     DocumentBuilderFactory.newInstance().newDocumentBuilder()
                             .newDocument());
+            //对doc图片的管理,在这里设置了图片src的地址,应该设置成相对路径，最好把tomcat配置一下，允许访问外部文件
             wordToHtmlConverter.setPicturesManager(new PicturesManager() {
                 public String savePicture(byte[] content, PictureType pictureType,
                                           String suggestedName, float widthInches, float heightInches) {
-                    return suggestedName;
+                    //return suggestedName;
+                    return "/upload/"+fileid+"/"+suggestedName; //返回值就是src的连接地址
                 }
             });
-            wordToHtmlConverter.processDocument(wordDocument);
+            wordToHtmlConverter.processDocument(wordDocument); //对文件头，作者做了一下处理？
             List pics = wordDocument.getPicturesTable().getAllPictures();
             if (pics != null) {
                 for (int i = 0; i < pics.size(); i++) {
                     Picture pic = (Picture) pics.get(i);
                     try {
-                        pic.writeImageContent(new FileOutputStream(rootpath
+                        //设置图片在服务器上保存的路径，要跟上边src的地址保持一致，只不过这里存的是在服务器上的具体地址，
+                        // 这里设置存在html文件所在文件夹下，
+                        // 每个Html文件有自己专属的以文件id为名的文件夹，用来存放自己的图片
+                        String imagePath = targetPath+fileid;
+                        File fi = new File(imagePath);
+                        if(!fi.isDirectory()){//如果文件夹不存在
+                            fi.mkdir();//创建文件夹
+                        }
+                        pic.writeImageContent(new FileOutputStream(imagePath+"\\"
                                 + pic.suggestFullFileName()));
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
@@ -88,7 +98,13 @@ public class FileConvert {
      */
     public String WordTOHtmlDocx(String filepath,String targetPath,String fileid) {
         //String filepath = "D:\\";
-        String imagePath = targetPath ;
+        //定义图片地址
+        String imagePath = targetPath+fileid;
+        File fi = new File(imagePath);
+        if(!fi.isDirectory()){//如果文件夹不存在
+            fi.mkdir();//创建文件夹
+        }
+
         String targetFileName = targetPath + fileid+".html";
 
         OutputStreamWriter outputStreamWriter = null;
@@ -98,7 +114,7 @@ public class FileConvert {
             // 存放图片的文件夹
             options.setExtractor(new FileImageExtractor(new File(imagePath)));
             // html中图片的路径
-            options.URIResolver(new BasicURIResolver(imagePath));
+            options.URIResolver(new BasicURIResolver("/upload/"+fileid+"/"));
             outputStreamWriter = new OutputStreamWriter(new FileOutputStream(targetFileName), "utf-8");
             XHTMLConverter xhtmlConverter = (XHTMLConverter) XHTMLConverter.getInstance();
             xhtmlConverter.convert(document, outputStreamWriter, options);
@@ -110,54 +126,6 @@ public class FileConvert {
         }
 
         return "/upload/"+fileid+".html";
-    }
-
-
-
-
-    /*
-    excel转html的方法
-
-     */
-    public String excelToHtml(String path,String file){
-
-        HSSFWorkbook excelBook= null;
-        try {
-            InputStream input=new FileInputStream(path+file);
-            excelBook = new HSSFWorkbook(input);
-            ExcelToHtmlConverter excelToHtmlConverter = new ExcelToHtmlConverter (DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument() );
-            excelToHtmlConverter.processWorkbook(excelBook);
-            List pics = excelBook.getAllPictures();
-            if (pics != null) {
-                for (int i = 0; i < pics.size(); i++) {
-                    Picture pic = (Picture) pics.get (i);
-                    try {
-                        pic.writeImageContent (new FileOutputStream (path + pic.suggestFullFileName() ) );
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            Document htmlDocument =excelToHtmlConverter.getDocument();
-            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-            DOMSource domSource = new DOMSource (htmlDocument);
-            StreamResult streamResult = new StreamResult (outStream);
-            TransformerFactory tf = TransformerFactory.newInstance();
-            Transformer serializer = tf.newTransformer();
-            serializer.setOutputProperty (OutputKeys.ENCODING, "utf-8");
-            serializer.setOutputProperty (OutputKeys.INDENT, "yes");
-            serializer.setOutputProperty (OutputKeys.METHOD, "html");
-            serializer.transform (domSource, streamResult);
-            outStream.close();
-
-            String content = new String (outStream.toByteArray() );
-
-            FileUtils.writeStringToFile(new File (path, "exportExcel.html"), content, "utf-8");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "";
-
     }
 
 }

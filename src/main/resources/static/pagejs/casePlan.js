@@ -16,9 +16,9 @@ var vm = new Vue({
     },
      filters: {  
      	status:function(num){
-          	if(num=="0"){
+          	if(num==="0"){
                return "失败";
-          	}else if(num=="1"){
+          	}else if(num==="1"){
                return "成功";
           	}      
      	}
@@ -81,7 +81,7 @@ var vm = new Vue({
                 },
                 success: function(result){ // 当请求成功时运行的函数
                     let  message = JSON.parse(result);
-                    if("office"==message.data.type||"common"==message.data.type){
+                    if("office"===message.data.type||"common"===message.data.type){
                         window.open(message.data.filePathHtml);
                         //window.open("/upload/11.html")
                     }else{
@@ -116,7 +116,8 @@ var vm = new Vue({
                     },
                     success: function(result){ // 当请求成功时运行的函数
                         let message = JSON.parse(result)
-                        if(message.status=="200"){
+                        //status返回值是number类型，===先比较类型再比较值，如果用字符串比较，就会有问题
+                        if(message.status===200){
                             temp.$message({
                                 type: 'success',
                                 message: message.info
