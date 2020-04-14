@@ -3,6 +3,8 @@ package com.lawer.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpSession;
+
 /**
  * 页面跳转
  * @author 张涛
@@ -69,6 +71,15 @@ public class PageController {
     @RequestMapping("modifyPassword")
     public String toModifyPassword(){
         return "html/modify_password";
+    }
+
+    //跳转到修改密码页面
+    @RequestMapping("updateInfo")
+    public String toUpdateInfo(String id, HttpSession session){
+        if(id!=null && !"".equals(id)){
+            session.setAttribute("mdfId",id);
+        }
+        return "html/updateInfo";
     }
 
 }

@@ -5,6 +5,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.lawer.common.ResultGson;
 import com.lawer.pojo.BusUser;
 import com.lawer.pojo.Business;
@@ -94,12 +96,13 @@ public class UserController {
 		user.setPassword(busUser.getPassword());
 		user.setGender(busUser.getGender());
 		user.setPhonenumber(busUser.getPhoneNumber());
+		user.setPosition("高级律师");
 		user.setBusId(businessId);
-        bus.setId(businessId);
-        bus.setLawerid(userId);
-        bus.setLawerName(busUser.getZname());
-        bus.setName(busUser.getName());
-        bus.setTelphone(busUser.getPhoneNumber());
+		bus.setId(businessId);
+		bus.setLawerid(userId);
+		bus.setLawerName(busUser.getZname());
+		bus.setName(busUser.getName());
+		bus.setTelphone(busUser.getPhoneNumber());
 		if( userService.addBusiness(bus)==0 || userService.addUser(user)==0){
 			return 0;
 		}
@@ -107,7 +110,19 @@ public class UserController {
 		return 1;
 	}
 
-	//检查用户名是否存在
+	//添加用户
+	@RequestMapping(value = "addUser")
+	@ResponseBody
+	public int addUser(@RequestBody  String json,HttpSession session){
+		User user=(User)session.getAttribute("us");
+		Map<String,Object> map = JSON.parseObject(json);
+		map.put("busid",user.getBusId());
+		userService.addUser(map);
+		return 1;
+	}
+
+
+	//获取当前律所所有律师
 	@RequestMapping("getAllLawer")
 	@ResponseBody
 	public ResultGson getAllLawer(HttpSession session){
@@ -125,40 +140,81 @@ public class UserController {
 
 		return ResultGson.ok(map);
 	}
-
-
 	//修改密码
-	@RequestMapping("updateps.action")
+	@RequestMapping("updatePs")
 	@ResponseBody
-	public int updatePs(@RequestBody Password ps,HttpSession session,HttpServletRequest request){
+	public int updatePs(@RequestBody String json,HttpSession session,HttpServletRequest request){
 		//从session中获取用户信息
 		User user=(User) session.getAttribute("us");
+		Map<String, Object> mapJson = JSON.parseObject(json);
 		//将用户密码和用户输入的原密码进行比较
-		if(user.getPassword().equals(ps.getPs1())){
+		if(user.getPassword().equals(mapJson.get("oldpassword"))){
 			//将用户密码修改成新密码
-			user.setPassword(ps.getPs2());
+			user.setPassword((String) mapJson.get("password"));
 			//修改数据库中的用户密码
-			int i=userService.updatePs(user);
+
+			try{
+				userService.updatePs(user);
+			}catch (Exception e){
+				return -2;
+			}
 			session.setAttribute("us", user);
-			return i;
+			return 1;
 		}
 		return 0;
 	}
-	//跳转到修改密码页面
-	@RequestMapping("update.action")
-	public String Update(Password ps,HttpSession session,HttpServletRequest request){
-		return "/lawpage/updateps.jsp";
+
+	//获取用户信息
+	@RequestMapping("getUserInfo")
+	@ResponseBody
+	public ResultGson getUserInfo(HttpSession session){
+		//从session中获取用户信息
+		User user=(User) session.getAttribute("us");
+		try{
+			Map<String,Object> map=userService.getUserInfo(user);
+			return ResultGson.ok(map);
+		}catch (Exception e){
+			return ResultGson.error("获取信息失败");
+		}
 	}
-	//跳转到个人信息页面
-	@RequestMapping("toInfor.action")
-	public String toInformation(Password ps,HttpSession session,HttpServletRequest request){
-		return "/lawpage/information.jsp";
+	//获取用户信息
+	@RequestMapping("getBusinessUser")
+	@ResponseBody
+	public String getBusinessUser(String page,String limit, String key, HttpSession session){
+		//从session中获取用户信息
+		User user=(User) session.getAttribute("us");
+		Map<String,Object> map = new HashMap<String,Object>();
+		if (key != null) {
+			JSONObject json = JSONObject.parseObject(key);
+			if (!("".equals(json.get("name"))) && !(null == json.get("name"))) {
+				map.put("name", json.getString("name"));
+			}
+			if (!("".equals(json.get("position"))) && !(null == json.get("position"))) {
+				if(json.getIntValue("position")==0){
+					map.put("position","初级律师");
+				}
+				else if(json.getIntValue("position")==1){
+					map.put("position","中级律师");
+				}
+				else if(json.getIntValue("position")==2){
+					map.put("position","高级律师");
+				}
+			}
+		}
+		map.put("busid",user.getBusId());
+		int pageSize = Integer.parseInt(limit);
+		map.put("pageSize", pageSize);
+		map.put("skipCount", (Integer.parseInt(page) - 1) * pageSize);
+		List list = userService.getBusinessUser(map);
+		JSONObject result = new JSONObject();
+		result.put("data",list);
+		result.put("msg","请求成功");
+		result.put("code", 0);
+		result.put("count",100);
+		return JSON.toJSONString(result);
 	}
-	//跳转到修改个人信息页面
-	@RequestMapping("toupinfor.action")
-	public String to(Password ps,HttpSession session,HttpServletRequest request){
-		return "/lawpage/upinformation.jsp";
-	}
+
+
 	//修改个人信息
 	@RequestMapping("upinfor.action")
 	@ResponseBody
@@ -166,6 +222,18 @@ public class UserController {
 		
 		int i=userService.upinfor(user);
 		return i;
+	}
+
+	//修改个人信息
+	@RequestMapping("getUserById")
+	@ResponseBody
+	public ResultGson getUserById(HttpSession session,HttpServletRequest request){
+		//从session中获取用户信息
+		String id=(String) session.getAttribute("mdfId");
+		User user=userService.userById(id);
+		Map<String,Object> map = new HashMap<>();
+		map.put("result",user);
+		return ResultGson.ok(map);
 	}
 
 }

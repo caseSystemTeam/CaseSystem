@@ -46,14 +46,14 @@
         <div class="layui-form-item">
             <label class="layui-form-label">案件名称</label>
             <div class="layui-input-inline shortInput">
-                <input type="text" name="name" required  placeholder="请输入案件名称" autocomplete="off" class="layui-input">
+                <input type="text" name="name" required lay-verify="required" placeholder="请输入案件名称" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">拟定金额</label>
 
             <div class="layui-col-xs2">
-                <input type="number" name="money" required   placeholder="请输入拟定金额" autocomplete="off" class="layui-input">
+                <input type="number" name="money" required lay-verify="required"   placeholder="请输入拟定金额" autocomplete="off" class="layui-input">
             </div>
             <div class="layui-col-xs1">
                 <div class="layui-btn " style="height: 35px;line-height: 35px;border: 1px solid #dcdfe6;background-color: #f5f7fa;margin-left: -1px;color:black" >元</div>
@@ -63,28 +63,28 @@
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">案件详情</label>
             <div class="layui-input-block">
-                <textarea id="editor" required style="display: none;" name="content"></textarea>
+                <textarea id="editor" required style="display: none;" lay-verify="required" name="content"></textarea>
             </div>
         </div>
 
         <div class="layui-form-item">
             <label class="layui-form-label">申述人姓名</label>
             <div class="layui-input-inline shortInput">
-                <input type="text" name="cusname" required  placeholder="请输入申述人姓名" autocomplete="off" class="layui-input">
+                <input type="text" name="cusname" required lay-verify="required"  placeholder="请输入申述人姓名" autocomplete="off" class="layui-input">
             </div>
         </div>
 
         <div class="layui-form-item">
             <label class="layui-form-label">申述人联系方式</label>
             <div class="layui-input-inline shortInput">
-                <input type="text" name="cus_telphone" required  placeholder="请输入申述人联系方式" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" maxlength=11 autocomplete="off" class="layui-input">
+                <input type="text" name="cus_telphone" required lay-verify="required"  placeholder="请输入申述人联系方式" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" maxlength=11 autocomplete="off" class="layui-input">
             </div>
         </div>
 
         <div class="layui-form-item">
             <label class="layui-form-label">负责人</label>
             <div class="layui-input-inline">
-                <select name="mainp" id="mainp" required lay-filter="mainp">
+                <select name="mainp" id="mainp" required lay-verify="required" lay-filter="mainp">
                     <option value=""></option>
                 </select>
             </div>

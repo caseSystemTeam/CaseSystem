@@ -15,9 +15,12 @@ public interface UserService {
 	public List<User> getList();  //查询所有的律师信息
 	public int IdByname(String name);  //通过姓名查询id
 	public String nameById(int lawerid);  //通过id查询name
-	public User userById(int id);  //通过id查询用户信息
+	public User userById(String id);  //通过id查询用户信息
 	public String checkUserName(String username); //检查用户名是否存在
 	public int addBusiness(Business bus); //添加律所信息
 	public int addUser(User user); //添加用户信息
 	public List<Map<String,Object>> getAllLawer(String busId); //查询当前律所的所有律师
+	public Map<String,Object> getUserInfo(User user);   //封装用户信息
+	public List<Map<String,Object>> getBusinessUser(Map<String,Object> map);  //获取公司当前所有员工信息
+	public int addUser(Map<String,Object> map); //添加用户
 }

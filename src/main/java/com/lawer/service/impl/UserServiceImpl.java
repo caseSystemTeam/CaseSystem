@@ -1,8 +1,11 @@
 package com.lawer.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import com.lawer.mapper.BusinessMapper;
 import com.lawer.pojo.Business;
 import com.lawer.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserMapper mapper;
+	@Autowired
+	private BusinessMapper businessMapper;
 	@Override
 	public User findUser(User user) {
 	    return mapper.findUser(user);
@@ -67,7 +72,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User userById(int id) {
+	public User userById(String id) {
 
 		return mapper.userById(id);
 	}
@@ -108,6 +113,36 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<Map<String, Object>> getAllLawer(String busId) {
 		return mapper.getAllLawer(busId);
+	}
+
+	@Override
+	public Map<String, Object> getUserInfo(User user) {
+		Map<String,Object> bmap = businessMapper.getBusinessById(user.getBusId());
+		Map<String,Object> map =  new HashMap<>();
+		user.setPassword("");
+		map.put("user",user);
+		map.put("business",bmap);
+		return map;
+	}
+
+	@Override
+	public List<Map<String, Object>> getBusinessUser(Map<String, Object> map) {
+
+		return businessMapper.getBusinessUser(map);
+	}
+
+	@Override
+	public int addUser(Map<String, Object> map) {
+		User user = new User();
+		user.setUsername((String) map.get("username"));
+		user.setPassword((String) map.get("password"));
+		user.setName((String) map.get("name"));
+		user.setPosition((String)map.get("position"));
+		user.setBusId((String)map.get("busid"));
+		user.setGender((String)map.get("gender"));
+		user.setId(UUID.randomUUID().toString());
+		user.setPhonenumber((String) map.get("phonenumber"));
+		return mapper.addUser(user);
 	}
 
 }

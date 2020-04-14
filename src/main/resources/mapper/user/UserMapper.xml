@@ -55,7 +55,7 @@ select id from laweruser where name=#{name}
 select name from laweruser where id=#{lawerid}
 </select>
 
-    <select id="userById" parameterType="int" resultType="user">
+    <select id="userById" parameterType="string" resultType="user">
 select * from laweruser where id=#{id}
 </select>
 
@@ -69,8 +69,8 @@ select * from laweruser where id=#{id}
  </insert>
 
     <insert id="addUser" parameterType="user">
-  insert into laweruser(id,username,name,password,gender,phonenumber,busid)
-  values (#{id},#{username},#{name},#{password},#{gender},#{phonenumber},#{busId})
+  insert into laweruser(id,username,name,password,gender,position,phonenumber,busid)
+  values (#{id},#{username},#{name},#{password},#{gender},#{position},#{phonenumber},#{busId})
  </insert>
 
     <select id="getAllLawer" parameterType="string" resultType="Map">

@@ -126,7 +126,7 @@
         var form   = layui.form;
         var $ = layui.jquery;
         var layer  = layui.layer;
-        var i=1;
+        var i=1,t=1,s=1,n=1;
         //添加表单失焦事件
         //验证表单
         $('#user').blur(function() {
@@ -144,10 +144,11 @@
                     if (data == 0) {
                         $('#ri').removeAttr('hidden');
                         $('#wr').attr('hidden','hidden');
+                        n=1;
                     } else {
                         $('#wr').removeAttr('hidden');
                         $('#ri').attr('hidden','hidden');
-                        i=0;
+                        n=0;
                     }
 
                 },
@@ -173,7 +174,7 @@
             }else {
                 $('#pri').removeAttr('hidden');
                 $('#pwr').attr('hidden','hidden');
-
+                i=1;
             }
         });
 
@@ -183,10 +184,11 @@
                 $('#rpwr').removeAttr('hidden');
                 $('#rpri').attr('hidden','hidden');
 
-                i=0;
+                t=0;
             }else {
                 $('#rpri').removeAttr('hidden');
                 $('#rpwr').attr('hidden','hidden');
+                t=1;
             };
         });
         //手机号是否合法
@@ -195,17 +197,18 @@
                 $('#rpwrp').removeAttr('hidden');
                 $('#rprip').attr('hidden','hidden');
 
-                i=0;
+                s=0;
             }else {
                 $('#rprip').removeAttr('hidden');
                 $('#rpwrp').attr('hidden','hidden');
+                s=1;
             };
         });
         //
         //添加表单监听事件,提交注册信息
         form.on('submit(sub)', function(data) {
             console.info("sss",data.field)
-            if(i!=0){
+            if(i!=0 &&t!=0 && n!=0 &&s!=0){
                 $.ajax({
                     url:path+"/userCon/addBusUser",
                     data:JSON.stringify(data.field),
