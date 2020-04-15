@@ -231,6 +231,7 @@ public class UserController {
 		//从session中获取用户信息
 		String id=(String) session.getAttribute("mdfId");
 		User user=userService.userById(id);
+		user.setPassword("");
 		Map<String,Object> map = new HashMap<>();
 		map.put("result",user);
 		return ResultGson.ok(map);

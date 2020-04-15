@@ -149,7 +149,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
     table.on('tool(saleTable)', function (obj) {
         var data = obj.data; //获得当前行数据
         var tr = obj.tr; //获得当前行 tr 的DOM对象
-        console.info("edit",data);
+
         if (obj.event === 'edit') {
             window.location.href = path + "/page/updateInfo?id=" + data.Id ;
         }

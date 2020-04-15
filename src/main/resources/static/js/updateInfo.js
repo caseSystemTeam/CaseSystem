@@ -39,12 +39,18 @@ layui.use(['upload','form','layer','jquery'], function() {
         contentType: "application/json",
         dataType:'json',
         success:function(data){
-            console.info("data",data);
-            $("input[name=username]").val("zz");
-            $("input[name=name]").val("zz");
-            $("#radio1").removeAttr("checked");
-            $("#radio2").attr("checked",true);
-            $("input[name=phonenumber]").val("15638159781");
+           var user =data.data.result;
+            $("input[name=username]").val(user.username);
+            $("input[name=name]").val(user.name);
+            if(user.gender=="男") {
+                $("#radio2").removeAttr("checked");
+                $("#radio1").attr("checked", true);
+            }else{
+                $("#radio1").removeAttr("checked");
+                $("#radio2").attr("checked",true);
+            }
+            $("#position").val(user.position);
+            $("input[name=phonenumber]").val(user.phonenumber);
             form.render(); //更新全部
         }
     })
