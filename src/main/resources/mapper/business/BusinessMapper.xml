@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lawer.mapper.BusinessMapper">
+    <select id="getBusinessById" parameterType="string" resultType="map">
+        select * from business where id =#{id}
+    </select>
+    <select id="getBusinessUser" resultType="map">
+        select * from laweruser where busid =#{map.busid}
+        <if test="map.name !=null and map.name !=''">
+            <trim prefix="AND(" suffix=")">
+                name like concat('%',#{map.name},'%')
+                OR phonenumber like concat('%',#{map.name},'%')
+            </trim>
+
+        </if>
+        <if test="map.position !=null and map.position !=''">
+            and position = #{map.position}
+        </if>
+        order by id
+    </select>
+
+    <select id="getBusUserCount" resultType="int">
+        select count(1) from laweruser where busid =#{map.busid}
+        <if test="map.name !=null and map.name !=''">
+            <trim prefix="AND(" suffix=")">
+                name like concat('%',#{map.name},'%')
+                OR phonenumber like concat('%',#{map.name},'%')
+            </trim>
+
+        </if>
+        <if test="map.position !=null and map.position !=''">
+            and position = #{map.position}
+        </if>
+    </select>
+    <delete id="deleteUser" parameterType="string" >
+        delete from laweruser where id=#{id}
+    </delete>
+
+</mapper>

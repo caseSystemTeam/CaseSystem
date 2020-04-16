@@ -57,7 +57,7 @@ function menuCAClick(url,_this){
 	
 	//处理frameMain title名称变化
 	if($(_this).find("i").attr("class") == "iconfont icon-yonghu1"){
-		$("#frameMainTitle span").html('<i class="iconfont icon-xianshiqi"></i>个人资料');
+		$("#frameMainTitle span").html('<i class="iconfont icon-xianshiqi"></i>个人信息');
 		return;
 	}
 	if($(_this).text() == "修改密码"){

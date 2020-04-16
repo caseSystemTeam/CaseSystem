@@ -76,36 +76,7 @@ layui.use(['jquery','layer','form','layedit'],
             return false;
         })
 
-        //二级菜单点击后的处理方法
-        function menuCAClick(url,_this){
 
-            //处理frameMain url地址
-            $("#mainIframe").attr("src",url);
-
-            //处理frameMain title名称变化
-            if($(_this).find("i").attr("class") == "iconfont icon-yonghu1"){
-                $("#frameMainTitle span").html('<i class="iconfont icon-xianshiqi"></i>个人资料');
-                return;
-            }
-            if($(_this).text() == "修改密码"){
-                $("#frameMainTitle span").html('<i class="iconfont icon-xianshiqi"></i>'+$(_this).text());
-                return;
-            }
-            if($(_this).attr("class") == "menuFA"){
-                $("#frameMainTitle span").html('<i class="iconfont icon-xianshiqi"></i>'+$(_this).text());
-            }else{
-                //显示父菜单
-//		$("#frameMainTitle span").html('<i class="iconfont icon-xianshiqi"></i>'+$(_this).parent().parent().siblings(".menuFA").text());
-                //显示子菜单
-                $("#frameMainTitle span").html('<i class="iconfont icon-xianshiqi"></i>'+$(_this).text());
-            }
-
-            //处理菜单样式变化
-            $(_this).css("cssText", "background-color:#fbcc19 !important;").css("color","#FFF");
-            $(_this).parent().siblings().find("a").css("cssText", "background-color:#transparent").css("color","#c2c2c2");
-            $(_this).parent().parent().parent().siblings().find("dl dt a").css("cssText", "background-color:#transparent").css("color","#c2c2c2")
-
-        }
 
 
     }

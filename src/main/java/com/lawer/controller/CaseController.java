@@ -5,21 +5,25 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lawer.common.IpAdress;
 import com.lawer.pojo.CaseFile;
 import com.alibaba.fastjson.JSON;
 import com.lawer.common.ResultGson;
+import com.lawer.pojo.Log;
 import com.lawer.pojo.User;
 import com.lawer.service.CaseService;
+import com.lawer.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.io.File;
 import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 
@@ -32,6 +36,8 @@ public class CaseController {
 
     @Autowired
     private CaseService caseService;
+    @Autowired
+    private LogService logService;
 
     //跳转至案件详情界面
     @RequestMapping("/tocase")
@@ -51,6 +57,7 @@ public class CaseController {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("json转换出了问题");
+
         }
         //将返回数据转成json格式
         return json;
@@ -58,15 +65,18 @@ public class CaseController {
 
     @RequestMapping("addCase")
     @ResponseBody
-    public ResultGson addCase(@RequestBody  String json, HttpSession session){
+    public ResultGson addCase(@RequestBody  String json, HttpSession session, HttpServletRequest request){
         Map<String, Object> mapJson = JSON.parseObject(json);
         User user =(User)session.getAttribute("us");
        try{
            caseService.addCase(mapJson,user);
        }catch (Exception e){
-           e.printStackTrace();
+           Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"添加案件","失败", "添加案件\""+ mapJson.get("name")+"\"",user.getBusId());
+           logService.addLog(log);
            return ResultGson.error("执行出错");
        }
+        Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"添加案件","成功", "添加案件\""+ mapJson.get("name")+"\"",user.getBusId());
+        logService.addLog(log);
         return ResultGson.ok("执行成功");
     }
 
