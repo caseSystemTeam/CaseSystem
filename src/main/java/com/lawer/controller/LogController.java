@@ -26,10 +26,12 @@ public class LogController {
     //获取日志信息
     @RequestMapping("getLog")
     @ResponseBody
-    public String getLog(String page,String limit, String key){
+    public String getLog(String page,String limit, String key,HttpSession session){
         Map<String,Object> map = new HashMap<>();
         JSONObject result = new JSONObject();
+        User user=(User)session.getAttribute("us");
         int pageSize = Integer.parseInt(limit);
+        map.put("busid",user.getBusId());
         map.put("pageSize", pageSize);
         map.put("skipCount", (Integer.parseInt(page) - 1) * pageSize);
         if (key != null) {

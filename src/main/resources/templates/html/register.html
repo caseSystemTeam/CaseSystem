@@ -114,7 +114,7 @@
             <button type="submit" lay-submit lay-filter="sub" class="layui-btn">注册</button>
         </div>
         <hr style="width: 85%" />
-        <p style="width: 85%"><a href="/userCon/login" class="fl">已有账号？立即登录</a><a href="javascript:;" class="fr">忘记密码？</a></p>
+        <p style="width: 85%"><a href="/userCon/login" class="fl">已有账号？立即登录</a><!--<a href="javascript:;" class="fr">忘记密码？</a>--></p>
     </form>
 </div>
 
@@ -140,7 +140,7 @@
                 // contentType:"application/json;charset=UTF-8",
                 dataType:'text',
                 success:function(data){
-
+                    console.info("sszzz",data);
                     if (data == 0) {
                         $('#ri').removeAttr('hidden');
                         $('#wr').attr('hidden','hidden');

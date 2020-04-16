@@ -68,11 +68,11 @@ public class CaseController {
        try{
            caseService.addCase(mapJson,user);
        }catch (Exception e){
-           Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"添加案件","失败", "添加案件\""+ mapJson.get("name")+"\"");
+           Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"添加案件","失败", "添加案件\""+ mapJson.get("name")+"\"",user.getBusId());
            logService.addLog(log);
            return ResultGson.error("执行出错");
        }
-        Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"添加案件","成功", "添加案件\""+ mapJson.get("name")+"\"");
+        Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"添加案件","成功", "添加案件\""+ mapJson.get("name")+"\"",user.getBusId());
         logService.addLog(log);
         return ResultGson.ok("执行成功");
     }

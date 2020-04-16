@@ -61,11 +61,11 @@ public class UserController {
 			request.getSession().setAttribute("us",user);
 			Cookie cookie = new Cookie("lawername",user.getName());
 			response.addCookie(cookie);
-			Log log =Log.ok(user.getUsername(),IpAdress.getIp(request),0,"登录","成功","");
+			Log log =Log.ok(user.getUsername(),IpAdress.getIp(request),0,"登录","成功","",user.getBusId());
 			logService.addLog(log);
 			return "1";
 		}
-		Log log =Log.ok(us.getUsername(),IpAdress.getIp(request),0,"登录","失败","");
+		Log log =Log.ok(us.getUsername(),IpAdress.getIp(request),0,"登录","失败","",user.getBusId());
 		logService.addLog(log);
 		return "0";
 		
@@ -128,11 +128,11 @@ public class UserController {
 		try{
 			userService.addUser(map);
 		}catch (Exception e){
-			Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"添加用户","失败", "添加用户\""+ map.get("username")+"\"");
+			Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"添加用户","失败", "添加用户\""+ map.get("username")+"\"",user.getBusId());
 			logService.addLog(log);
 			return 0;
 		}
-		Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"添加用户","成功", "添加用户\""+ map.get("username")+"\"");
+		Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"添加用户","成功", "添加用户\""+ map.get("username")+"\"",user.getBusId());
 		logService.addLog(log);
 		return 1;
 	}
@@ -173,17 +173,17 @@ public class UserController {
 			try{
 				userService.updatePs(us);
 			}catch (Exception e){
-				Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"修改密码","失败", "无");
+				Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"修改密码","失败", "无",user.getBusId());
 				logService.addLog(log);
 				return -2;
 			}
 			session.setAttribute("us",us);
-			Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"修改密码","成功", "无");
+			Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"修改密码","成功", "无",user.getBusId());
 			logService.addLog(log);
 
 			return 1;
 		}
-		Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"修改密码","失败", "无");
+		Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"修改密码","失败", "无",user.getBusId());
 		logService.addLog(log);
 		return 0;
 	}
@@ -251,11 +251,11 @@ public class UserController {
 		user.setId(id);
 		try{
 			int i=userService.upinfor(user);
-			Log log =Log.ok(us.getUsername(), IpAdress.getIp(request),1,"修改信息","成功", "修改"+user.getUsername()+"的个人信息");
+			Log log =Log.ok(us.getUsername(), IpAdress.getIp(request),1,"修改信息","成功", "修改"+user.getUsername()+"的个人信息",us.getBusId());
 			logService.addLog(log);
 			return i;
 		}catch (Exception e){
-			Log log =Log.ok(us.getUsername(), IpAdress.getIp(request),1,"修改信息","失败", "修改"+user.getUsername()+"的个人信息");
+			Log log =Log.ok(us.getUsername(), IpAdress.getIp(request),1,"修改信息","失败", "修改"+user.getUsername()+"的个人信息",us.getBusId());
 			logService.addLog(log);
 			return 0;
 		}
@@ -284,19 +284,20 @@ public class UserController {
 		Map<String,Object> map = JSON.parseObject(json);
 		User us = userService.userById((String) map.get("id"));
 		map.put("busId",user.getBusId());
+		map.put("jstatus",0);
 		int i=caseListService.getACaseCount(map);
 		if(i>0){
-			Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"删除用户","失败", "用户还有未完成案件，无法删除用户\""+us.getUsername()+"\"");
+			Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"删除用户","失败", "用户还有未完成案件，无法删除用户\""+us.getUsername()+"\"",user.getBusId());
 			logService.addLog(log);
 			return ResultGson.error("未完成");
 		}
 		try {
 			userService.deleteUser((String) map.get("id"));
-			Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"删除用户","成功", "删除用户\""+us.getUsername()+"\"");
+			Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"删除用户","成功", "删除用户\""+us.getUsername()+"\"",user.getBusId());
 			logService.addLog(log);
 			return ResultGson.ok("删除成功");
 		} catch (Exception e) {
-			Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"删除用户","失败", "删除用户\""+us.getUsername()+"\"");
+			Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"删除用户","失败", "删除用户\""+us.getUsername()+"\"",user.getBusId());
 			logService.addLog(log);
             return ResultGson.error("删除失败");
 		}

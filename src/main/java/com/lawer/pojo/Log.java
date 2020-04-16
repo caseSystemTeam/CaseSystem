@@ -39,6 +39,11 @@ public class Log {
      */
     private String create_time;
 
+    /**
+     *公司id
+     */
+    private String busid;
+
     public String getId() {
         return id;
     }
@@ -97,7 +102,7 @@ public class Log {
     public Log(){
         super();
     }
-    public Log(String id, String username, String ipaddress, int style, String operatename, String operateresult, String descript, String create_time) {
+    public Log(String id, String username, String ipaddress, int style, String operatename, String operateresult, String descript, String create_time,String busid) {
         this.id = id;
         this.username = username;
         this.ip_address = ipaddress;
@@ -106,6 +111,7 @@ public class Log {
         this.operateresult = operateresult;
         this.descript = descript;
         this.create_time = create_time;
+        this.busid = busid;
     }
 
     public String getCreate_time() {
@@ -115,7 +121,7 @@ public class Log {
     public void setCreate_time(String create_time) {
         this.create_time = create_time;
     }
-    public Log createLog(String username,String ip_address,int style,String operatename,String result,String name){
+    public Log createLog(String username,String ip_address,int style,String operatename,String result,String name,String busid){
         this.id = UUID.randomUUID().toString();
         this.create_time = DateUtil.getToday();
         this.username =username;
@@ -123,13 +129,14 @@ public class Log {
         this.style =style;
         this.operatename = operatename;
         this.operateresult = operatename+result;
+        this.busid =busid;
         if(style !=0)
            this.descript = name;
         return this;
 
     }
-    public static Log ok(String username,String ip_address,int style,String operatename,String result,String name){
-        return  new Log().createLog(username,ip_address,style,operatename,result,name);
+    public static Log ok(String username,String ip_address,int style,String operatename,String result,String name,String busid){
+        return  new Log().createLog(username,ip_address,style,operatename,result,name,busid);
     }
 
 }
