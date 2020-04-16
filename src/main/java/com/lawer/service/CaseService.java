@@ -16,6 +16,9 @@ public interface CaseService {
 	 * 案件管理业务层接口
 	 */
     public void addCase(Map<String,Object> map, User user); //添加案件
+	public Map<String,Object> getCaseInfo(String caseId); //添加案件
+
+	void addMessage(List<User> receList,String info,String sender);
 
 
 }

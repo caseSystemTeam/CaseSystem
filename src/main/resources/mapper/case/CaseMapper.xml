@@ -21,6 +21,21 @@
 		delete from file where fileid =#{fileid}
 	</delete>
 
+    <insert id="addMessage" parameterType="com.lawer.pojo.Message">
+      insert into message(
+        Id,sender,receiver,info,sendTime,isRead)
+      values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id},#{item.sender},#{item.receiver},#{item.info},#{item.sendTime},#{item.isRead})
+        </foreach>
+    </insert>
+
+    <!-- 根据案件ID查询案件信息 -->
+    <select id="getCaseInfo" resultType="Map" parameterType="String">
+		select * from anjian where Id=#{caseId}
+	</select>
+
+
 
 
 

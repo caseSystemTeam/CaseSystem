@@ -61,35 +61,67 @@
                 <div class="text item">
                     <!--卡片内容 开始 -->
 
-                    <el-form label-position="right" label-width="120px">
+                    <el-form label-position="right" :model="caseInfo" label-width="140px">
+
+                        <el-form-item label="案件名称：">
+                            <!-- el-col是element-UI的布局组件-->
+                            <el-col :span="8">
+                                <el-input v-model="caseInfo.name" disabled></el-input>
+                            </el-col>
+                        </el-form-item>
 
                         <el-form-item label="提交人：">
                             <!-- el-col是element-UI的布局组件-->
                             <el-col :span="8">
-                                <el-input ></el-input>
+                                <el-input disabled></el-input>
                             </el-col>
                         </el-form-item>
 
                         <el-form-item label="提交时间：">
                             <el-col :span="8">
-                                <el-input ></el-input>
+                                <el-input v-model="caseInfo.rtime" disabled></el-input>
                             </el-col>
                         </el-form-item>
 
                         <el-form-item label="涉案金额：">
                             <el-col :span="8">
-                                <el-input >
+                                <el-input v-model="caseInfo.money" disabled>
                                     <template slot="append">元</template>
                                 </el-input>
                             </el-col>
                         </el-form-item>
 
+                        <el-form-item label="申诉人姓名：">
+                            <!-- el-col是element-UI的布局组件-->
+                            <el-col :span="8">
+                                <el-input v-model="caseInfo.cusname" disabled></el-input>
+                            </el-col>
+                        </el-form-item>
+
+                        <el-form-item label="申诉人联系方式：">
+                            <!-- el-col是element-UI的布局组件-->
+                            <el-col :span="8">
+                                <el-input v-model="caseInfo.cus_telphone" disabled></el-input>
+                            </el-col>
+                        </el-form-item>
+
+                        <el-form-item label="案件描述：">
+                            <el-col :span="16">
+                                <textarea id="editorContent" style="display: none;"></textarea>
+                            </el-col>
+                        </el-form-item>
+
                         <el-form-item label="咨询结果：">
                             <el-col :span="16">
-                                <textarea id="editor" style="display: none;"></textarea>
+                                <textarea id="editorResult" style="display: none;"></textarea>
                             </el-col>
                         </el-form-item>
                     </el-form>
+
+                    <div>
+                        <el-button type="primary" round>结束案件</el-button>
+                        <el-button type="primary" round>执行下一个流程</el-button>
+                    </div>
 
                     <!--卡片内容 结束 -->
                 </div>
@@ -200,44 +232,89 @@
                                         >
                                     <i class="el-icon-upload"></i>
                                     <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                                    <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                                    <div class="el-upload__tip" slot="tip">支持word、excel、pdf以及图片的浏览，单个文件最大不超过30M</div>
                                 </el-upload>
 
                             </el-col>
                             <el-col :span="16"><div class="grid-content bg-purple-light"></div>
-                                <!--当前案件下需要的文件列表 -->
-                                <el-card class="box-card">
-                                    <el-table
-                                            :data="fileList"
-                                            height="400"
-                                            style="width: 100%">
-                                        <el-table-column
-                                                prop="filename"
-                                                label="文件名"
-                                                width="180">
-                                        </el-table-column>
-                                        <el-table-column
-                                                prop="createTime"
-                                                label="上传日期"
-                                                width="180">
-                                        </el-table-column>
-                                        <el-table-column
-                                                prop="upId"
-                                                label="上传人">
-                                        </el-table-column>
-                                        <el-table-column
-                                                label="操作">
-                                                <template slot-scope="scope">
-                                                    <el-button @click="watchFile(scope.row)" type="text" size="small">浏览</el-button>
-                                                    <el-button  @click="deleteFileById(scope.row)" type="text" size="small">删除</el-button>
-                                                </template>
-                                        </el-table-column>
-                                    </el-table>
-                                </el-card>
+                                <el-form  label-width="120px">
+                                    <el-form-item label="消息内容：" >
+                                        <el-input type="textarea" :rows="8" v-model="message"></el-input>
+                                    </el-form-item>
+                                    <el-form-item>
+
+                                        <el-button type="primary" @click="dialogFormVisible = true">选择接收人</el-button>
+
+                                        <el-dialog title="接收人列表" :visible.sync="dialogFormVisible">
+                                            <!--当前律所下工作人员的列表，用来选择接收消息的人 -->
+                                            <el-table
+                                                    ref="multipleTable"
+                                                    :data="userList"
+                                                    tooltip-effect="dark"
+                                                    style="width: 100%"
+                                                    @selection-change="handleSelectionChange">
+                                                <el-table-column
+                                                        type="selection"
+                                                        width="60">
+                                                </el-table-column>
+                                                <el-table-column
+                                                        prop="name"
+                                                        label="姓名"
+                                                        width="120">
+                                                </el-table-column>
+                                                <el-table-column
+                                                        prop="position"
+                                                        label="职称"
+                                                        width="120">
+                                                </el-table-column>
+
+                                            </el-table>
+
+                                            <div slot="footer" class="dialog-footer">
+                                                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                                                <el-button type="primary" @click="sendMessage">确 定</el-button>
+                                            </div>
+
+                                        </el-dialog>
+                                    </el-form-item>
+                                </el-form>
                             </el-col>
                         </el-row>
                     </el-card>
 
+                    <div class="common-position">
+
+                        <!--当前案件下需要的文件列表 -->
+                        <el-card class="box-card">
+                            <el-table
+                                    :data="fileList"
+                                    height="400"
+                                    style="width: 100%">
+                                <el-table-column
+                                        prop="filename"
+                                        label="文件名"
+                                        width="180">
+                                </el-table-column>
+                                <el-table-column
+                                        prop="createTime"
+                                        label="上传日期"
+                                        width="180">
+                                </el-table-column>
+                                <el-table-column
+                                        prop="upId"
+                                        label="上传人">
+                                </el-table-column>
+                                <el-table-column
+                                        label="操作">
+                                    <template slot-scope="scope">
+                                        <el-button @click="watchFile(scope.row)" type="text" size="small">浏览</el-button>
+                                        <el-button  @click="deleteFileById(scope.row)" type="text" size="small">删除</el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-card>
+                    </div>
+                    <!--案件修改版本列表-->
                     <div class="common-position">
                         <el-card class="box-card">
                             <el-table
@@ -259,6 +336,11 @@
                                 </el-table-column>
                             </el-table>
                         </el-card>
+                    </div>
+
+                    <div>
+                        <el-button type="primary" round>切换为新版本</el-button>
+                        <el-button type="primary" round>执行下一个流程</el-button>
                     </div>
 
 
@@ -302,10 +384,18 @@
     <script src="/pagejs/casePlan.js"></script>
 
     <script>
+        var layedit;
+        var editorContent;
+        var editorResult;
+
         layui.use('layedit', function(){
-            var layedit = layui.layedit;
-            layedit.build('editor',{
+            layedit = layui.layedit;
+
+            editorContent = layedit.build('editorContent',{
                 tool:[]
+            }); //建立编辑器
+
+            editorResult = layedit.build('editorResult',{
             }); //建立编辑器
         });
 

@@ -5,16 +5,17 @@ package com.lawer.service.impl;
 
 import com.lawer.mapper.CaseMapper;
 import com.lawer.pojo.CaseFile;
+import com.lawer.pojo.Message;
 import com.lawer.service.CaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
+
 import com.lawer.common.DateUtil;
 import com.lawer.pojo.User;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Map;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -56,5 +57,34 @@ public class CaseServiceImpl implements CaseService {
 
 
     }
+
+	@Override
+	public Map<String,Object> getCaseInfo(String caseId) {
+		Map<String,Object> map = null;
+		map = mapper.getCaseInfo(caseId);
+		return map;
+	}
+
+
+	public void addMessage(List<User> receList,String info,String sender){
+		List<Message> list = new ArrayList<>();
+		Message message = null;
+		for(int i=0;i<receList.size();i++){
+			message = new Message();
+			message.setId(UUID.randomUUID().toString());
+			message.setReceiver(receList.get(i).getId());
+			message.setInfo(info);
+			message.setSender(sender);
+			message.setIsRead(0);
+			Date now=new Date();
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String time=dateFormat.format(now);
+			message.setSendTime(time);
+			list.add(message);
+		}
+		mapper.addMessage(list);
+	}
+
+
 
 }
