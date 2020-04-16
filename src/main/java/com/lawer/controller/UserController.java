@@ -7,17 +7,18 @@ import javax.servlet.http.HttpSession;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.lawer.common.IpAdress;
 import com.lawer.common.ResultGson;
-import com.lawer.pojo.BusUser;
-import com.lawer.pojo.Business;
+import com.lawer.pojo.*;
+import com.lawer.service.CaseListService;
+import com.lawer.service.LogService;
+import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.lawer.pojo.User;
-import com.lawer.pojo.Password;
 import com.lawer.service.UserService;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,6 +37,10 @@ import java.util.UUID;
 public class UserController {
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private LogService logService;
+	@Autowired
+	private CaseListService caseListService;
 	
 	//跳转到登录页面
 	@RequestMapping("login")
@@ -56,9 +61,12 @@ public class UserController {
 			request.getSession().setAttribute("us",user);
 			Cookie cookie = new Cookie("lawername",user.getName());
 			response.addCookie(cookie);
+			Log log =Log.ok(user.getUsername(),IpAdress.getIp(request),0,"登录","成功","");
+			logService.addLog(log);
 			return "1";
 		}
-
+		Log log =Log.ok(us.getUsername(),IpAdress.getIp(request),0,"登录","失败","");
+		logService.addLog(log);
 		return "0";
 		
 	}
@@ -113,11 +121,19 @@ public class UserController {
 	//添加用户
 	@RequestMapping(value = "addUser")
 	@ResponseBody
-	public int addUser(@RequestBody  String json,HttpSession session){
+	public int addUser(@RequestBody  String json,HttpSession session,HttpServletRequest request){
 		User user=(User)session.getAttribute("us");
 		Map<String,Object> map = JSON.parseObject(json);
 		map.put("busid",user.getBusId());
-		userService.addUser(map);
+		try{
+			userService.addUser(map);
+		}catch (Exception e){
+			Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"添加用户","失败", "添加用户\""+ map.get("username")+"\"");
+			logService.addLog(log);
+			return 0;
+		}
+		Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"添加用户","成功", "添加用户\""+ map.get("username")+"\"");
+		logService.addLog(log);
 		return 1;
 	}
 
@@ -146,21 +162,29 @@ public class UserController {
 	public int updatePs(@RequestBody String json,HttpSession session,HttpServletRequest request){
 		//从session中获取用户信息
 		User user=(User) session.getAttribute("us");
+		User us = userService.userById(user.getId());
 		Map<String, Object> mapJson = JSON.parseObject(json);
 		//将用户密码和用户输入的原密码进行比较
-		if(user.getPassword().equals(mapJson.get("oldpassword"))){
+		if(us.getPassword().equals(mapJson.get("oldpassword"))){
 			//将用户密码修改成新密码
-			user.setPassword((String) mapJson.get("password"));
+			us.setPassword((String) mapJson.get("password"));
 			//修改数据库中的用户密码
 
 			try{
-				userService.updatePs(user);
+				userService.updatePs(us);
 			}catch (Exception e){
+				Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"修改密码","失败", "无");
+				logService.addLog(log);
 				return -2;
 			}
-			session.setAttribute("us", user);
+			session.setAttribute("us",us);
+			Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"修改密码","成功", "无");
+			logService.addLog(log);
+
 			return 1;
 		}
+		Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"修改密码","失败", "无");
+		logService.addLog(log);
 		return 0;
 	}
 
@@ -206,25 +230,39 @@ public class UserController {
 		map.put("pageSize", pageSize);
 		map.put("skipCount", (Integer.parseInt(page) - 1) * pageSize);
 		List list = userService.getBusinessUser(map);
+		int count = userService.getBusUserCount(map);
 		JSONObject result = new JSONObject();
 		result.put("data",list);
 		result.put("msg","请求成功");
 		result.put("code", 0);
-		result.put("count",100);
+		result.put("count",count);
 		return JSON.toJSONString(result);
 	}
 
 
 	//修改个人信息
-	@RequestMapping("upinfor.action")
+	@RequestMapping("updateUser")
 	@ResponseBody
-	public int upInfor(@RequestBody User user,HttpSession session,HttpServletRequest request){
-		
-		int i=userService.upinfor(user);
-		return i;
+	public int updateUser(@RequestBody User user,HttpSession session,HttpServletRequest request){
+		//从session中获取用户信息
+		String id=(String) session.getAttribute("mdfId");
+		//从session中获取用户信息
+		User us=(User) session.getAttribute("us");
+		user.setId(id);
+		try{
+			int i=userService.upinfor(user);
+			Log log =Log.ok(us.getUsername(), IpAdress.getIp(request),1,"修改信息","成功", "修改"+user.getUsername()+"的个人信息");
+			logService.addLog(log);
+			return i;
+		}catch (Exception e){
+			Log log =Log.ok(us.getUsername(), IpAdress.getIp(request),1,"修改信息","失败", "修改"+user.getUsername()+"的个人信息");
+			logService.addLog(log);
+			return 0;
+		}
+
 	}
 
-	//修改个人信息
+	//获取用户信息
 	@RequestMapping("getUserById")
 	@ResponseBody
 	public ResultGson getUserById(HttpSession session,HttpServletRequest request){
@@ -236,5 +274,37 @@ public class UserController {
 		map.put("result",user);
 		return ResultGson.ok(map);
 	}
+
+	//删除用户信息
+	@RequestMapping("deleteUser")
+	@ResponseBody
+	public ResultGson deleteUser(@RequestBody String json,HttpServletRequest request,HttpSession session) {
+		//从session中获取用户信息
+		User user=(User) session.getAttribute("us");
+		Map<String,Object> map = JSON.parseObject(json);
+		User us = userService.userById((String) map.get("id"));
+		map.put("busId",user.getBusId());
+		int i=caseListService.getACaseCount(map);
+		if(i>0){
+			Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"删除用户","失败", "用户还有未完成案件，无法删除用户\""+us.getUsername()+"\"");
+			logService.addLog(log);
+			return ResultGson.error("未完成");
+		}
+		try {
+			userService.deleteUser((String) map.get("id"));
+			Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"删除用户","成功", "删除用户\""+us.getUsername()+"\"");
+			logService.addLog(log);
+			return ResultGson.ok("删除成功");
+		} catch (Exception e) {
+			Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"删除用户","失败", "删除用户\""+us.getUsername()+"\"");
+			logService.addLog(log);
+            return ResultGson.error("删除失败");
+		}
+	}
+
+
+
+
+
 
 }

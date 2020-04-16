@@ -1,6 +1,6 @@
-layui.use(['jquery','layer'],
+layui.use(['jquery','layer','form'],
     function () {
-        var layer = layui.layer, $ = layui.jquery;
+        var layer = layui.layer, $ = layui.jquery,form=layui.form;
         $.ajax({
             url:path+"/userCon/getUserInfo",
             dataType:'json',
@@ -11,7 +11,7 @@ layui.use(['jquery','layer'],
                 if (data.status == 200){
                     var bus = data.data.business;
                     var user =data.data.user;
-                  var html='<div class="layui-form-item">\n' +
+                  var html=' <form id="iform" class="layui-form" action=""><div class="layui-form-item">\n' +
                       '    <label class="layui-form-label laywidth">姓名:</label>\n' +
                       '    <label class="layui-form-label laywidth">'+user.name+'</label>\n' +
                       '</div>\n' +
@@ -43,7 +43,13 @@ layui.use(['jquery','layer'],
                       '<div class="layui-form-item">\n' +
                       '    <label class="layui-form-label laywidth">未解决案件数:</label>\n' +
                       '    <label class="layui-form-label laywidth">'+user.unsolve+'</label>\n' +
-                      '</div>';
+                      '</div>' +
+                      // '<div class="layui-form-item">\n' +
+                      // '     <div class="layui-input-block">\n' +
+                      // '          <button class="layui-btn" lay-submit lay-filter="submitBut"></button>\n' +
+                      // '     </div>\n' +
+                      // '</div>\n' +
+                      '</form>';
                     $(".cBody").html(html);
 
                 }else{
@@ -54,5 +60,7 @@ layui.use(['jquery','layer'],
                 $(".cBody").html("加载失败");
             }
         })
+
+
     }
 )

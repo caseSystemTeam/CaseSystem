@@ -24,6 +24,9 @@ update laweruser set password = #{password} where username= #{username}
             <if test="phonenumber!=null and phonenumber !=''">
                 phonenumber=#{phonenumber},
             </if>
+            <if test="position !=null and position !=''">
+                position=#{position},
+            </if>
             <if test="ftag!=null ">
                 ftag=#{ftag},
             </if>

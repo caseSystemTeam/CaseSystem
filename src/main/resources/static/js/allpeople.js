@@ -44,6 +44,13 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                             return "<div class='layui-elip cursor-p' title='" + d.name + "'>" + d.name + "</div>";
                         }
                     }, {
+                    field: 'username',
+                    title: '用户名',
+                    width: '14%',
+                    templet: function (d) {
+                        return "<div class='layui-elip cursor-p' title='" + d.username + "'>" + d.username + "</div>";
+                    }
+                }, {
                     field: 'gender',
                     title: '员工性别',
                     width: "10%",
@@ -152,6 +159,52 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
 
         if (obj.event === 'edit') {
             window.location.href = path + "/page/updateInfo?id=" + data.Id ;
+        }
+        else if(obj.event=='delete'){
+            layer.open({
+                type: 1,
+                title: '提示',
+                offset: 'auto',
+                btnAlign: 'c',
+                area: ['420px', '220px'],
+                offset: 'auto',
+                content: "<div style='text-align:center;padding:42px 0 26px 0;'><span class='layui-badge'>!</span>" + "   " + "确定删除该用户吗？</div><hr class='layui-bg-gray' style='margin:29px 0 0'>",
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+                    var json={id:data.Id};
+
+                    $.ajax({
+                        url: path + "/userCon/deleteUser",
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify(json),
+                        success: function (data) {
+                            if (data.status == 200) {
+                                console.info("sssdata",data);
+                                layer.msg("删除成功");
+                                setTimeout(function() {
+                                    window.location.reload();
+                                },1000);
+                            }else{
+
+                                if(data.info=="未完成"){
+                                    layer.msg("该用户还有未完成案件，无法删除");
+                                }else{
+                                    layer.msg("删除失败");
+                                }
+                            }
+                        }
+                    });
+                    layer.close(index);
+
+                },
+                success: function (index, layero) {
+                    $(':focus').blur();
+                },
+                no: function (index, layero) {
+
+                }
+            })
         }
 
     });

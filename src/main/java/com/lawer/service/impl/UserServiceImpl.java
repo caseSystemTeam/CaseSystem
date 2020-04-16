@@ -132,6 +132,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public int getBusUserCount(Map<String, Object> map) {
+		return businessMapper.getBusUserCount(map);
+	}
+
+	@Override
 	public int addUser(Map<String, Object> map) {
 		User user = new User();
 		user.setUsername((String) map.get("username"));
@@ -143,6 +148,11 @@ public class UserServiceImpl implements UserService {
 		user.setId(UUID.randomUUID().toString());
 		user.setPhonenumber((String) map.get("phonenumber"));
 		return mapper.addUser(user);
+	}
+
+	@Override
+	public void deleteUser(String id) {
+        businessMapper.deleteUser(id);
 	}
 
 }

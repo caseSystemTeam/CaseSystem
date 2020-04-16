@@ -7,7 +7,7 @@ layui.use(['upload','form','layer','jquery'], function() {
     //监听提交
     form.on('submit(submitBut)', function(data) {
 
-        if(i!=0 &&t!=0 && n!=0 &&s!=0){
+        if(s!=0){
             $.ajax({
                 url:path+"/userCon/updateUser",
                 data:JSON.stringify(data.field),
@@ -15,7 +15,6 @@ layui.use(['upload','form','layer','jquery'], function() {
                 contentType: "application/json",
                 dataType:'json',
                 success:function(data){
-                    console.info("data",data);
                     if(data==1){
                         layer.msg("修改成功");
                         setTimeout(function(){

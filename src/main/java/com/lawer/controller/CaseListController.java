@@ -50,6 +50,7 @@ public class CaseListController {
                 map.put("tricktime2", tricktime[1]+ " 23:59:59");
             }
         }
+
         List list = caseListService.getAllCase(map);
         int count = caseListService.getACaseCount(map);
         result.put("data",list);

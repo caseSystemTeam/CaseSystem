@@ -22,5 +22,7 @@ public interface UserService {
 	public List<Map<String,Object>> getAllLawer(String busId); //查询当前律所的所有律师
 	public Map<String,Object> getUserInfo(User user);   //封装用户信息
 	public List<Map<String,Object>> getBusinessUser(Map<String,Object> map);  //获取公司当前所有员工信息
+	public int getBusUserCount(Map<String,Object> map);  //获取员工数量
 	public int addUser(Map<String,Object> map); //添加用户
+	public void deleteUser(String id); //删除用户
 }

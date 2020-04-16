@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lawer.mapper.LogMapper">
+
+
+    <insert id="addLog" parameterType="log">
+  insert into log(id,username,ip_address,style,operatename,operateresult,descript,create_time)
+  values (#{id},#{username},#{ip_address},#{style},#{operatename},#{operateresult},#{descript},#{create_time})
+ </insert>
+    <select id="getAllLog" resultType="map">
+        select * from log where style = #{map.style}
+        <if test="map.username !=null and map.username !=''">
+            and username = #{map.username}
+        </if>
+        <if test="map.tricktime !=null and map.tricktime !=''">
+            AND unix_timestamp(create_time) between unix_timestamp(#{map.tricktime}) and
+            unix_timestamp(#{map.tricktime2})
+        </if>
+        order by create_time desc
+        <if test="map.pageSize!=null and map.skipCount!=null ">
+            LIMIT #{map.skipCount},#{map.pageSize}
+        </if>
+    </select>
+    <select id="getLogCount" resultType="int">
+        select count(1) from log where style = #{map.style}
+        <if test="map.username !=null and map.username !=''">
+            and username = #{map.username}
+        </if>
+        <if test="map.tricktime !=null and map.tricktime !=''">
+            AND unix_timestamp(create_time) between unix_timestamp(#{map.tricktime}) and
+            unix_timestamp(#{map.tricktime2})
+        </if>
+    </select>
+
+
+</mapper>
