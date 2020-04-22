@@ -65,7 +65,7 @@ public class UserController {
 			logService.addLog(log);
 			return "1";
 		}
-		Log log =Log.ok(us.getUsername(),IpAdress.getIp(request),0,"登录","失败","",user.getBusId());
+		Log log =Log.ok(us.getUsername(),IpAdress.getIp(request),0,"登录","失败","","");
 		logService.addLog(log);
 		return "0";
 		

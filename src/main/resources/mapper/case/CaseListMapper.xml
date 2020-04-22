@@ -109,6 +109,55 @@ where aj.business_id=#{map.busId}
             </choose>
         </if>
     </select>
+    <!--修改案件信息-->
+    <update id="updateCase" >
+        update anjian
+        <trim prefix="set" suffixOverrides=",">
+            <if test="map.name != null and map.name != ''">
+                name = #{map.name},
+            </if>
+            <if test="map.content != null and map.content != ''">
+                content = #{map.content},
+            </if>
+            <if test="map.money != null and map.money != ''">
+                money = #{map.money},
+            </if>
+            <if test="map.cusname != null and map.cusname != ''">
+                cusname = #{map.cusname},
+            </if>
+            <if test="map.cus_telphone != null and map.cus_telphone != ''">
+                cus_telphone = #{map.cus_telphone},
+            </if>
+            <if test="map.rtime != null and map.rtime != ''">
+                rtime = #{map.rtime},
+            </if>
+            <if test="map.fstatus != null and map.fstatus != ''">
+                fstatus = #{map.fstatus},
+            </if>
+            <if test="map.lawerid != null and map.lawerid != ''">
+                lawerid = #{map.lawerid},
+            </if>
+            <if test="map.jstatus != null and map.jstatus != ''">
+                jstatus = #{map.jstatus},
+            </if>
+            <if test="map.p_status != null and map.p_status != ''">
+                p_status = #{map.p_status},
+            </if>
+            <if test="map.filelist != null and map.filelist != ''">
+                filelist = #{map.filelist},
+            </if>
+            <if test="map.business_id != null and map.business_id != ''">
+                business_id = #{map.business_id},
+            </if>
+            <if test="map.ftime != null and map.ftime != ''">
+                ftime = #{map.ftime},
+            </if>
+            <if test="map.resultContent != null and map.resultContent != ''">
+                resultContent = #{map.resultContent},
+            </if>
+        </trim>
+        where Id = #{map.Id}
+    </update>
 
 
 

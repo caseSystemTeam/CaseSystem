@@ -59,7 +59,7 @@ layui.use(['jquery','layer','form','layedit'],
                 type:'post',
                 contentType: "application/json",
                 success:function (data) {
-                    console.info("data",data);
+
                     if (data.status == 200){
                         layer.msg("添加成功");
                         setTimeout(function(){

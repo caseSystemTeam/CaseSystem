@@ -14,7 +14,7 @@ layui.use(['upload','form','layer'], function() {
                 contentType: "application/json",
                 dataType:'json',
                 success:function(data){
-                    console.info("data",data);
+
                     if(data==1){
                         layer.msg("添加成功");
                         setTimeout(function(){

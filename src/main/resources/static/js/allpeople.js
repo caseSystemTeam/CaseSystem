@@ -92,7 +92,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                 ]
             ],
             done: function (res, curr) {
-                console.info("sssss",res);
+
 
                 $(".layui-table-fixed-r .layui-table-body").css({
                     'overflow': 'hidden'
@@ -180,7 +180,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                         data: JSON.stringify(json),
                         success: function (data) {
                             if (data.status == 200) {
-                                console.info("sssdata",data);
+
                                 layer.msg("删除成功");
                                 setTimeout(function() {
                                     window.location.reload();

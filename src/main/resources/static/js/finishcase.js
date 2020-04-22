@@ -10,7 +10,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
     form.on('submit(submit)', function (data) {
 
         data.field.jstatus=1;
-        console.info("ssssss",data.field);
+
         table.reload('saleTable', {
             page: {
                 curr: 1 //重新从第 1 页开始

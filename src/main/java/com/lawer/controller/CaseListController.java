@@ -2,15 +2,20 @@ package com.lawer.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.lawer.common.IpAdress;
 import com.lawer.common.ResultGson;
+import com.lawer.pojo.Log;
 import com.lawer.pojo.User;
 import com.lawer.service.CaseListService;
+import com.lawer.service.LogService;
+import com.lawer.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +26,10 @@ import java.util.Map;
 public class CaseListController {
     @Autowired
     private CaseListService caseListService;
+    @Autowired
+    private LogService logService;
+    @Autowired
+    private UserService userService;
 
     //获取律所所有的案件
     @RequestMapping("getAllCase")
@@ -102,5 +111,31 @@ public class CaseListController {
 
     }
 
+    //案件转移
+    @RequestMapping("transferPerson")
+    @ResponseBody
+    public ResultGson transferPerson(@RequestBody String json, HttpSession session, HttpServletRequest request){
+        Map<String,Object> map =  JSON.parseObject(json);
+        User user =(User)session.getAttribute("us");
+        List<Map<String,Object>> list = (List<Map<String,Object>>)map.get("data");
+        String lawerid =(String) map.get("lawerid");
+        User us = userService.userById(lawerid);
+        for(Map<String,Object> hmap:list){
+            hmap.put("lawerid",lawerid);
+            try{
+                caseListService.transferPerson(hmap);
+                Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"转移案件","成功", "将案件\""+hmap.get("name")+"\"转移给\""+us.getName()+"\"成功",user.getBusId());
+                logService.addLog(log);
+            }catch (Exception e){
+                Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"转移案件","失败", "将案件\""+hmap.get("name")+"\"转移给\""+us.getName()+"\"失败",user.getBusId());
+                logService.addLog(log);
+            }
+
+        }
+
+        return ResultGson.ok("操作成功");
+
+
+    }
 
 }
