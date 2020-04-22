@@ -155,4 +155,10 @@ public class UserServiceImpl implements UserService {
         businessMapper.deleteUser(id);
 	}
 
+	@Override
+	public List<Map<String, Object>> getAllBusiness() {
+
+		return businessMapper.getAllBusiness();
+	}
+
 }

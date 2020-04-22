@@ -33,6 +33,9 @@ update laweruser set password = #{password} where username= #{username}
             <if test="unsolve!=null ">
                 unsolve=#{unsolve},
             </if>
+            <if test="solve!=null ">
+                solve=#{solve}
+            </if>
         </set>
         where id= #{id}
     </update>
@@ -79,5 +82,7 @@ select * from laweruser where id=#{id}
     <select id="getAllLawer" parameterType="string" resultType="Map">
   select * from laweruser where busId =#{busId}
  </select>
+    
+
 
 </mapper>

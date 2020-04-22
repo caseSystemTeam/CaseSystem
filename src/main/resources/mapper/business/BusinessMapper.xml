@@ -38,4 +38,8 @@
         delete from laweruser where id=#{id}
     </delete>
 
+    <select id="getAllBusiness" resultType="map">
+        select * from business
+    </select>
+
 </mapper>

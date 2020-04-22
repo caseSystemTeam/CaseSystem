@@ -25,4 +25,5 @@ public interface UserService {
 	public int getBusUserCount(Map<String,Object> map);  //获取员工数量
 	public int addUser(Map<String,Object> map); //添加用户
 	public void deleteUser(String id); //删除用户
+	public List<Map<String,Object>> getAllBusiness(); //获取所有律所信息
 }
