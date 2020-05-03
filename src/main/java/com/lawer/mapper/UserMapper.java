@@ -24,5 +24,25 @@ public interface UserMapper {
 	public int addBusiness(Business bus); //添加律所信息
 	public int addUser(User user); //添加用户信息
 	public List<Map<String,Object>> getAllLawer(String busId); //查询当前律所的所有律师
+	/**
+	 * 根据角色id查询用户list
+	 * @param roleId
+	 * @return list
+	 */
+	List<User> findByRoleId(String roleId);
+
+	/**
+	 * 根据角色id查询用户list
+	 * @param roleIds
+	 * @return list
+	 */
+	List<User> findByRoleIds(List<String> roleIds);
+
+	/**
+	 * 通过用户id查询角色信息
+	 * @param id
+	 * @return
+	 */
+	Map<String,Object> selectRoleByUserId(String id);
 
 }

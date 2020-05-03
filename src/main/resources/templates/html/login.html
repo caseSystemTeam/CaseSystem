@@ -39,11 +39,24 @@
 
 
 <script type="text/javascript">
+
     layui.use(['layer','form','jquery'], function () {
 
         // 操作对象
         var form = layui.form;
         var $ = layui.jquery;
+        var login = {
+            //初始化页面跳转，为了防止从iframe跳转到login页面直接在iframe中显示login页面
+            initPage : function() {
+                //alert(location.href);
+                if(window.top != window.self){
+                    top.location.href = location.href;
+                }
+            },
+        }
+        $(function(){
+            login.initPage();
+        });
         form.on('submit(login)',function (data) {
             $.ajax({
                 url:path+"/userCon/index",
@@ -52,7 +65,6 @@
                 type:'post',
                 contentType: "application/json",
                 success:function (data) {
-
                     if (data == '1'){
                         location.href = path+"/userCon/toindex";
                     }else{

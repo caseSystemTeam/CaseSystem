@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 
 	<head>
 		<meta charset="UTF-8">
@@ -34,9 +35,7 @@
 		<link rel="stylesheet" type="text/css" href="/css/model/frameStyle.css">
 		<script type="text/javascript" src="/framework/frame.js" ></script>
 		<script src="/js/home.js"></script>
-		<script type="text/javascript" src="/js/frame/frame.js"></script>
-
-
+		<script src="/js/frame/frame.js"></script>
 	</head>
 
 	<body>
@@ -50,16 +49,21 @@
 		        </div>
 		    </div>
 		    <div class="menu">
-		        <ul>
+		        <ul id="ulmenu">
+				<!--	<shiro:hasPermission name="case:add">
 		        	<li >
 		                <a class="menuFA" href="javascript:void(0)" onclick="menuCAClick('/page/addcase',this)"><i class="iconfont icon-zhishi left"></i>案件登记</a>
 		            </li>
-
-		        	<li>
+					</shiro:hasPermission>
+					<li>
 		                <a class="menuFA" href="javascript:void(0)"><i class="iconfont icon-liuliangyunpingtaitubiao03 left"></i>案件管理<i class="iconfont icon-dajiantouyou right"></i></a>
 		                <dl>
-		                	<dt><a href="javascript:void(0)" onclick="menuCAClick('/page/allcase',this)">全部案件</a></dt>
-							<dt><a href="javascript:void(0)" onclick="menuCAClick('/page/unfinishcase',this)">未完成案件</a></dt>
+							<shiro:hasPermission name="casemanage">
+								<dt><a href="javascript:void(0)" onclick="menuCAClick('/page/allcase',this)">全部案件</a></dt>
+							</shiro:hasPermission>
+							<shiro:hasPermission name="casemanage:unlist">
+								<dt><a href="javascript:void(0)" onclick="menuCAClick('/page/unfinishcase',this)">未完成案件</a></dt>
+							</shiro:hasPermission>
 		                	<dt><a href="javascript:void(0)" onclick="menuCAClick('/page/finishcase',this)">已结束案件</a></dt>
 		                </dl>
 		            </li>
@@ -81,8 +85,7 @@
 
 					<li>
 						<a class="menuFA" href="javascript:void(0)" onclick="menuCAClick('/case/tocase',this)"><i class="iconfont icon-zhishi left"></i>案件进度管理</a>
-					</li>
-
+					</li>-->
 		        </ul>
 		    </div>
 		</div>
@@ -94,7 +97,7 @@
 
 				<div class="topMenu">
 					<ul>
-						<li><a  href="javascript:void(0)" onclick="menuCAClick('/page/peopleinfo',this)" id="username"><i class="iconfont icon-yonghu1" ></i>默认用户</a></li>
+						<li><a  href="javascript:void(0)" onclick="menuCAClick('/page/peopleinfo',this)" id="username"><i class="iconfont icon-yonghu1" ></i><span shiro:principal property="name"></span></a></li>
 						<li><a href="javascript:void(0)" onclick="menuCAClick('/page/modifyPassword',this)"><i class="iconfont icon-xiugaimima" id="uppword"></i>修改密码</a></li>
 						<li><a href="/userCon/logout"><i class="iconfont icon-084tuichu"></i>注销</a></li>
 					</ul>
@@ -113,9 +116,6 @@
 			</div>
 			<!-- 核心区域 - 结束 -->
 		</div>
-	<script>
-
-	</script>
 	</body>
 
 </html>

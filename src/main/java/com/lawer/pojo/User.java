@@ -1,6 +1,9 @@
 package com.lawer.pojo;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
+	private static final long serialVersionUID = -3662066498325187792L;
 	private String id;
 	private String username;
 	private String name;
@@ -11,25 +14,44 @@ public class User {
 	private int solve;
 	private int ftag;
 	private String busId;
+	private String salt;
 
 
+	/**
+	 *
+	 * 重写获取盐值方法，自定义realm使用
+	 * Gets credentials salt.
+	 *
+	 * @return the credentials salt
+	 */
+	public String getCredentialsSalt() {
+		return username + "nbclass.com" + salt;
+	}
 
+
+	/**
+	 * 获取加密盐值
+	 *
+	 * @return salt - 加密盐值
+	 */
+	public String getSalt() {
+		return salt;
+	}
+
+	/**
+	 * 设置加密盐值
+	 *
+	 * @param salt 加密盐值
+	 */
+	public void setSalt(String salt) {
+		this.salt = salt == null ? null : salt.trim();
+	}
 	public int getFtag() {
 		return ftag;
 	}
 	public void setFtag(int ftag) {
 		this.ftag = ftag;
 	}
-
-	
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", name=" + name + ", password=" + password + ", profile="
-				+ profile + ", gender=" + gender + ", position=" + position + ", solve=" + solve + ", ftag=" + ftag
-				+ ", unsolve=" + unsolve + ", phonenumber=" + phonenumber + "]";
-	}
-
-	
 	public String getId() {
 		return id;
 	}

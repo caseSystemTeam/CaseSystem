@@ -31,6 +31,23 @@ layui.use(['upload','form','layer'], function() {
 
         return false;
     });
+    //获取角色列表
+    $.ajax({
+        url:path+"/role/rolelist",
+        type:'post',
+        contentType: "application/json",
+        dataType:'json',
+        success:function(data){
+            console.info("role",data);
+            $.each(data.data.roleList, function (i, item) {
+                $("#urole").append(
+                    '<option value="' + item.roleId
+                    + '">' + item.name
+                    + '</option>');
+            });
+            form.render(); //更新全部
+        }
+    })
     $('#user').blur(function() {
         var username = $(this).val();
         $.ajax({

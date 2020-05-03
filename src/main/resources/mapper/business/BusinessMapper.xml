@@ -41,5 +41,8 @@
     <select id="getAllBusiness" resultType="map">
         select * from business
     </select>
+    <select id="getBusinessInfo" parameterType="string" resultType="map">
+        select * from business where id=#{id}
+    </select>
 
 </mapper>

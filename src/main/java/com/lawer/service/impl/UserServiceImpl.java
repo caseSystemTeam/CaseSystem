@@ -1,13 +1,17 @@
 package com.lawer.service.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import com.lawer.mapper.BusinessMapper;
+import com.lawer.mapper.RoleMapper;
+import com.lawer.mapper.UserRoleMapper;
 import com.lawer.pojo.Business;
+import com.lawer.pojo.UserRole;
 import com.lawer.service.UserService;
+import com.lawer.util.MD5Utils;
+import com.lawer.util.PasswordHelper;
+import com.lawer.util.ResponseVo;
+import com.lawer.util.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -23,6 +27,9 @@ public class UserServiceImpl implements UserService {
 	private UserMapper mapper;
 	@Autowired
 	private BusinessMapper businessMapper;
+	@Autowired
+	private UserRoleMapper userRoleMapper;
+
 	@Override
 	public User findUser(User user) {
 	    return mapper.findUser(user);
@@ -32,7 +39,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int updatePs(User user) {
 
-		return mapper.updatePs(user);
+		return mapper.upinfor(user);
 	}
 
 	public int upinfor(User user) {
@@ -127,8 +134,14 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<Map<String, Object>> getBusinessUser(Map<String, Object> map) {
-
-		return businessMapper.getBusinessUser(map);
+		List<Map<String,Object>> list = businessMapper.getBusinessUser(map);
+		for(Map<String,Object> lmap:list){
+			Map<String,Object> rolemapper = mapper.selectRoleByUserId((String)lmap.get("Id"));
+			if(rolemapper!=null && rolemapper.size()!=0){
+				lmap.put("role",rolemapper.get("name"));
+			}
+		}
+		return list;
 	}
 
 	@Override
@@ -147,6 +160,11 @@ public class UserServiceImpl implements UserService {
 		user.setGender((String)map.get("gender"));
 		user.setId(UUID.randomUUID().toString());
 		user.setPhonenumber((String) map.get("phonenumber"));
+		PasswordHelper.encryptPassword(user);
+		UserRole urole = new UserRole();
+		urole.setUserId(user.getId());
+		urole.setRoleId((String)map.get("urole"));
+		userRoleMapper.insert(urole);
 		return mapper.addUser(user);
 	}
 
@@ -159,6 +177,34 @@ public class UserServiceImpl implements UserService {
 	public List<Map<String, Object>> getAllBusiness() {
 
 		return businessMapper.getAllBusiness();
+	}
+
+	@Override
+	public Map<String, Object> getBusinessInfo(String id) {
+		return businessMapper.getBusinessInfo(id);
+	}
+
+	@Override
+	public int addAssignRole(String userId, List<String> roleIds) {
+		try{
+			UserRole userRole = new UserRole();
+			userRole.setUserId(userId);
+			userRoleMapper.delete(userRole);
+			for(String roleId :roleIds){
+				userRole.setUserId(userId);
+				userRole.setRoleId(roleId);
+				userRoleMapper.insert(userRole);
+			}
+			return 1;
+		}catch(Exception e){
+			e.printStackTrace();
+			return 0;
+		}
+	}
+
+	@Override
+	public Map<String, Object> selectRoleByUserId(String id) {
+		return mapper.selectRoleByUserId(id);
 	}
 
 }

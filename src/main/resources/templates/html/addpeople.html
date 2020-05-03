@@ -116,6 +116,15 @@
         </div>
 
         <div class="layui-form-item">
+            <label class="layui-form-label">角色</label>
+            <div class="layui-input-inline">
+                <select name="urole" id="urole" required lay-verify="required" lay-filter="urole">
+                    <option value="">请选择</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
             <label class="layui-form-label">联系方式</label>
             <div class="layui-input-inline shortInput">
                 <input type="text" name="phonenumber" id="pnumber" required lay-verify="required"  onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" maxlength=11 autocomplete="off" class="layui-input">

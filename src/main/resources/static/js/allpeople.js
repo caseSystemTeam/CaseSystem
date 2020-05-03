@@ -39,47 +39,45 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                     {
                         field: 'name',
                         title: '员工姓名',
-                        width: '14%',
                         templet: function (d) {
                             return "<div class='layui-elip cursor-p' title='" + d.name + "'>" + d.name + "</div>";
                         }
                     }, {
                     field: 'username',
                     title: '用户名',
-                    width: '14%',
                     templet: function (d) {
                         return "<div class='layui-elip cursor-p' title='" + d.username + "'>" + d.username + "</div>";
                     }
                 }, {
                     field: 'gender',
                     title: '员工性别',
-                    width: "10%",
-
                     templet: function (d) {
                         return "<div class='layui-elip cursor-p' title='" + d.gender + "'>" + d.gender + "</div>";
                     }
                 }, {
                     field: 'position',
                     title: '员工职称',
-                    width: '12%',
                     templet: function (d) {
                         return "<div class='layui-elip cursor-p' title='" + d.position + "'>" + d.position + "</div>";
                     }
                 }, {
+                    field: 'role',
+                    title: '角色',
+                    templet: function (d) {
+                        return "<div class='layui-elip cursor-p' title='" + d.role + "'>" + d.role + "</div>";
+                    }
+                },  {
                     field: 'phonenumber',
                     title: '联系方式',
-                    width: '12%',
                     templet: function (d) {
                         return "<div class='layui-elip cursor-p' title='" + d.phonenumber + "'>" + d.phonenumber + "</div>";
                     }
                 },{
                     field: 'solve',
                     title: '解决案件数',
-                    width: '10%'
                 },{
                     field: 'unsolve',
                     title: '未解决案件数',
-                    width: '10%',
 
                 },  {
                     filed:'caozuo',
@@ -150,7 +148,29 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
             }
         });
     }
+    $.ajax({
+        url:path+"/role/rolelist",
+        type:'post',
+        contentType: "application/json",
+        dataType:'json',
+        success:function(data){
+            console.info("role",data);
+            $.each(data.data.roleList, function (i, item) {
+                $("#urole").append(
+                    '<option value="' + item.roleId
+                    + '">' + item.name
+                    + '</option>');
+            });
+            form.render(); //更新全部
+        }
+    });
+    var roleId=null;
+    form.on("select(urole)",function (data) {
+        roleId = data.value;
+        form.render("select");
+    })
     tableload();
+    //获取角色列表
 
     //监听工具条的操作
     table.on('tool(saleTable)', function (obj) {
@@ -205,6 +225,43 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
 
                 }
             })
+        }else if(obj.event=='role'){
+
+            layer.open({
+                type: 1,
+                title: '分配角色',   //标题
+                area: ['390px', '200px'],   //宽高
+                content: $("#rolediv").html(),
+                btn: ['确定', '取消'], //按钮组
+                yes: function(index){//layer.msg('yes');    //点击确定回调
+
+                  var json ={userId:data.Id,roleId:roleId};
+                  if(roleId!=null){
+                      $.ajax({
+                          url: path + "/role/updateRole",
+                          type: "POST",
+                          contentType: "application/json",
+                          data: JSON.stringify(json),
+                          success: function (data) {
+                              if (data.status == 200) {
+                                  layer.msg(data.info);
+                                  setTimeout(function() {
+                                      window.location.reload();
+                                  },1000);
+                              }else{
+                                  layer.msg(data.info);
+                              }
+                          }
+                      });
+                  }else{
+                      layer.msg("分配失败");
+                  }
+
+                    layer.close(index);
+                },
+
+            });
+            form.render();
         }
 
     });
