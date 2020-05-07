@@ -94,6 +94,13 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                         return "<div class='layui-elip cursor-p' title='" + (d.create_time != undefined ? d.create_time : "") + "'>" + (d.create_time != undefined ? d.create_time : "") + "</div>";
                     }
 
+                }, {
+                    filed:'caozuo',
+                    fixed: 'right',
+                    title: '操作',
+                    align:'center',
+                    unresize:true,
+                    toolbar: '#bianjikuang'
                 }
                 ]
             ],
@@ -157,6 +164,30 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
         });
     }
     tableload();
+    //监听工具条的操作
+    table.on('tool(saleTable)', function (obj) {
+        var data = obj.data; //获得当前行数据
+        var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+        if (obj.event === 'edit') {
+            $.ajax({
+                url:path+"/log/deleteLog",
+                type:'post',
+                data:{id:data.id},
+                dataType:'json',
+                success:function(data){
+                    if(data.status==200){
+                        layer.msg("删除成功");
+                    }else{
+                        layer.msg("删除失败");
+                    }
+                    form.render(); //更新全部
+                }
+            })
+        }
+
+    });
+
 
 
 

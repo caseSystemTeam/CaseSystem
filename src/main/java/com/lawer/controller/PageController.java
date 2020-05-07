@@ -1,5 +1,6 @@
 package com.lawer.controller;
 
+import com.lawer.pojo.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -78,6 +79,9 @@ public class PageController {
     public String toUpdateInfo(String id, HttpSession session){
         if(id!=null && !"".equals(id)){
             session.setAttribute("mdfId",id);
+        }else{
+            User user =(User) session.getAttribute("us");
+            session.setAttribute("mdfId",user.getId());
         }
         return "html/updateInfo";
     }

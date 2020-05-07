@@ -44,11 +44,9 @@ layui.use(['jquery','layer','form'],
                       '    <label class="layui-form-label laywidth">未解决案件数:</label>\n' +
                       '    <label class="layui-form-label laywidth">'+user.unsolve+'</label>\n' +
                       '</div>' +
-                      // '<div class="layui-form-item">\n' +
-                      // '     <div class="layui-input-block">\n' +
-                      // '          <button class="layui-btn" lay-submit lay-filter="submitBut"></button>\n' +
-                      // '     </div>\n' +
-                      // '</div>\n' +
+                      '<div class="layui-form-item">\n' +
+                      '     <div class="layui-input-block"> <button class="layui-btn" lay-submit lay-filter="submitBut">修改信息</button></div>'+
+                      '</div>'+
                       '</form>';
                     $(".cBody").html(html);
 
@@ -61,6 +59,11 @@ layui.use(['jquery','layer','form'],
             }
         })
 
+        //监听提交
+        form.on('submit(submitBut)', function (data) {
+            window.location.href = path + "/page/updateInfo";
+            return false;
+        });
 
     }
 )

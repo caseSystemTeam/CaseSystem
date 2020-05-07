@@ -30,4 +30,9 @@ public class LogServiceImpl implements LogService {
 
         return logMapper.getLogCount(map);
     }
+
+    @Override
+    public void deleteLog(String id) {
+        logMapper.deleteLog(id);
+    }
 }

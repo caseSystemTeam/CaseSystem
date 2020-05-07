@@ -70,14 +70,14 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                     {
                         field: 'name',
                         title: '案件名称',
-                        width: '14%',
+
                         templet: function (d) {
                             return "<div class='layui-elip cursor-p' title='" + d.name + "'>" + d.name + "</div>";
                         }
                     }, {
                     field: 'money',
                     title: '拟定金额',
-                    width: "10%",
+
 
                     templet: function (d) {
                         return "<div class='layui-elip cursor-p' title='" + (d.money != undefined ? d.money : "") + "'>" + (d.money != undefined ? d.money : "") + "</div>";
@@ -85,25 +85,25 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                 }, {
                     field: 'cusname',
                     title: '申述人姓名',
-                    width: '12%',
+
                     templet: function (d) {
                         return "<div class='layui-elip cursor-p' title='" + d.cusname + "'>" + d.cusname + "</div>";
                     }
                 }, {
                     field: 'cus_telphone',
                     title: '联系电话',
-                    width: '12%',
+
                     templet: function (d) {
                         return "<div class='layui-elip cursor-p' title='" + (d.cus_telphone != undefined ? d.cus_telphone : "") + "'>" + (d.cus_telphone != undefined ? d.cus_telphone : "") + "</div>";
                     }
                 },{
                     field: 'lawername',
                     title: '责任律师',
-                    width: '12%'
+
                 },{
                     field: 'jstatus',
                     title: '案件状态',
-                    width: '10%',
+
                     templet: function (d) {
                         return "<div class='layui-elip cursor-p' title='" + d.jstatus + "'>" + (d.jstatus != 0 ? "已结束" : "正在进行") + "</div>";
                     }
@@ -111,6 +111,11 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                     field: 'rtime',
                     title: '登记时间',
                     width: '14%',
+
+                },{
+                    field: 'cname',
+                    title: '登记人名称',
+
 
                 }, {
                     filed:'caozuo',

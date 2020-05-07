@@ -7,7 +7,7 @@ $(function(){
 	
 	//菜单
 	$("body").delegate(".menuFA","click", function(){
-		console.info("zz","sss");
+
 		menuFAClick($(this));
 	});
 	$("body").delegate(".menuFA","mouseenter", function(){

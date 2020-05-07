@@ -14,4 +14,6 @@ public interface LogMapper {
 
     public int getLogCount(@Param("map") Map<String,Object> map);  //根据类型获取日志
 
+    void deleteLog(String id); //删除日志
+
 }

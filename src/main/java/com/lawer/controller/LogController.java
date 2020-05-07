@@ -2,6 +2,7 @@ package com.lawer.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.lawer.common.ResultGson;
 import com.lawer.pojo.User;
 import com.lawer.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,19 @@ public class LogController {
         result.put("code", 0);
         result.put("count",count);
         return  JSON.toJSONString(result);
+
+    }
+    //获取日志信息
+    @RequestMapping("deleteLog")
+    @ResponseBody
+    public ResultGson delteLog(String id){
+        try{
+            logService.deleteLog(id);
+        }catch (Exception e){
+            return ResultGson.error("删除失败");
+        }
+
+        return  ResultGson.ok("删除成功");
 
     }
 
