@@ -15,7 +15,15 @@ public class User implements Serializable {
 	private int ftag;
 	private String busId;
 	private String salt;
+	private String createTime;
 
+	public String getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
 
 	/**
 	 *

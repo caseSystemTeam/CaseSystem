@@ -13,6 +13,8 @@
         <result column="position" property="position" jdbcType="VARCHAR" />
         <result column="phonenumber" property="phonenumber" jdbcType="VARCHAR" />
         <result column="busid" property="busid" jdbcType="VARCHAR" />
+        <result column="busid" property="busid" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="Base_Column_List" >
         id, username, password, name,salt,gender, position, phonenumber, busid
@@ -98,12 +100,12 @@ select * from laweruser where id=#{id}
  </insert>
 
     <insert id="addUser" parameterType="user">
-  insert into laweruser(id,username,name,salt,password,gender,position,phonenumber,busid)
-  values (#{id},#{username},#{name},#{salt},#{password},#{gender},#{position},#{phonenumber},#{busId})
+  insert into laweruser(id,username,name,salt,password,gender,position,phonenumber,busid,create_time)
+  values (#{id},#{username},#{name},#{salt},#{password},#{gender},#{position},#{phonenumber},#{busId},#{createTime})
  </insert>
 
     <select id="getAllLawer" parameterType="string" resultType="Map">
-  select * from laweruser where busId =#{busId}
+  select lu.*,ur.role_id from laweruser lu join user_role ur on ur.user_id = lu.Id where busId =#{busId} order by create_time
  </select>
 
     <select id="findByRoleId" resultMap="BaseResultMap">

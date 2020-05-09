@@ -5,7 +5,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
         $ = layui.jquery,
         layer = layui.layer;
 
-
+      console.info("sss","ddddd");
 
     //监听提交
     form.on('submit(submit)', function (data) {
@@ -164,6 +164,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
             form.render(); //更新全部
         }
     });
+
     var roleId=null;
     form.on("select(urole)",function (data) {
         roleId = data.value;

@@ -18,7 +18,7 @@
         <if test="map.position !=null and map.position !=''">
             and position = #{map.position}
         </if>
-        order by id
+        order by create_time
     </select>
 
     <select id="getBusUserCount" resultType="int">

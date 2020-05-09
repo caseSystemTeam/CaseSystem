@@ -170,7 +170,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                 btnAlign: 'c',
                 area: ['420px', '220px'],
                 offset: 'auto',
-                content: "<div style='text-align:center;padding:42px 0 26px 0;'><span class='layui-badge'>!</span>" + "   " + "确定删除该用户吗？</div><hr class='layui-bg-gray' style='margin:29px 0 0'>",
+                content: "<div style='text-align:center;padding:42px 0 26px 0;'><span class='layui-badge'>!</span>" + "   " + "确定删除该条纪录吗？</div><hr class='layui-bg-gray' style='margin:29px 0 0'>",
                 btn: ['确定', '取消'],
                 yes: function (index, layero) {
                     $.ajax({

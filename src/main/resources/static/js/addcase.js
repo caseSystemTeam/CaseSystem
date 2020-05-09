@@ -40,10 +40,12 @@ layui.use(['jquery','layer','form','layedit'],
             success: function (data) {
 
                 $.each(data.data.data, function (i, item) {
-                    $("#mainp").append(
-                        '<option value="' + item.Id
-                        + '">' + item.name+'('+item.position+')'
-                        + '</option>');
+                    if(item.role_id != 4){
+                        $("#mainp").append(
+                            '<option value="' + item.Id
+                            + '">' + item.name+'('+item.position+')'
+                            + '</option>');
+                    }
                 });
                 form.render();
             }

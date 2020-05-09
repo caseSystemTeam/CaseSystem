@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.lawer.common.DateUtil;
 import com.lawer.common.IpAdress;
 import com.lawer.common.ResultGson;
 import com.lawer.pojo.*;
@@ -131,6 +132,7 @@ public class UserController {
 		user.setPhonenumber(busUser.getPhoneNumber());
 		user.setPosition("高级律师");
 		user.setBusId(businessId);
+		user.setCreateTime(DateUtil.getToday());
 		PasswordHelper.encryptPassword(user);
 		bus.setId(businessId);
 		bus.setLawerid(userId);
@@ -157,6 +159,7 @@ public class UserController {
 		User user=(User)SecurityUtils.getSubject().getPrincipal();
 		Map<String,Object> map = JSON.parseObject(json);
 		map.put("busid",user.getBusId());
+		map.put("create_time", DateUtil.getToday());
 		try{
 			userService.addUser(map);
 		}catch (Exception e){

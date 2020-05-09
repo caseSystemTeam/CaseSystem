@@ -12,10 +12,12 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
         type: "POST",
         success: function (data) {
             $.each(data.data.data, function (i, item) {
-                $("#lawerid").append(
-                    '<option value="' + item.Id
-                    + '">' + item.name+'('+item.position+')'
-                    + '</option>');
+                if(item.role_id != 4){
+                    $("#lawerid").append(
+                        '<option value="' + item.Id
+                        + '">' + item.name+'('+item.position+')'
+                        + '</option>');
+                }
             });
             form.render();
         }
@@ -195,10 +197,12 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
         success: function (data) {
 
             $.each(data.data.data, function (i, item) {
-                $("#transfer").append(
-                    '<option value="' + item.Id
-                    + '">' + item.name+'('+item.position+')'
-                    + '</option>');
+                if(item.role_id != 4){
+                    $("#transfer").append(
+                        '<option value="' + item.Id
+                        + '">' + item.name+'('+item.position+')'
+                        + '</option>');
+                }
             });
             form.render();
         }

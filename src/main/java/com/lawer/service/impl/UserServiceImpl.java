@@ -160,6 +160,7 @@ public class UserServiceImpl implements UserService {
 		user.setGender((String)map.get("gender"));
 		user.setId(UUID.randomUUID().toString());
 		user.setPhonenumber((String) map.get("phonenumber"));
+		user.setCreateTime((String) map.get("create_time"));
 		PasswordHelper.encryptPassword(user);
 		UserRole urole = new UserRole();
 		urole.setUserId(user.getId());
