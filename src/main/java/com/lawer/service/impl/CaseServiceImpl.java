@@ -52,8 +52,8 @@ public class CaseServiceImpl implements CaseService {
         map.put("cname",user.getName());
         map.put("busId",busId);
         map.put("fstatus",1);
-        map.put("jstatus",0);
-        map.put("p_status",2);
+        map.put("jstatus",2);
+        map.put("p_status",0);
 		mapper.addCase(map);
 
 

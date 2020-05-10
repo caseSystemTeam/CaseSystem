@@ -16,8 +16,8 @@ where aj.business_id=#{map.busId}
         <if test="map.lawerid !=null and map.lawerid !=''">
             and aj.lawerid = #{map.lawerid}
         </if>
-        <if test="map.jstatus !=null and map.jstatus !=''">
-            and aj.jstatus = #{map.jstatus}
+        <if test="map.pstatus !=null and map.pstatus !=''">
+            and aj.p_status = #{map.pstatus}
         </if>
         <if test="map.tricktime !=null and map.tricktime !=''">
             AND unix_timestamp(aj.rtime) between unix_timestamp(#{map.tricktime}) and
@@ -38,8 +38,8 @@ where aj.business_id=#{map.busId}
     <if test="map.lawerid !=null and map.lawerid !=''">
         and aj.lawerid = #{map.lawerid}
     </if>
-    <if test="map.jstatus !=null and map.jstatus !=''">
-        and aj.jstatus = #{map.jstatus}
+    <if test="map.pstatus !=null and map.pstatus !=''">
+        and aj.p_status = #{map.pstatus}
     </if>
     <if test="map.tricktime !=null and map.tricktime !=''">
         AND unix_timestamp(aj.rtime) between unix_timestamp(#{map.tricktime}) and
@@ -58,12 +58,12 @@ where aj.business_id=#{map.busId}
             </trim>
 
         </if>
-        <if test="map.jstatus !=null and map.jstatus !=''">
-            and aj.jstatus = #{map.jstatus}
+        <if test="map.pstatus !=null and map.pstatus !=''">
+            and aj.p_status = #{map.pstatus}
         </if>
         <if test="map.tricktime !=null and map.tricktime !=''">
             <choose>
-                <when test="map.jstatus==0">
+                <when test="map.pstatus==0">
                     AND unix_timestamp(aj.rtime) between unix_timestamp(#{map.tricktime}) and
                     unix_timestamp(#{map.tricktime2})
                 </when>
@@ -91,13 +91,13 @@ where aj.business_id=#{map.busId}
             </trim>
         </if>
 
-        <if test="map.jstatus !=null and map.jstatus !=''">
-            and aj.jstatus = #{map.jstatus}
+        <if test="map.pstatus !=null and map.pstatus !=''">
+            and aj.p_status = #{map.pstatus}
         </if>
 
         <if test="map.tricktime !=null and map.tricktime !=''">
             <choose>
-                <when test="map.jstatus==0">
+                <when test="map.pstatus==0">
                     AND unix_timestamp(aj.rtime) between unix_timestamp(#{map.tricktime}) and
                     unix_timestamp(#{map.tricktime2})
                 </when>

@@ -50,8 +50,8 @@ public class CaseListController {
             if (!("".equals(json.get("lawerid"))) && !(null == json.get("lawerid"))) {
                 map.put("lawerid", json.getString("lawerid"));
             }
-            if (!("".equals(json.get("jstatus"))) && !(null == json.get("jstatus"))) {
-                map.put("jstatus", json.getString("jstatus"));
+            if (!("".equals(json.get("pstatus"))) && !(null == json.get("pstatus"))) {
+                map.put("pstatus", json.getString("pstatus"));
             }
             if (!("".equals(json.get("rtime"))) && !(null == json.get("rtime"))) {
                 String[] tricktime = json.get("rtime").toString().split(" - ");
@@ -87,7 +87,7 @@ public class CaseListController {
         if (key != null) {
             JSONObject json = JSONObject.parseObject(key);
 
-            map.put("jstatus", json.getString("jstatus"));
+            map.put("pstatus", json.getString("pstatus"));
 
             if (!("".equals(json.get("name"))) && !(null == json.get("name"))) {
                 map.put("name", json.getString("name"));

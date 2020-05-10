@@ -103,11 +103,11 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                     title: '责任律师',
 
                 },{
-                    field: 'jstatus',
+                    field: 'p_status',
                     title: '案件状态',
 
                     templet: function (d) {
-                        return "<div class='layui-elip cursor-p' title='" + d.jstatus + "'>" + (d.jstatus != 0 ? "已结束" : "正在进行") + "</div>";
+                        return "<div class='layui-elip cursor-p' title='" + d.p_status + "'>" + (d.p_status != 0 ? "已结束" : "正在进行") + "</div>";
                     }
                 }, {
                     field: 'rtime',

@@ -9,7 +9,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
     //监听提交
     form.on('submit(submit)', function (data) {
 
-        data.field.jstatus=0;
+        data.field.pstatus=0;
         table.reload('saleTable', {
             page: {
                 curr: 1 //重新从第 1 页开始
@@ -35,7 +35,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
 
 
     tableload = function () {
-        var datas={jstatus:0}
+        var datas={pstatus:0}
         table.render({
             elem: '#saleTable',
             id: 'saleTable',
@@ -81,10 +81,10 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                     field: 'lawername',
                     title: '责任律师',
                 },{
-                    field: 'jstatus',
+                    field: 'p_status',
                     title: '案件状态',
                     templet: function (d) {
-                        return "<div class='layui-elip cursor-p' title='" + d.jstatus + "'>" + (d.jstatus != 0 ? "已结束" : "正在进行") + "</div>";
+                        return "<div class='layui-elip cursor-p' title='" + d.p_status + "'>" + (d.p_status != 0 ? "已结束" : "正在进行") + "</div>";
                     }
                 }, {
                     field: 'rtime',
