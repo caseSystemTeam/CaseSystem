@@ -3,9 +3,28 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lawer.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="com.lawer.pojo.User" >
+        <id column="id" property="id" jdbcType="VARCHAR" />
+        <result column="username" property="username" jdbcType="VARCHAR" />
+        <result column="salt" property="salt" jdbcType="VARCHAR" />
+        <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="gender" property="gender" jdbcType="VARCHAR" />
+        <result column="position" property="position" jdbcType="VARCHAR" />
+        <result column="phonenumber" property="phonenumber" jdbcType="VARCHAR" />
+        <result column="busid" property="busid" jdbcType="VARCHAR" />
+        <result column="busid" property="busid" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, username, password, name,salt,gender, position, phonenumber, busid
+    </sql>
 
     <select id="findUser" parameterType="user" resultType="user">
-select * from laweruser where username = #{username} and password = #{password}  
+select * from laweruser where username = #{username}
+        <if test="password!=null and password !=''">
+           and password=#{password}
+        </if>
 </select>
 
     <update id="updatePs" parameterType="user">
@@ -17,6 +36,12 @@ update laweruser set password = #{password} where username= #{username}
         <set>
             <if test="name!=null and name !=''">
                 name=#{name},
+            </if>
+            <if test="password!=null and password !=''">
+                password=#{password},
+            </if>
+            <if test="salt!=null and salt !=''">
+                salt=#{salt},
             </if>
             <if test="gender!=null and gender !=''">
                 gender=#{gender},
@@ -32,6 +57,9 @@ update laweruser set password = #{password} where username= #{username}
             </if>
             <if test="unsolve!=null ">
                 unsolve=#{unsolve},
+            </if>
+            <if test="solve!=null ">
+                solve=#{solve}
             </if>
         </set>
         where id= #{id}
@@ -72,12 +100,30 @@ select * from laweruser where id=#{id}
  </insert>
 
     <insert id="addUser" parameterType="user">
-  insert into laweruser(id,username,name,password,gender,position,phonenumber,busid)
-  values (#{id},#{username},#{name},#{password},#{gender},#{position},#{phonenumber},#{busId})
+  insert into laweruser(id,username,name,salt,password,gender,position,phonenumber,busid,create_time)
+  values (#{id},#{username},#{name},#{salt},#{password},#{gender},#{position},#{phonenumber},#{busId},#{createTime})
  </insert>
 
     <select id="getAllLawer" parameterType="string" resultType="Map">
-  select * from laweruser where busId =#{busId}
+  select lu.*,ur.role_id from laweruser lu join user_role ur on ur.user_id = lu.Id where busId =#{busId} order by create_time
  </select>
+
+    <select id="findByRoleId" resultMap="BaseResultMap">
+        SELECT a.id, a.username,a.name, a.password, a.gender, a.position, a.phonenumber, a.busid FROM laweruser a INNER JOIN user_role b ON a.id = b.user_id WHERE b.role_id = #{roleId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="findByRoleIds" resultMap="BaseResultMap">
+        SELECT a.id, a.username,a.name,a.password, a.gender, a.position, a.phonenumber, a.busid FROM laweruser a INNER JOIN user_role b ON a.user_id = b.user_id
+        WHERE b.role_id IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="selectRoleByUserId" parameterType="string" resultType="map">
+        select r.* from role r join  user_role ur on r.role_id =ur.role_id where ur.user_id=#{id}
+    </select>
+    
+
 
 </mapper>

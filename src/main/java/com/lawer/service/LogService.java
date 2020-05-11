@@ -13,4 +13,6 @@ public interface LogService {
     public List<Map<String,Object>> getAllLog(Map<String,Object> map);  //根据类型获取日志
 
     public int getLogCount(Map<String,Object> map);  //根据类型获取日志
+
+    public void deleteLog(String id); //删除日志
 }

@@ -1,31 +1,41 @@
 package com.lawer.controller;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.lawer.common.DateUtil;
 import com.lawer.common.IpAdress;
 import com.lawer.common.ResultGson;
 import com.lawer.pojo.*;
 import com.lawer.service.CaseListService;
 import com.lawer.service.LogService;
-import net.bytebuddy.asm.Advice;
+import com.lawer.service.PermissionService;
+import com.lawer.shiro.MyShiroRealm;
+
+import com.lawer.util.PasswordHelper;
+
+import com.lawer.util.ResponseVo;
+import com.lawer.util.ResultUtil;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.LockedAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.cache.Cache;
+import org.apache.shiro.subject.Subject;
+import org.crazycake.shiro.RedisCacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.lawer.service.UserService;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * 用户管理
@@ -41,13 +51,19 @@ public class UserController {
 	private LogService logService;
 	@Autowired
 	private CaseListService caseListService;
-	
+	@Autowired
+	private MyShiroRealm shiroRealm;
+	@Autowired
+	private PermissionService permissionService;
+	@Autowired
+	private RedisCacheManager redisCacheManager;
+
 	//跳转到登录页面
 	@RequestMapping("login")
 	public String Login(){
 		return "html/login";
 	}
-	//跳转到登录页面
+	//跳转到注册页面
 	@RequestMapping("register")
 	public String Register(){
 		return "html/register";
@@ -56,19 +72,29 @@ public class UserController {
 	@RequestMapping("index")
 	@ResponseBody
 	public String loginCheck(@RequestBody User us, HttpServletRequest request, HttpServletResponse response){
-		User user=userService.findUser(us);  //判断数据库中是否存在该用户
-		if(user!=null && us.getUsername().equals(user.getUsername())&&us.getPassword().equals(user.getPassword())){
+
+		UsernamePasswordToken token = new UsernamePasswordToken(us.getUsername(), us.getPassword());
+		try{
+			Subject subject = SecurityUtils.getSubject();
+			subject.login(token);
+			User user=(User)SecurityUtils.getSubject().getPrincipal();
+		/*	us.setPassword("");
+			User user=userService.findUser(us);*/
 			request.getSession().setAttribute("us",user);
-			Cookie cookie = new Cookie("lawername",user.getName());
-			response.addCookie(cookie);
 			Log log =Log.ok(user.getUsername(),IpAdress.getIp(request),0,"登录","成功","",user.getBusId());
 			logService.addLog(log);
-			return "1";
+		} catch (LockedAccountException e) {
+			token.clear();
+			Log log =Log.ok(us.getUsername(),IpAdress.getIp(request),0,"登录","失败","","");
+			logService.addLog(log);
+			return "0";
+		} catch (AuthenticationException e) {
+			token.clear();
+			Log log =Log.ok(us.getUsername(),IpAdress.getIp(request),0,"登录","失败","","");
+			logService.addLog(log);
+			return "0";
 		}
-		Log log =Log.ok(us.getUsername(),IpAdress.getIp(request),0,"登录","失败","",user.getBusId());
-		logService.addLog(log);
-		return "0";
-		
+		return "1";
 	}
 	//跳转到主页
 	@RequestMapping("toindex")
@@ -76,11 +102,11 @@ public class UserController {
 		return "/html/frame";
 	}
 	//退出登录
-	@RequestMapping("logout")
-	public String Logout(HttpSession httpSession){
-		httpSession.invalidate();   //清除session数据
-		return "/html/login";
-	}
+//	@RequestMapping("logout")
+//	public String Logout(HttpSession httpSession){
+//		httpSession.invalidate();   //清除session数据
+//		return "/html/login";
+//	}
 
 	//检查用户名是否存在
 	@RequestMapping("checkName")
@@ -106,25 +132,34 @@ public class UserController {
 		user.setPhonenumber(busUser.getPhoneNumber());
 		user.setPosition("高级律师");
 		user.setBusId(businessId);
+		user.setCreateTime(DateUtil.getToday());
+		PasswordHelper.encryptPassword(user);
 		bus.setId(businessId);
 		bus.setLawerid(userId);
 		bus.setLawerName(busUser.getZname());
 		bus.setName(busUser.getName());
 		bus.setTelphone(busUser.getPhoneNumber());
-		if( userService.addBusiness(bus)==0 || userService.addUser(user)==0){
+		List<String> roleIdsList =new ArrayList<>();
+		roleIdsList.add("1");
+		if( userService.addBusiness(bus)==0 || userService.addUser(user)==0 || userService.addAssignRole(user.getId(),roleIdsList)==0){
+
 			return 0;
 		}
-
+		List<String> userIds = new ArrayList<>();
+		userIds.add(userId);
+		shiroRealm.clearAuthorizationByUserId(userIds);
 		return 1;
 	}
 
 	//添加用户
 	@RequestMapping(value = "addUser")
 	@ResponseBody
-	public int addUser(@RequestBody  String json,HttpSession session,HttpServletRequest request){
-		User user=(User)session.getAttribute("us");
+	public int addUser(@RequestBody  String json,HttpServletRequest request){
+//		User user=(User)session.getAttribute("us");
+		User user=(User)SecurityUtils.getSubject().getPrincipal();
 		Map<String,Object> map = JSON.parseObject(json);
 		map.put("busid",user.getBusId());
+		map.put("create_time", DateUtil.getToday());
 		try{
 			userService.addUser(map);
 		}catch (Exception e){
@@ -141,9 +176,9 @@ public class UserController {
 	//获取当前律所所有律师
 	@RequestMapping("getAllLawer")
 	@ResponseBody
-	public ResultGson getAllLawer(HttpSession session){
+	public ResultGson getAllLawer(){
 
-		User user=(User)session.getAttribute("us");
+		User user=(User)SecurityUtils.getSubject().getPrincipal();
 		String busId=user.getBusId();
 		List<Map<String,Object>> list=null;
 		try{
@@ -160,15 +195,20 @@ public class UserController {
 	@RequestMapping("updatePs")
 	@ResponseBody
 	public int updatePs(@RequestBody String json,HttpSession session,HttpServletRequest request){
-		//从session中获取用户信息
-		User user=(User) session.getAttribute("us");
+
+		User user = (User)session.getAttribute("us");
 		User us = userService.userById(user.getId());
 		Map<String, Object> mapJson = JSON.parseObject(json);
+		String pw=us.getPassword();
+		us.setPassword((String) mapJson.get("password"));
+		String npw =PasswordHelper.getPassword(us);
+
 		//将用户密码和用户输入的原密码进行比较
-		if(us.getPassword().equals(mapJson.get("oldpassword"))){
+		if(pw.equals(npw)){
 			//将用户密码修改成新密码
 			us.setPassword((String) mapJson.get("password"));
 			//修改数据库中的用户密码
+			PasswordHelper.encryptPassword(us);
 
 			try{
 				userService.updatePs(us);
@@ -283,6 +323,12 @@ public class UserController {
 		User user=(User) session.getAttribute("us");
 		Map<String,Object> map = JSON.parseObject(json);
 		User us = userService.userById((String) map.get("id"));
+		Map<String,Object> bmap = userService.getBusinessInfo(user.getBusId());
+		if(bmap.get("lawerid").equals(map.get("id"))){
+			Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"删除用户","失败", "无法删除超级管理员",user.getBusId());
+			logService.addLog(log);
+			return ResultGson.error("无法删除超级管理员");
+		}
 		map.put("busId",user.getBusId());
 		map.put("jstatus",0);
 		int i=caseListService.getACaseCount(map);
@@ -299,8 +345,36 @@ public class UserController {
 		} catch (Exception e) {
 			Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"删除用户","失败", "删除用户\""+us.getUsername()+"\"",user.getBusId());
 			logService.addLog(log);
-            return ResultGson.error("删除失败");
+			return ResultGson.error("删除失败");
 		}
+	}
+
+	/*获取当前登录用户的菜单*/
+	@RequestMapping("menu")
+	@ResponseBody
+	public List<Permission> getMenus(){
+		List<Permission> permissionListList = permissionService.selectMenuByUserId(((User) SecurityUtils.getSubject().getPrincipal()).getId());
+		return permissionListList;
+	}
+	/*登出*/
+	@RequestMapping("logout")
+	public String logout() {
+		Subject subject = SecurityUtils.getSubject();
+		if(null!=subject){
+			String username = ((User) SecurityUtils.getSubject().getPrincipal()).getUsername();
+			Serializable sessionId = SecurityUtils.getSubject().getSession().getId();
+			Cache<String, Deque<Serializable>> cache = redisCacheManager.getCache(redisCacheManager.getKeyPrefix()+username);
+			Deque<Serializable> deques = cache.get(username);
+			for(Serializable deque : deques){
+				if(sessionId.equals(deque)){
+					deques.remove(deque);
+					break;
+				}
+			}
+			cache.put(username,deques);
+		}
+		subject.logout();
+		return "html/login";
 	}
 
 

@@ -81,6 +81,9 @@ public class PageController {
     public String toUpdateInfo(String id, HttpSession session){
         if(id!=null && !"".equals(id)){
             session.setAttribute("mdfId",id);
+        }else{
+            User user =(User) session.getAttribute("us");
+            session.setAttribute("mdfId",user.getId());
         }
         return "html/updateInfo";
     }

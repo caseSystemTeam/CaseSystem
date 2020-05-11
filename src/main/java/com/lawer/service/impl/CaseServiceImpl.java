@@ -58,10 +58,11 @@ public class CaseServiceImpl implements CaseService {
         String busId = user.getBusId();
         map.put("id",id);
         map.put("rtime",rtime);
+        map.put("cname",user.getName());
         map.put("busId",busId);
         map.put("fstatus",1);
-        map.put("jstatus",0);
-        map.put("p_status",2);
+        map.put("jstatus",2);
+        map.put("p_status",0);
 		mapper.addCase(map);
 
 

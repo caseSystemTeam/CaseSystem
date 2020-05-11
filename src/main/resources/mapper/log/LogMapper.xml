@@ -32,6 +32,9 @@
             unix_timestamp(#{map.tricktime2})
         </if>
     </select>
+    <delete id="deleteLog" parameterType="string">
+        delete from log where id=#{id}
+    </delete>
 
 
 </mapper>

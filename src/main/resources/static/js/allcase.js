@@ -5,17 +5,19 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
         $ = layui.jquery,
         layer = layui.layer;
 
+    var sdata = null;
     //获取当前公司所有律师信息
     $.ajax({
         url: path + "/userCon/getAllLawer",
         type: "POST",
         success: function (data) {
-
             $.each(data.data.data, function (i, item) {
-                $("#lawerid").append(
-                    '<option value="' + item.Id
-                    + '">' + item.name+'('+item.position+')'
-                    + '</option>');
+                if(item.role_id != 4){
+                    $("#lawerid").append(
+                        '<option value="' + item.Id
+                        + '">' + item.name+'('+item.position+')'
+                        + '</option>');
+                }
             });
             form.render();
         }
@@ -23,7 +25,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
 
     //监听提交
     form.on('submit(submit)', function (data) {
-
+        sdata = data.field;
         table.reload('saleTable', {
             page: {
                 curr: 1 //重新从第 1 页开始
@@ -70,14 +72,14 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                     {
                         field: 'name',
                         title: '案件名称',
-                        width: '14%',
+
                         templet: function (d) {
                             return "<div class='layui-elip cursor-p' title='" + d.name + "'>" + d.name + "</div>";
                         }
                     }, {
                     field: 'money',
                     title: '拟定金额',
-                    width: "10%",
+
 
                     templet: function (d) {
                         return "<div class='layui-elip cursor-p' title='" + (d.money != undefined ? d.money : "") + "'>" + (d.money != undefined ? d.money : "") + "</div>";
@@ -85,32 +87,37 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                 }, {
                     field: 'cusname',
                     title: '申述人姓名',
-                    width: '12%',
+
                     templet: function (d) {
                         return "<div class='layui-elip cursor-p' title='" + d.cusname + "'>" + d.cusname + "</div>";
                     }
                 }, {
                     field: 'cus_telphone',
                     title: '联系电话',
-                    width: '12%',
+
                     templet: function (d) {
                         return "<div class='layui-elip cursor-p' title='" + (d.cus_telphone != undefined ? d.cus_telphone : "") + "'>" + (d.cus_telphone != undefined ? d.cus_telphone : "") + "</div>";
                     }
                 },{
                     field: 'lawername',
                     title: '责任律师',
-                    width: '12%'
+
                 },{
-                    field: 'jstatus',
+                    field: 'p_status',
                     title: '案件状态',
-                    width: '10%',
+
                     templet: function (d) {
-                        return "<div class='layui-elip cursor-p' title='" + d.jstatus + "'>" + (d.jstatus != 0 ? "已结束" : "正在进行") + "</div>";
+                        return "<div class='layui-elip cursor-p' title='" + d.p_status + "'>" + (d.p_status != 0 ? "已结束" : "正在进行") + "</div>";
                     }
                 }, {
                     field: 'rtime',
                     title: '登记时间',
                     width: '14%',
+
+                },{
+                    field: 'cname',
+                    title: '登记人名称',
+
 
                 }, {
                     filed:'caozuo',
@@ -123,7 +130,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                 ]
             ],
             done: function (res, curr) {
-                console.info("sssss",res);
+
 
                 $(".layui-table-fixed-r .layui-table-body").css({
                     'overflow': 'hidden'
@@ -183,16 +190,105 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
     }
     tableload();
 
+    //获取当前公司所有律师信息
+    $.ajax({
+        url: path + "/userCon/getAllLawer",
+        type: "POST",
+        success: function (data) {
+
+            $.each(data.data.data, function (i, item) {
+                if(item.role_id != 4){
+                    $("#transfer").append(
+                        '<option value="' + item.Id
+                        + '">' + item.name+'('+item.position+')'
+                        + '</option>');
+                }
+            });
+            form.render();
+        }
+    });
+
+    //监听转移客户的下拉选择
+    form.on('select(transfer)', function (data) {
+        var checkStatus = table.checkStatus('saleTable'),
+            checkData = checkStatus.data;
+
+        var personValue = $(data.elem).find("option:selected").text();
+        if (data.value != "" || data.value != null) {
+            layer.open({
+                type: 1,
+                title: '提示',
+                offset: 'auto',
+                btnAlign: 'c',
+                area: ['420px', '220px'],
+                offset: 'auto',
+                content: "<div style='text-align:center;padding:42px 0 26px 0;'><span class='layui-badge'>!</span>" + "   " + "确认将所选客户转移给<span>" + personValue + "</span>吗？</div><hr class='layui-bg-gray' style='margin:29px 0 0'>",
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+                    var json = {
+                        "data": checkData,
+                        "lawerid": data.value
+                    }
+
+                    //客户转移
+                    $.ajax({
+                        url: path + "/caseList/transferPerson",
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify(json),
+                        success: function (data) {
+
+                            if (data.status == 200) {
+                                layer.msg("转移成功");
+                                setTimeout(function() {
+                                    window.location.reload();
+                                },1000);
+                            }else {
+                                layer.msg("转移失败");
+                                setTimeout(function() {
+                                    window.location.reload();
+                                },1000);
+                            }
+                        }
+                    });
+
+                    layer.close(index);
+                },
+                success: function (index, layero) {
+                    $(':focus').blur();
+                },
+                no: function (index, layero) {
+
+                }
+            })
+        }
+    });
+
+
+
     //监听工具条的操作
     table.on('tool(saleTable)', function (obj) {
         var data = obj.data; //获得当前行数据
         var tr = obj.tr; //获得当前行 tr 的DOM对象
-        console.info('edit',data);
         if (obj.event === 'edit') {
             //跳转案件详情页面，id为当前案件id
             window.location.href = path + "case/tocase?id=" + data.id ;
         }
 
+    });
+
+    table.on('checkbox(saleTable)', function (obj) {
+        var checkStatus = table.checkStatus('saleTable'),
+            data = checkStatus.data;
+        if (data.length == 0) {
+            $('.plcz').addClass('layui-hide');
+
+        } else {
+            $('.plcz').removeClass('layui-hide');
+        }
+    });
+    $('.guanbicaozuo').click(function () {
+        $('.plcz').addClass('layui-hide');
     });
 
 });

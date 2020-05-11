@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 
 <head>
     <meta charset="UTF-8">
@@ -24,6 +24,11 @@
     <script src="/framework/jquery.mCustomScrollbar.min.js"></script>
     <script src="/framework/cframe.js"></script><!-- 仅供所有子页面使用 -->
     <!-- 公共样式 结束 -->
+    <style>
+        .layui-layer-page .layui-layer-content {
+            overflow: visible  !important;
+        }
+    </style>
     <script src="/js/home.js"></script>
     <script src="/js/allpeople.js"></script>
 
@@ -31,6 +36,18 @@
 
 <body>
 <div class="cBody">
+    <div id="rolediv" style="display: none">
+        <form class="layui-form" action="" style="padding-top: 30px;" >
+            <div class="layui-form-item">
+                <label class="layui-form-label">角色</label>
+                <div class="layui-input-inline">
+                    <select name="urole" id="urole" required lay-verify="required" lay-filter="urole">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
     <div class="console">
         <form class="layui-form" action="">
             <div class="layui-form-item">
@@ -56,13 +73,22 @@
         <table class="layui-table" id="saleTable" lay-filter="saleTable"></table>
         <script type="text/html" id="bianjikuang">
             <div class="oper-tab">
-                <a lay-event="edit" class="hover-blue">编辑</a>
-                <a lay-event="delete" class="hover-blue">删除</a>
+              <shiro:hasPermission name="user:update">
+                  <a lay-event="edit" class="hover-blue">编辑</a>
+              </shiro:hasPermission>
+            <shiro:hasPermission name="user:role">
+                <a lay-event="role" class="hover-blue">分配角色</a>
+            </shiro:hasPermission>
+                <shiro:hasPermission name="user:delete">
+                    <a lay-event="delete" class="hover-blue">删除</a>
+                </shiro:hasPermission>
             </div>
         </script>
+
     </div>
 
 </div>
 </body>
+
 
 </html>

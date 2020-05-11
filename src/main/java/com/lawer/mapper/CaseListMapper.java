@@ -17,4 +17,7 @@ public interface CaseListMapper {
 
     //获取当前个人的案件数
     public int getCaseCount(@Param("map") Map<String,Object> map);
+
+    //修改案件信息
+    public void updateCase(@Param("map") Map<String,Object> map);
 }

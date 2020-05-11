@@ -43,4 +43,9 @@ public class CaseListServiceImpl implements CaseListService {
 
         return caseListMapper.getCaseCount(map);
     }
+
+    @Override
+    public void transferPerson(Map<String, Object> map) {
+        caseListMapper.updateCase(map);
+    }
 }

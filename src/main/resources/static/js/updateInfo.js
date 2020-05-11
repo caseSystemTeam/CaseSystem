@@ -48,11 +48,15 @@ layui.use(['upload','form','layer','jquery'], function() {
                 $("#radio1").removeAttr("checked");
                 $("#radio2").attr("checked",true);
             }
+
             $("#position").val(user.position);
             $("input[name=phonenumber]").val(user.phonenumber);
             form.render(); //更新全部
         }
     })
+
+
+
 
     // $('#pwd').blur(function() {
     //     var reg = /^[\w]{6,12}$/;

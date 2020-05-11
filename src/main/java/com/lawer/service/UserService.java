@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.lawer.pojo.Business;
 import com.lawer.pojo.User;
+import com.lawer.util.ResponseVo;
 
 public interface UserService {
 	public User findUser(User user);   //查找用户
@@ -25,4 +26,20 @@ public interface UserService {
 	public int getBusUserCount(Map<String,Object> map);  //获取员工数量
 	public int addUser(Map<String,Object> map); //添加用户
 	public void deleteUser(String id); //删除用户
+	public List<Map<String,Object>> getAllBusiness(); //获取所有律所信息
+	public Map<String,Object>  getBusinessInfo(String id); //获取律所信息
+	/**
+	 * 根据用户id分配角色集合
+	 * @param userId
+	 * @param roleIds
+	 * @return int
+	 */
+	int addAssignRole(String userId, List<String> roleIds);
+
+	/**
+	 * 通过用户id查询角色信息
+	 * @param id
+	 * @return
+	 */
+	Map<String,Object> selectRoleByUserId(String id);
 }

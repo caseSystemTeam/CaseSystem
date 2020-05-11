@@ -6,7 +6,26 @@ $(function(){
 	});
 	
 	//菜单
-	$(".menuFA").click(function(){
+	$("body").delegate(".menuFA","click", function(){
+
+		menuFAClick($(this));
+	});
+	$("body").delegate(".menuFA","mouseenter", function(){
+		menuFAMouseenter($(this));
+	});
+	$("body").delegate(".menuFA","mouseleave", function(){
+		menuFAMouseleave($(this));
+	});
+	/*$(".menuFA").on('click',function(){
+		menuFAClick($(this));
+	})
+	$(".menuFA").on('mouseenter',function(){
+		menuFAMouseenter($(this));
+	})
+	$(".menuFA").on('mouseleave',function(){
+		menuFAMouseleave($(this));
+	})*/
+	/*$(".menuFA").click(function(){
 		menuFAClick($(this));
 	});
 	$(".menuFA").mouseenter(function(){
@@ -14,7 +33,7 @@ $(function(){
 	});
 	$(".menuFA").mouseleave(function(){
 		menuFAMouseleave($(this));
-	});
+	});*/
 	
 })
 

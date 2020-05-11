@@ -10,4 +10,6 @@ public interface BusinessMapper {
     public List<Map<String, Object>> getBusinessUser(@Param("map") Map<String, Object> map); //获取公司当前所有员工信息
     public int getBusUserCount(@Param("map") Map<String,Object> map);  //获取员工数量
     public void deleteUser(String id); //删除用户
+    public List<Map<String,Object>> getAllBusiness(); //获取所有律所信息
+    public Map<String,Object>  getBusinessInfo(String id); //获取律所信息
 }

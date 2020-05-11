@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 
 <head>
     <meta charset="UTF-8">
@@ -50,37 +51,7 @@
             </div>
 
         </div>
-        <!--密码-->
-     <!--   <div class="layui-form-item">
-            <label class="layui-form-label">密码</label>
 
-            <div class="layui-input-inline shortInput">
-                <input type="password" id="pwd" name="password" required lay-verify="required" autocomplete="off" class="layui-input">
-            </div>
-            &lt;!&ndash; 对号 &ndash;&gt;
-            <div class="layui-inline" style="margin-top: 10px">
-                <i class="layui-icon" id="pri" style="color: green;font-weight: bolder;" hidden></i>
-            </div>
-            &lt;!&ndash; 错号 &ndash;&gt;
-            <div class="layui-inline"  style="margin-top: 10px;margin-left: -15px">
-                <i class="layui-icon" id="pwr" style="color: red; font-weight: bolder;" hidden>ဆ</i>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">确认密码</label>
-            <div class="layui-input-inline shortInput">
-                <input type="password" id="rpwd" name="password2" required lay-verify="required" autocomplete="off" class="layui-input">
-            </div>
-            &lt;!&ndash; 对号 &ndash;&gt;
-            <div class="layui-inline" style="margin-top: 10px">
-                <i class="layui-icon" id="rpri" style="color: green;font-weight: bolder;" hidden></i>
-            </div>
-            &lt;!&ndash; 错号 &ndash;&gt;
-            <div class="layui-inline"  style="margin-top: 10px;margin-left: -15px">
-                <i class="layui-icon" id="rpwr" style="color: red; font-weight: bolder;" hidden>ဆ</i>
-            </div>
-        </div>
--->
 
         <div class="layui-form-item">
             <label class="layui-form-label">姓名</label>
@@ -96,7 +67,7 @@
                 <input id="radio2" type="radio" name="gender" value="女" title="女"  >
             </div>
         </div>
-
+    <shiro:hasPermission name="user:update">
         <div class="layui-form-item">
             <label class="layui-form-label">职称</label>
             <div class="layui-input-inline">
@@ -108,7 +79,7 @@
                 </select>
             </div>
         </div>
-
+    </shiro:hasPermission>
         <div class="layui-form-item">
             <label class="layui-form-label">联系方式</label>
             <div class="layui-input-inline shortInput">

@@ -18,7 +18,7 @@
         <if test="map.position !=null and map.position !=''">
             and position = #{map.position}
         </if>
-        order by id
+        order by create_time
     </select>
 
     <select id="getBusUserCount" resultType="int">
@@ -37,5 +37,12 @@
     <delete id="deleteUser" parameterType="string" >
         delete from laweruser where id=#{id}
     </delete>
+
+    <select id="getAllBusiness" resultType="map">
+        select * from business
+    </select>
+    <select id="getBusinessInfo" parameterType="string" resultType="map">
+        select * from business where id=#{id}
+    </select>
 
 </mapper>
