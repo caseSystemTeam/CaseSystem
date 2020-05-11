@@ -47,6 +47,52 @@ where aj.business_id=#{map.busId}
     </if>
 </select>
 
+    <!--查询小组案件信息  -->
+    <select id="getGroupCase"  resultType="Map">
+        select aj.*,lu.name as lawername,lu.position from anjian aj left join laweruser lu on aj.lawerid =lu.id
+        join casegroup cg on cg.caseId = aj.Id
+        where aj.business_id=#{map.busId}
+        and (cg.member2 =#{map.groupuserid} or cg.member3 =#{map.groupuserid} or cg.member4 =#{map.groupuserid})
+        <if test="map.name !=null and map.name !=''">
+            and aj.name like concat('%',#{map.name},'%')
+        </if>
+        <if test="map.lawerid !=null and map.lawerid !=''">
+            and aj.lawerid = #{map.lawerid}
+        </if>
+        <if test="map.pstatus !=null and map.pstatus !=''">
+            and aj.p_status = #{map.pstatus}
+        </if>
+        <if test="map.tricktime !=null and map.tricktime !=''">
+            AND unix_timestamp(aj.rtime) between unix_timestamp(#{map.tricktime}) and
+            unix_timestamp(#{map.tricktime2})
+        </if>
+        order by aj.rtime desc
+        <if test="map.pageSize!=null and map.skipCount!=null ">
+            LIMIT #{map.skipCount},#{map.pageSize}
+        </if>
+    </select>
+
+    <!--查询小组案件数量-->
+    <select id="getGroupCaseCount" resultType="int">
+        select count(1) from anjian aj
+        join casegroup cg on cg.caseId = aj.Id
+        where aj.business_id=#{map.busId}
+        and (cg.member2 =#{map.groupuserid} or cg.member3 =#{map.groupuserid} or cg.member4 =#{map.groupuserid})
+        <if test="map.name !=null and map.name !=''">
+            and aj.name like concat('%',#{map.name},'%')
+        </if>
+        <if test="map.lawerid !=null and map.lawerid !=''">
+            and aj.lawerid = #{map.lawerid}
+        </if>
+        <if test="map.pstatus !=null and map.pstatus !=''">
+            and aj.p_status = #{map.pstatus}
+        </if>
+        <if test="map.tricktime !=null and map.tricktime !=''">
+            AND unix_timestamp(aj.rtime) between unix_timestamp(#{map.tricktime}) and
+            unix_timestamp(#{map.tricktime2})
+        </if>
+    </select>
+
     <!--查询个人案件信息  -->
     <select id="getCaseById"  resultType="Map">
         select aj.*,lu.name as lawername,lu.position from anjian aj left join laweruser lu on aj.lawerid =lu.id
