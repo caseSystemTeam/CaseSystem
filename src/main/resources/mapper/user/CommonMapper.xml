@@ -3,11 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lawer.mapper.CommonMapper">
 
-	<!-- 根据案件ID查询案件包含的文件路径信息 -->
-	<select id="getFileById" resultType="com.lawer.pojo.CaseFile" parameterType="Integer">
-		select * from file where caseId=#{caseId}
-	</select>
-	
+
 	<!-- 根据案件ID添加新的文件路径信息 -->
 	<insert id="addFile" parameterType="com.lawer.pojo.CaseFile" >
 		insert into file (caseId,fileid,filename,url,createTime)

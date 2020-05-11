@@ -4,6 +4,7 @@ import com.lawer.common.FileConvert;
 import com.lawer.common.PoiExcelToHtmlUtil;
 import com.lawer.common.ResultGson;
 import com.lawer.pojo.CaseFile;
+import com.lawer.service.CaseService;
 import com.lawer.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import com.lawer.common.FileUpAndDown;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +28,10 @@ public class CommonController {
     @Autowired
     CommonService commonService;
 
+    @Autowired
+    CaseService caseService;
+
+    //文件上传
     @RequestMapping("/SingleUpload")
     @ResponseBody
     public String SingleUpload(@RequestParam("caseId") String caseId, @RequestParam("uploadfile") List<MultipartFile> uploadfile
@@ -39,6 +47,36 @@ public class CommonController {
             result = ResultGson.error("文件上传失败，请检查文件格式是否符合要求。").toJson();
         }
         return result;
+    }
+
+
+    //文件下载
+    @RequestMapping("/downloadFile")
+    @ResponseBody
+    public String downloadFile(@RequestParam("fileid") String fileid
+            , HttpServletResponse response){
+        FileUpAndDown fileCon = new FileUpAndDown();
+        CaseFile cf = caseService.getFileById(fileid);
+        String filepath = cf.getUrl();
+        String filename = cf.getFilename();
+        filepath.replace("\\","\\\\");
+        //根据url和文件名确定下载文件
+        File file = new File(filepath);
+        String result = null;
+        if (file.exists()) {
+            response.setContentType("application/force-download");// 设置强制下载不打开
+            try {
+                response.addHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(filename,"UTF-8"));// 设置文件名
+                fileCon.fileDownload(file,response,filename);
+                result = ResultGson.ok("ok").toJson();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }else{
+            result = ResultGson.error("文件不存在！！").toJson();
+        }
+        return "";
     }
 
     @RequestMapping("/WatchFile")

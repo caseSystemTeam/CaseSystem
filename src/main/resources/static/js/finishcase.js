@@ -177,7 +177,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
         console.info('edit',data);
         if (obj.event === 'edit') {
             //跳转案件详情页面，id为当前案件id
-            window.location.href = path + "case/tocase?id=" + data.id ;
+            window.location.href = path + "/page/tocase?caseId=" + data.Id+"&lawerid="+data.lawerid;
         }
 
     });

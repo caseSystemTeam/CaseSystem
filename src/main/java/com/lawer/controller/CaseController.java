@@ -9,6 +9,7 @@ import com.lawer.common.IpAdress;
 import com.lawer.pojo.CaseFile;
 import com.alibaba.fastjson.JSON;
 import com.lawer.common.ResultGson;
+import com.lawer.pojo.Indictment;
 import com.lawer.pojo.Log;
 import com.lawer.pojo.User;
 import com.lawer.service.CaseService;
@@ -20,12 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import java.io.File;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.io.Serializable;
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Map;
 
 
 @Controller
@@ -40,11 +40,29 @@ public class CaseController {
     private LogService logService;
 
     //跳转至案件详情界面
-    @RequestMapping("/tocase")
-    public String toCasePlan(){
-        return "/html/casePlan";
+    @RequestMapping("/getCaseId")
+    @ResponseBody
+    public ResultGson getCaseId(HttpSession session){
+        String caseId =(String) session.getAttribute("caseId");
+        String userid =(String) session.getAttribute("userid");
+        Map<String,Object> map = new HashMap<>();
+        map.put("caseId",caseId);
+        map.put("userid",userid);
+        return ResultGson.ok(map);
     }
 
+
+    @RequestMapping("nextCard")
+    @ResponseBody
+    public ResultGson nextCard(@RequestParam("caseId") String caseId,@RequestParam("jstatus") int jstatus){
+        if(jstatus==3){
+            caseService.updateCaseJstatus(caseId,jstatus);
+            caseService.addAnjianAssist(caseId);
+        }else{
+            caseService.updateCaseJstatus(caseId,jstatus);
+        }
+        return ResultGson.ok();
+    }
 
     //查询当前案件下所有的文件
     @RequestMapping("/getFileAll")
@@ -130,6 +148,122 @@ public class CaseController {
 
         return ResultGson.ok(map);
     }
+
+    @RequestMapping("getCaseInfoAssist")
+    @ResponseBody
+    public ResultGson getCaseInfoAssist(@RequestParam("caseId") String caseId){
+        Map<String,Object> map =null;
+        try{
+            map = caseService.getCaseInfoAssist(caseId);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultGson.error("获取补充案件信息出错");
+        }
+
+        return ResultGson.ok(map);
+    }
+
+    @RequestMapping("commitCaseResult")
+    @ResponseBody
+    public ResultGson commitCaseResult(@RequestParam("caseId") String caseId,
+                                       @RequestParam("resultContent") String resultContent){
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",caseId);
+        map.put("resultContent",resultContent);
+        try{
+            caseService.updateCaseInfo(map);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultGson.error("更新案件信息出错");
+        }
+        return ResultGson.ok();
+    }
+
+    @RequestMapping("setCaseGroup")
+    @ResponseBody
+    public ResultGson setCaseGroup(@RequestParam("caseId") String caseId,
+                                   String member1,String member2,String member3,String member4,int jstatus){
+        if(caseId==null||member1.equals("")||member2.equals("")||member3.equals("")||member4.equals("")){
+            return ResultGson.error("添加失败，核心信息为空");
+        }
+        Map<String,String> map = new HashMap<>();
+        map.put("id", UUID.randomUUID().toString());
+        map.put("caseId",caseId);
+        map.put("member1",member1);
+        map.put("member2",member2);
+        map.put("member3",member3);
+        map.put("member4",member4);
+        Date now=new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time=dateFormat.format(now);
+        map.put("time",time);
+        caseService.setCaseGroup(map);
+
+        //切换案件执行的状态
+        caseService.updateCaseJstatus(caseId,jstatus);
+
+        //以上执行完后，会切换到诉状书写部分，所以把版本1的信息也在这步添加了
+        Map<String,Object> mapversinon = new HashMap<>();
+        mapversinon.put("caseId",caseId);
+        mapversinon.put("member1",member1);
+        mapversinon.put("member2",member2);
+        mapversinon.put("member3",member3);
+        mapversinon.put("member4",member4);
+        mapversinon.put("version",1);
+        caseService.putCaseVersion(mapversinon);
+        return ResultGson.ok("组员添加成功");
+    }
+
+    //获取案件的小组成员名字
+    @RequestMapping("getMember")
+    @ResponseBody
+    public ResultGson getMember(@RequestParam("caseId") String caseId){
+        Map <String,Object> map = caseService.getCaseGroup(caseId);
+        return ResultGson.ok(map);
+    }
+
+
+    @RequestMapping("getCaseVersionInfo")
+    @ResponseBody
+    public ResultGson getCaseVersionInfo(@RequestParam("caseId") String caseId){
+        List<Indictment> list = null;
+        try{
+            list = caseService.getCaseVersionInfo(caseId);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultGson.error("获取案件信息出错");
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("data",list);
+        return ResultGson.ok(map);
+    }
+
+    @RequestMapping("addCaseVersion")
+    @ResponseBody
+    public ResultGson addCaseVersion(@RequestParam("caseId") String caseId){
+        List<Indictment> list = caseService.getCaseMaxVersion(caseId);
+        if(list!=null){
+            Map<String,Object> map = new HashMap<>();
+            map.put("caseId",list.get(0).getCaseId());
+            map.put("member1",list.get(0).getWriterId());
+            map.put("member2",list.get(0).getHelperId());
+            map.put("member3",list.get(1).getHelperId());
+            map.put("member4",list.get(2).getHelperId());
+            map.put("version",list.get(0).getVersion()+1);
+            caseService.putCaseVersion(map);
+        }
+        return ResultGson.ok("切换新版本成功~~");
+    }
+
+    @RequestMapping("saveInfo")
+    @ResponseBody
+    public ResultGson saveInfo(@RequestParam("data") String data){
+        Map<String,Object> map =  JSONObject.parseObject(data,new TypeReference<Map<String, Object>>(){});
+        caseService.updateAnjianAssist(map);
+        return ResultGson.ok("切换新版本成功~~");
+    }
+
 
 
 

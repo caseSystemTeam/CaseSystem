@@ -8,8 +8,8 @@ var vm = new Vue({
         userList:[],   //用户列表,
         caseInfo:[],    //当前案件的信息
         versionInfo:[],  //案件版本的信息，包含当前版本的操作人
-        message:"测试用消息",  //消息内容
-        userid:'bebede7a-4d27-4dfc-8fd7-35b8bc64f316',
+        message:"",  //消息内容
+        userid:'',
         jstatus:1,   //案件执行到哪一步的状态
         member1:'',
         member2:'',  //小组成员的id，不是名字

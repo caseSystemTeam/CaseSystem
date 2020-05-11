@@ -16,6 +16,11 @@
 		select fileid,filename,url,createTime,caseId,filetype,upId from file where caseId=#{caseId}
 	</select>
 
+    <!-- 根据文件ID，查询对应的文件 -->
+    <select id="getFileById" resultType="com.lawer.pojo.CaseFile" parameterType="String">
+		select * from file where fileid=#{fileid}
+	</select>
+
     <!-- 根据案件ID删除对应的文件信息 -->
     <delete id="deleteFileById"  parameterType="String">
 		delete from file where fileid =#{fileid}
@@ -35,9 +40,75 @@
 		select * from anjian where Id=#{caseId}
 	</select>
 
+    <!-- 根据案件ID查询补充案件信息 -->
+    <select id="getCaseInfoAssist" resultType="Map" parameterType="String">
+		select * from anjian_assist where Id=#{caseId}
+	</select>
+
+    <update id="updateCaseInfo" >
+        update anjian
+        <set>
+            <if test="map.resultContent != null "> resultContent = #{map.resultContent},</if>
+            <if test="map.jstatus != null "> jstatus = #{map.jstatus, jdbcType=VARCHAR},</if>
+            <if test="map.p_status != null "> p_status = #{map.p_status, jdbcType=VARCHAR},</if>
+        </set>
+        where Id=#{map.id}
+    </update>
+
+    <!--    设置案件小组-->
+    <insert id="setCaseGroup" >
+        insert into casegroup(
+        Id,caseId,createTime,member1,member2,member3,member4)
+        values
+            (#{map.id},#{map.caseId},#{map.time},#{map.member1},#{map.member2},#{map.member3},#{map.member4})
+
+    </insert>
 
 
+    <!--获取案件小组-->
+    <select id="getCaseGroup" resultType="Map" parameterType="String">
+		select * from casegroup where caseId=#{caseId}
+	</select>
 
+    <insert id="putCaseVersion" >
+        insert into indictment(
+        Id,caseId,writerId,helperId,version)
+        values (#{map.id},#{map.caseId},#{map.writerId},#{map.helperId},#{map.version})
+    </insert>
+
+    <!-- 根据案件ID查询案件版本信息 -->
+    <select id="getCaseVersionInfo" resultType="com.lawer.pojo.Indictment" parameterType="String">
+		select * from indictment where caseId=#{caseId}
+	</select>
+
+    <!-- 根据案件ID查询案件版本信息 -->
+    <select id="getCaseMaxVersion" resultType="com.lawer.pojo.Indictment" parameterType="String">
+		select * from indictment where
+		    version=any(select max(version) from indictment where caseId=#{caseId})
+	</select>
+
+    <insert id="addAnjianAssist" parameterType="String">
+        insert into anjian_assist(Id)
+        values (#{caseId})
+    </insert>
+
+    <update id="updateAnjianAssist" >
+        update anjian_assist
+        <set>
+            <if test="map.lian_info != null and map.lian_info !='' "> lian_info = #{map.lian_info},</if>
+            <if test="map.lian_faguan != null and map.lian_faguan !=''"> lian_faguan = #{map.lian_faguan, jdbcType=VARCHAR},</if>
+            <if test="map.lian_number != null and map.lian_number !='' "> lian_number = #{map.lian_number, jdbcType=VARCHAR},</if>
+            <if test="map.lian_didian != null and map.lian_didian != '' "> lian_didian = #{map.lian_didian, jdbcType=VARCHAR},</if>
+            <if test="map.lian_timestart != null and map.lian_timestart != '' "> lian_timestart = #{map.lian_timestart, jdbcType=VARCHAR},</if>
+            <if test="map.lian_timeend != null and map.lian_timeend != '' "> lian_timeend = #{map.lian_timeend, jdbcType=VARCHAR},</if>
+            <if test="map.kt_info != null and map.kt_info != '' "> kt_info = #{map.kt_info, jdbcType=VARCHAR},</if>
+            <if test="map.kt_timestart != null and map.kt_timestart != '' "> kt_timestart = #{map.kt_timestart, jdbcType=VARCHAR},</if>
+            <if test="map.kt_timeend != null and map.kt_timeend != '' "> kt_timeend = #{map.kt_timeend, jdbcType=VARCHAR},</if>
+            <if test="map.ts_info != null and map.ts_info != '' "> ts_info = #{map.ts_info, jdbcType=VARCHAR},</if>
+            <if test="map.ts_time != null and map.ts_time != '' "> ts_time = #{map.ts_time, jdbcType=VARCHAR},</if>
+        </set>
+        where Id=#{map.id}
+    </update>
 
 
 </mapper>

@@ -2,6 +2,8 @@ package com.lawer.common;
 
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.lawer.pojo.CaseFile;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.http.HttpHeaders;
@@ -10,7 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -30,8 +32,6 @@ public class FileUpAndDown {
 						for(MultipartFile file:uploadfile){
 							originalFileName = file.getOriginalFilename();
 							//设置上传文件的保存地址目录
-							//dirPath = request.getServletContext().getRealPath("/upload/");
-							//dirPath = request.getServletContext().getRealPath("D:\\upload\\");
 							File filePath = new File(dirPath);
 							//如果目标地址不存在，就创建这个地址
 							if(!filePath.exists()) {
@@ -67,23 +67,39 @@ public class FileUpAndDown {
 					return null;
 				}
 	}
-	
-//	public ResponseEntity<byte []> fileDownLoad(HttpServletRequest request,String filename,String path) throws IOException{
-//
-//				//创建该文件对象
-//				File file = new File(path+File.separator+filename);
-//				//对文件名编码，防止中文乱码问题
-//				//filename = this.getFilename(request,filename);
-//
-//				//设置响应头
-//				HttpHeaders headers = new HttpHeaders();
-//				//通知浏览器以下载的方式打开文件
-//				headers.setContentDispositionFormData("attachment", filename);
-//				//定义以流的方式下载返回文件数据
-//				headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-//
-//				return new ResponseEntity<byte []> (FileUtils.readFileToByteArray(file),headers,HttpStatus.OK);
-//
-//	}
+
+    public void fileDownload(File file, HttpServletResponse response,String filename){
+
+        byte[] buffer = new byte[1024];
+        FileInputStream fis = null;
+        BufferedInputStream bis = null;
+        try {
+            fis = new FileInputStream(file);
+            bis = new BufferedInputStream(fis);
+            OutputStream os = response.getOutputStream();
+            int i = bis.read(buffer);
+            while (i != -1) {
+                os.write(buffer, 0, i);
+                i = bis.read(buffer);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (bis != null) {
+                try {
+                    bis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 	
 }

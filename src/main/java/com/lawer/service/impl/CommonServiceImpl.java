@@ -16,12 +16,6 @@ public class CommonServiceImpl implements CommonService {
 	private CommonMapper commonMapper;
 
 	@Override
-	public List<CaseFile> getFileById(int fileid) {
-		List<CaseFile> lf=commonMapper.getFileById(fileid);
-		return lf;
-	}
-
-	@Override
 	public void addFile(CaseFile file) {
 		commonMapper.addFile(file);
 		
