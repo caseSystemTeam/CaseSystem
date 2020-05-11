@@ -275,7 +275,7 @@
                             <el-col :span="16"><div class="grid-content bg-purple-light"></div>
                                 <el-form  label-width="120px">
                                     <el-form-item label="消息内容：" >
-                                        <el-input type="textarea" :rows="8" v-model="message"></el-input>
+                                        <el-input type="textarea" :rows="8" v-model="tomessage"></el-input>
                                     </el-form-item>
                                     <el-form-item>
 
@@ -386,11 +386,25 @@
                                         <!-- dialog会隔绝scope的数据，导致获取不到正确的row，所以不能直接让input绑定scope.row.idear-->
                                         <el-dialog title="修改意见内容：" :visible.sync="dialogCaseVersionVisible">
                                             <!-- 展示内容的文本域-->
-                                            <el-input
-                                                    type="textarea"
-                                                    :rows="6"
-                                                    v-model="idear" >
-                                            </el-input>
+
+                                            <el-form label-position="left" label-width="100px">
+                                                <el-form-item label="负责人消息">
+                                                    <el-input
+                                                            type="textarea"
+                                                            :rows="6"
+                                                            v-model="message" >
+                                                    </el-input>
+                                                </el-form-item>
+
+                                                <el-form-item label="组员回复">
+                                                    <el-input
+                                                            type="textarea"
+                                                            :rows="6"
+                                                            v-model="idear" >
+                                                    </el-input>
+                                                </el-form-item>
+
+                                            </el-form>
 
                                             <div slot="footer" class="dialog-footer">
                                                 <el-button @click="dialogCaseVersionVisible = false">关 闭</el-button>

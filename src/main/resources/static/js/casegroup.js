@@ -267,7 +267,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
         var tr = obj.tr; //获得当前行 tr 的DOM对象
         if (obj.event === 'edit') {
             //跳转案件详情页面，id为当前案件id
-            window.location.href = path + "case/tocase?id=" + data.id ;
+            window.location.href = path + "/page/tocase?caseId=" + data.Id+"&lawerid="+data.lawerid;
         }
 
     });

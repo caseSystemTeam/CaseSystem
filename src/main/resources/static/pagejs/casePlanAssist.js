@@ -1,6 +1,6 @@
 var vm = new Vue({
     el: "#app",
-    data: {//页面所需数据
+    data: {//这个是副本副本副本副本副本副本副本副本副本副本副本！！！！！！！！！！！！！！！！！！！！！！！！！！！！
         caseId:"2",   //当前案件的id
         fileList:[],  //文件列表
         dialogFormVisible: false,  //发送消息部分，弹出框可见性
@@ -9,6 +9,8 @@ var vm = new Vue({
         caseInfo:[],    //当前案件的信息
         versionInfo:[],  //案件版本的信息，包含当前版本的操作人
         message:"",  //消息内容
+        attRadio:1,  //回复态度
+        rowdata:[],
         userid:'',
         jstatus:1,   //案件执行到哪一步的状态
         member1:'',
@@ -103,11 +105,12 @@ var vm = new Vue({
             });
         },
         cartView: function () {
-            console.log("cartvie方法执行");
             this.getUserAll();
             this.getFileAll();
             this.getCaseInfo();
-            this.getCaseInfoAssist();
+            if(this.jstatus>=4){
+                this.getCaseInfoAssist();
+            }
             this.getCaseVersionInfo();
             this.getMember();
         },
@@ -338,7 +341,6 @@ var vm = new Vue({
                 success: function(result){ // 当请求成功时运行的函数
                     //result返回的是string类型的数组
                     let da = JSON.parse(result).data;
-                    console.log(da);
                     temp.lian_info = da.lian_info;
                     temp.lian_faguan = da.lian_faguan;
                     temp.lian_number = da.lian_number;
@@ -363,7 +365,48 @@ var vm = new Vue({
         watchIdear: function (rowdata) {
             let temp = this;
             temp.idear = rowdata.idear;
+            temp.message = rowdata.message;
             temp.dialogCaseVersionVisible = true;
+            temp.rowdata = rowdata;
+
+        },
+        backMessage: function () {
+            let temp = this;
+            temp.dialogCaseVersionVisible = false;
+            var map = new Map();
+            map.set('idear',temp.idear);
+            map.set('state',temp.attRadio);
+            map.set('version',temp.rowdata.version);
+            map.set('caseId',temp.caseId);
+            map.set('helperId',temp.rowdata.helperId);
+            let obj= Object.create(null);
+            for (let[k,v] of map) {
+                obj[k] = v;
+            }
+            let jsonp = JSON.stringify(obj);
+            $.ajax({
+                type:'POST', // 规定请求的类型（GET 或 POST）
+                url:'/case/backMessage', // 请求的url地址
+                dataType:'text', //预期的服务器响应的数据类型
+                data:{   //规定要发送到服务器的数据
+                    'jsonp':jsonp
+                },
+                success: function(result){ // 当请求成功时运行的函数
+                    //result返回的是string类型的数组
+                    let da = JSON.parse(result);
+                    temp.getCaseVersionInfo();
+                    temp.$message({
+                        message: '回复消息成功~~',
+                        type: 'success'
+                    });
+                },
+                error:function(result){ //失败的函数
+                    temp.$message({
+                        message: '回复消息出错！！',
+                        type: 'warning'
+                    });
+                }
+            });
 
         },
         sendMessage: function () {
@@ -371,7 +414,6 @@ var vm = new Vue({
             temp.dialogFormVisible = false;
             let receiver = this.$refs.multipleTable.selection;   //获取表格中被选中的数据
             receiver = JSON.stringify(receiver);
-            console.log(receiver);
             $.ajax({
                 type:'POST', // 规定请求的类型（GET 或 POST）
                 url:'/case/sendMessage', // 请求的url地址
@@ -671,7 +713,6 @@ var vm = new Vue({
             }
             var jsonp = JSON.stringify(obj);
 
-            console.log("json数据"+jsonp);
             $.ajax({
                 type:'POST', // 规定请求的类型（GET 或 POST）
                 url:'/case/saveInfo', // 请求的url地址

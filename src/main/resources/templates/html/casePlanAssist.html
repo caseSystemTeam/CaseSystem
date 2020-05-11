@@ -120,21 +120,6 @@
                         </el-form-item>
                     </el-form>
 
-                    <el-row>
-                        <el-col :span="16" :offset="8" v-if="jstatus===1">
-                            <el-button type="primary" @click="commitCaseResult" round>提交咨询结果</el-button>
-                        </el-col>
-                    </el-row>
-
-                    <div class="common-position">
-                        <el-row>
-                            <el-col :span="16" :offset="7" v-if="jstatus===1">
-                                <el-button type="info" round>结束案件</el-button>
-                                <el-button type="primary" @click="lianEnd" round>执行下一个流程</el-button>
-                            </el-col>
-                        </el-row>
-                    </div>
-
 
 
                     <!--卡片内容 结束 -->
@@ -150,66 +135,9 @@
             <el-card class="box-card" v-if="jstatus>=2">
                 <div slot="header" class="clearfix">
                     <span>律师分配</span>
-                    <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
                 </div>
                 <div class="text item">
                     <!-- 卡片开始内容-->
-
-                    <el-form  label-width="120px" v-if="jstatus===2">
-
-                        <el-row :gutter="20">
-                            <el-col :span="8"><div class="grid-content bg-purple"></div>
-                                <el-form-item label="组员1：">
-                                    <el-select v-model="member2" placeholder="请选择">
-                                        <el-option
-                                                v-for="item in userList"
-                                                :key="item.username"
-                                                :label="item.name"
-                                                :value="item.Id">
-                                            <span style="float: left">{{ item.name }}</span>
-                                            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.position }}</span>
-                                        </el-option>
-                                    </el-select>
-                                </el-form-item >
-
-                            </el-col>
-                            <el-col :span="8"><div class="grid-content bg-purple"></div>
-                                <el-form-item label="组员2：">
-                                    <el-select v-model="member3" placeholder="请选择">
-                                        <el-option
-                                                v-for="item in userList"
-                                                :key="item.username"
-                                                :label="item.name"
-                                                :value="item.Id">
-                                            <span style="float: left">{{ item.name }}</span>
-                                            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.position }}</span>
-                                        </el-option>
-                                    </el-select>
-                                </el-form-item >
-                            </el-col>
-                            <el-col :span="8"><div class="grid-content bg-purple"></div>
-                                <el-form-item label="组员3：">
-                                    <el-select v-model="member4" placeholder="请选择">
-                                        <el-option
-                                                v-for="item in userList"
-                                                :key="item.username"
-                                                :label="item.name"
-                                                :value="item.Id">
-                                            <span style="float: left">{{ item.name }}</span>
-                                            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.position }}</span>
-                                        </el-option>
-                                    </el-select>
-                                </el-form-item >
-                            </el-col>
-                        </el-row>
-
-                        <el-row type="flex" class="row-bg" justify="center">
-                            <el-col :span="6"><div class="grid-content" v-if="jstatus===2"></div>
-                                <el-button type="primary" @click="submitPeo">提交选择</el-button>
-                            </el-col>
-                        </el-row>
-
-                    </el-form>
 
                     <el-form label-position="right"  label-width="140px" v-if="jstatus>2">
 
@@ -252,72 +180,6 @@
                 <div class="text item">
                     <!-- 卡片开始内容-->
 
-                    <el-card class="box-card">
-                        <el-row>
-                            <el-col :span="8"><div class="grid-content bg-purple"></div>
-                                <el-upload
-                                        class="upload-demo"
-                                        :drag="true"
-                                        :show-file-list="false"
-                                        action="/comm/SingleUpload"
-                                        :before-upload="beforeFileUpload"
-                                        :on-success="FileUploadSuccess"
-                                        :on-error="FileUploadError"
-                                        :data="{'caseId':caseId}"
-                                        name="uploadfile"
-                                        >
-                                    <i class="el-icon-upload"></i>
-                                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                                    <div class="el-upload__tip" slot="tip">支持word、excel、pdf以及图片的浏览，单个文件最大不超过30M</div>
-                                </el-upload>
-
-                            </el-col>
-                            <el-col :span="16"><div class="grid-content bg-purple-light"></div>
-                                <el-form  label-width="120px">
-                                    <el-form-item label="消息内容：" >
-                                        <el-input type="textarea" :rows="8" v-model="message"></el-input>
-                                    </el-form-item>
-                                    <el-form-item>
-
-                                        <el-button type="primary" @click="dialogFormVisible = true">选择接收人</el-button>
-
-                                        <el-dialog title="接收人列表" :visible.sync="dialogFormVisible">
-                                            <!--当前律所下工作人员的列表，用来选择接收消息的人 -->
-                                            <el-table
-                                                    ref="multipleTable"
-                                                    :data="userList"
-                                                    tooltip-effect="dark"
-                                                    style="width: 100%"
-                                                   >
-                                                <el-table-column
-                                                        type="selection"
-                                                        width="60">
-                                                </el-table-column>
-                                                <el-table-column
-                                                        prop="name"
-                                                        label="姓名"
-                                                        width="120">
-                                                </el-table-column>
-                                                <el-table-column
-                                                        prop="position"
-                                                        label="职称"
-                                                        width="120">
-                                                </el-table-column>
-
-                                            </el-table>
-
-                                            <div slot="footer" class="dialog-footer">
-                                                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                                                <el-button type="primary" @click="sendMessage">确 定</el-button>
-                                            </div>
-
-                                        </el-dialog>
-                                    </el-form-item>
-                                </el-form>
-                            </el-col>
-                        </el-row>
-                    </el-card>
-
                     <div class="common-position">
 
                         <!--当前案件下需要的文件列表 -->
@@ -352,62 +214,100 @@
                             </el-table>
                         </el-card>
                     </div>
-                    <!--案件修改版本列表-->
-                    <div class="common-position">
-                        <el-card class="box-card">
-                            <el-table
-                                    :data="versionInfo"
-                                    :default-sort = "{prop: 'version', order: 'descending'}"
-                                    height="400"
-                                    style="width: 100%">
-                                <el-table-column
-                                        prop="version"
-                                        label="版本"
-                                        width="180">
-                                </el-table-column>
-                                <el-table-column
-                                        label="操作人"
-                                        width="180">
-                                    <template slot-scope="scope">
-                                        <p>{{scope.row.helperId | userName}}</p>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                        label="状态">
-                                    <template slot-scope="scope">
-                                       <p>{{scope.row.state | versionStatus}}</p>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                        label="修改意见">
-                                    <template slot-scope="scope">
-                                        <el-button @click="watchIdear(scope.row)" type="text">查 看</el-button>
-                                        <!--以下是查看修改信息的对话框-->
-                                        <!-- dialog会隔绝scope的数据，导致获取不到正确的row，所以不能直接让input绑定scope.row.idear-->
-                                        <el-dialog title="修改意见内容：" :visible.sync="dialogCaseVersionVisible">
-                                            <!-- 展示内容的文本域-->
-                                            <el-input
-                                                    type="textarea"
-                                                    :rows="6"
-                                                    v-model="idear" >
-                                            </el-input>
 
-                                            <div slot="footer" class="dialog-footer">
-                                                <el-button @click="dialogCaseVersionVisible = false">关 闭</el-button>
-                                            </div>
-                                        </el-dialog>
-                                    </template>
-                                </el-table-column>
-                            </el-table>
-                        </el-card>
-                    </div>
+                    <!-- 文件上传，执行版本的卡片 -->
+                    <el-card class="box-card">
+                        <el-row>
+                            <el-col :span="8"><div class="grid-content bg-purple"></div>
+                                <el-upload
+                                        class="upload-demo"
+                                        :drag="true"
+                                        :show-file-list="false"
+                                        action="/comm/SingleUpload"
+                                        :before-upload="beforeFileUpload"
+                                        :on-success="FileUploadSuccess"
+                                        :on-error="FileUploadError"
+                                        :data="{'caseId':caseId}"
+                                        name="uploadfile"
+                                >
+                                    <i class="el-icon-upload"></i>
+                                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                                    <div class="el-upload__tip" slot="tip">支持word、excel、pdf以及图片的浏览，单个文件最大不超过30M</div>
+                                </el-upload>
 
-                    <div v-if="jstatus===3">
-                        <el-button type="primary" @click="addCaseVersion" round>切换为新版本</el-button>
-                        <el-button type="primary" @click="szEnd" round>执行下一个流程</el-button>
-                    </div>
+                            </el-col>
 
+                           <el-col :span="16">
+                               <el-table
+                                       :data="versionInfo"
+                                       :default-sort = "{prop: 'version', order: 'descending'}"
+                                       height="400"
+                                       style="width: 100%">
+                                   <el-table-column
+                                           prop="version"
+                                           label="版本"
+                                           width="180">
+                                   </el-table-column>
+                                   <el-table-column
+                                           label="操作人"
+                                           width="180">
+                                       <template slot-scope="scope">
+                                           <p>{{scope.row.helperId | userName}}</p>
+                                       </template>
+                                   </el-table-column>
+                                   <el-table-column
+                                           label="状态">
+                                       <template slot-scope="scope">
+                                           <p>{{scope.row.state | versionStatus}}</p>
+                                       </template>
+                                   </el-table-column>
+                                   <el-table-column
+                                           label="修改意见">
+                                       <template slot-scope="scope">
+                                           <el-button @click="watchIdear(scope.row)" type="text">查 看</el-button>
+                                           <!--以下是查看修改信息的对话框-->
+                                           <!-- dialog会隔绝scope的数据，导致获取不到正确的row，所以不能直接让input绑定scope.row.idear-->
+                                           <el-dialog title="修改意见内容：" :visible.sync="dialogCaseVersionVisible">
+                                               <!-- 展示内容的文本域-->
 
+                                               <el-form label-position="left" label-width="100px">
+                                                   <el-form-item label="负责人消息">
+                                                       <el-input
+                                                               type="textarea"
+                                                               :rows="6"
+                                                               v-model="message" >
+                                                       </el-input>
+                                                   </el-form-item>
+
+                                                   <el-form-item label="组员回复">
+                                                       <el-input
+                                                               type="textarea"
+                                                               :rows="6"
+                                                               v-model="idear" >
+                                                       </el-input>
+                                                   </el-form-item>
+
+                                                   <el-form-item label="是否同意">
+                                                       <el-radio-group v-model="attRadio">
+                                                           <el-radio :label="1">同意</el-radio>
+                                                           <el-radio :label="0">拒绝</el-radio>
+                                                       </el-radio-group>
+                                                   </el-form-item>
+
+                                               </el-form>
+
+                                               <div slot="footer" class="dialog-footer">
+                                                   <el-button @click="dialogCaseVersionVisible = false">关 闭</el-button>
+                                                   <el-button @click="backMessage()">回 复</el-button>
+                                               </div>
+                                           </el-dialog>
+                                       </template>
+                                   </el-table-column>
+                               </el-table>
+
+                           </el-col>
+                        </el-row>
+                    </el-card>
                     <!-- 卡片结束内容-->
                 </div>
             </el-card>
@@ -422,7 +322,6 @@
             <el-card class="box-card"  v-if="jstatus>=4">
                 <div slot="header" class="clearfix">
                     <span>立案审理</span>
-                    <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
                 </div>
                 <div class="text item">
                     <!-- 卡片开始内容-->
@@ -487,13 +386,6 @@
 
 
                     </el-form>
-
-                    <el-row>
-                        <el-col :span="16" :offset="8" v-if="jstatus===4">
-                            <el-button type="primary" @click="saveInfo" round>保存</el-button>
-                            <el-button type="primary" @click="laEnd" round>执行下个流程</el-button>
-                        </el-col>
-                    </el-row>
                     <!-- 卡片结束内容-->
                 </div>
             </el-card>
@@ -549,13 +441,6 @@
                             </el-col>
                         </el-form-item>
                     </el-form>
-
-                    <el-row>
-                        <el-col :span="16" :offset="8" v-if="jstatus===5">
-                            <el-button type="primary" @click="saveInfo" round>保存</el-button>
-                            <el-button type="primary" @click="ktEnd" round>执行下个流程</el-button>
-                        </el-col>
-                    </el-row>
                     <!-- 卡片结束内容-->
                 </div>
             </el-card>
@@ -563,6 +448,7 @@
         </div>
         <!--开庭审判卡片结束 -->
 
+        <!--  副本副本副本副本副本副本副本副本副本副本副本副本副本v-->
         <!--庭审结果卡片开始 -->
         <div class="common-position"  >
             <el-card class="box-card"  v-if="jstatus>=6">
@@ -596,12 +482,6 @@
                         </el-form-item>
                     </el-form>
 
-                    <el-row>
-                        <el-col :span="16" :offset="8">
-                            <el-button type="primary" @click="saveInfo" round>保存</el-button>
-                            <el-button type="warning" @click="" round>结束当前案件</el-button>
-                        </el-col>
-                    </el-row>
                     <!-- 卡片结束内容-->
                 </div>
             </el-card>

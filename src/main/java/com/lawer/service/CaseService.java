@@ -24,6 +24,7 @@ public interface CaseService {
 	public void setCaseGroup(Map<String,String> map);
 	public Map<String,Object> getCaseGroup(String caseId);
 	public void putCaseVersion(Map<String,Object> map);
+	public void updateCaseVersionInfo(Map<String,Object> map);  //更新案件版本的一条信息
 	public List<Indictment> getCaseVersionInfo(String caseId);
 	public List<Indictment> getCaseMaxVersion(String caseId);
 	public void updateCaseInfo(Map<String,Object> map);

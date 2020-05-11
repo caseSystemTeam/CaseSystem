@@ -8,7 +8,8 @@ var vm = new Vue({
         userList:[],   //用户列表,
         caseInfo:[],    //当前案件的信息
         versionInfo:[],  //案件版本的信息，包含当前版本的操作人
-        message:"测试用消息",  //消息内容
+        message:"",  //消息内容
+        tomessage:"",  //消息内容
         userid:'bebede7a-4d27-4dfc-8fd7-35b8bc64f316',
         jstatus:1,   //案件执行到哪一步的状态
         pstatus:0,
@@ -104,11 +105,12 @@ var vm = new Vue({
             });
         },
         cartView: function () {
-            console.log("cartvie方法执行");
             this.getUserAll();
             this.getFileAll();
             this.getCaseInfo();
-            this.getCaseInfoAssist();
+            if(this.jstatus>=4){
+                this.getCaseInfoAssist();
+            }
             this.getCaseVersionInfo();
             this.getMember();
         },
@@ -147,6 +149,12 @@ var vm = new Vue({
                     //result返回的是string类型的数组
                     let da = JSON.parse(result);
                     temp.userList= da.data.data;
+                    //删除用户列表中的自己，因为发送消息时不能给自己发
+                    for(let i=0;i<temp.userList.length;i++){
+                        if(temp.userList[i].Id===temp.userid){
+                            temp.userList.splice(i,1);
+                        }
+                    }
                 },
                 error:function(result){ //失败的函数
                     console.log("请求用户列表出错");
@@ -383,29 +391,64 @@ var vm = new Vue({
         //查看小组成员对当前版本的意见
         watchIdear: function (rowdata) {
             let temp = this;
+            temp.message = rowdata.message;
             temp.idear = rowdata.idear;
             temp.dialogCaseVersionVisible = true;
 
         },
+        // sendMessage: function () {
+        //     let temp = this;
+        //     temp.dialogFormVisible = false;
+        //     let receiver = this.$refs.multipleTable.selection;   //获取表格中被选中的数据
+        //     receiver = JSON.stringify(receiver);
+        //     console.log(receiver);
+        //     $.ajax({
+        //         type:'POST', // 规定请求的类型（GET 或 POST）
+        //         url:'/case/sendMessage', // 请求的url地址
+        //         dataType:'text', //预期的服务器响应的数据类型
+        //         data:{   //规定要发送到服务器的数据
+        //             'receiver':receiver,
+        //             'message':temp.message,
+        //             'sender':temp.userid
+        //         },
+        //         success: function(result){ // 当请求成功时运行的函数
+        //             //result返回的是string类型的数组
+        //             let da = JSON.parse(result);
+        //             temp.message = "";  //清空发送的消息
+        //             temp.$message({
+        //                 message: '消息发送成功~~',
+        //                 type: 'success'
+        //             });
+        //
+        //         },
+        //         error:function(result){ //失败的函数
+        //             temp.$message({
+        //                 message: '消息发送失败！！',
+        //                 type: 'warning'
+        //             });
+        //         }
+        //     });
+        // },
         sendMessage: function () {
             let temp = this;
             temp.dialogFormVisible = false;
             let receiver = this.$refs.multipleTable.selection;   //获取表格中被选中的数据
             receiver = JSON.stringify(receiver);
-            console.log(receiver);
+
             $.ajax({
                 type:'POST', // 规定请求的类型（GET 或 POST）
                 url:'/case/sendMessage', // 请求的url地址
                 dataType:'text', //预期的服务器响应的数据类型
                 data:{   //规定要发送到服务器的数据
-                    'receiver':receiver,
-                    'message':temp.message,
-                    'sender':temp.userid
+                    'caseId':temp.caseId,
+                    'tomessage':temp.tomessage,
+                    'receiver':receiver
                 },
                 success: function(result){ // 当请求成功时运行的函数
                     //result返回的是string类型的数组
                     let da = JSON.parse(result);
                     temp.message = "";  //清空发送的消息
+                    temp.getCaseVersionInfo();
                     temp.$message({
                         message: '消息发送成功~~',
                         type: 'success'

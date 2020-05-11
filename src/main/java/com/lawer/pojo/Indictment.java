@@ -6,8 +6,17 @@ public class Indictment {
     private String writerId;
     private String helperId;
     private String idear;
+    private String message;
     private int state;
     private int version;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     public String getId() {
         return Id;
@@ -73,6 +82,7 @@ public class Indictment {
                 ", writerId='" + writerId + '\'' +
                 ", helperId='" + helperId + '\'' +
                 ", idear='" + idear + '\'' +
+                ", message='" + message + '\'' +
                 ", state=" + state +
                 ", version=" + version +
                 '}';

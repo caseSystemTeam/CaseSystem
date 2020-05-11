@@ -76,10 +76,24 @@
         values (#{map.id},#{map.caseId},#{map.writerId},#{map.helperId},#{map.version})
     </insert>
 
+
+
+    <update id="updateCaseVersionInfo" >
+        update indictment
+        <set>
+            <if test="map.message != null  "> message = #{map.message, jdbcType=VARCHAR},</if>
+            <if test="map.state != null "> state = #{map.state, jdbcType=VARCHAR},</if>
+            <if test="map.idear != null "> idear = #{map.idear, jdbcType=VARCHAR},</if>
+        </set>
+        where caseId=#{map.caseId}   and helperId=#{map.helperId} and version=#{map.version}
+    </update>
+
     <!-- 根据案件ID查询案件版本信息 -->
     <select id="getCaseVersionInfo" resultType="com.lawer.pojo.Indictment" parameterType="String">
 		select * from indictment where caseId=#{caseId}
 	</select>
+
+
 
     <!-- 根据案件ID查询案件版本信息 -->
     <select id="getCaseMaxVersion" resultType="com.lawer.pojo.Indictment" parameterType="String">

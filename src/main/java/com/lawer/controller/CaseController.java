@@ -115,23 +115,49 @@ public class CaseController {
         return ResultGson.ok("删除成功");
     }
 
+//    @RequestMapping("sendMessage")
+//    @ResponseBody
+    //    public ResultGson sendMessage(@RequestParam("receiver") String receiver,
+//                                  @RequestParam("message")String message,
+//                                  @RequestParam("sender")String sender){
+
+//        //解析json数组
+//        List<User> receList = JSON.parseObject(receiver, new TypeReference<ArrayList<User>>(){});
+//        if(receList!=null||message!=null||sender!=null){
+//            try{
+//                caseService.addMessage(receList,message,sender);
+//            }catch (Exception e){
+//                e.printStackTrace();
+//                return ResultGson.error("发送失败");
+//            }
+//
+//        }
+
     @RequestMapping("sendMessage")
     @ResponseBody
-    public ResultGson sendMessage(@RequestParam("receiver") String receiver,
-                                  @RequestParam("message")String message,
-                                  @RequestParam("sender")String sender){
-
+    public ResultGson sendMessage(@RequestParam("tomessage") String tomessage,String caseId,@RequestParam("receiver") String receiver){
         //解析json数组
         List<User> receList = JSON.parseObject(receiver, new TypeReference<ArrayList<User>>(){});
-        if(receList!=null||message!=null||sender!=null){
-            try{
-                caseService.addMessage(receList,message,sender);
-            }catch (Exception e){
-                e.printStackTrace();
-                return ResultGson.error("发送失败");
-            }
-
+        List<Indictment> list = caseService.getCaseMaxVersion(caseId);
+        int version = list.get(0).getVersion();
+        Map<String,Object> map =null;
+        for(int i=0;i<receList.size();i++){
+            map = new HashMap<>();
+            map.put("caseId",caseId);
+            map.put("message",tomessage);
+            map.put("version",version);
+            map.put("helperId",receList.get(i).getId());
+            caseService.updateCaseVersionInfo(map);
         }
+        return ResultGson.ok("发送成功");
+    }
+
+    //组员回复消息的消息，并更改状态
+    @RequestMapping("backMessage")
+    @ResponseBody
+    public ResultGson backMessage(@RequestParam("jsonp") String jsonp){
+        Map<String,Object> map =  JSONObject.parseObject(jsonp,new TypeReference<Map<String, Object>>(){});
+        caseService.updateCaseVersionInfo(map);
         return ResultGson.ok("发送成功");
     }
 

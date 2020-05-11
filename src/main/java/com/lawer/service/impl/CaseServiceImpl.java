@@ -141,6 +141,10 @@ public class CaseServiceImpl implements CaseService {
 		mapper.putCaseVersion(temp3);
 	}
 
+	public void updateCaseVersionInfo(Map<String,Object> map){
+    	mapper.updateCaseVersionInfo(map);
+	}
+
 	//获取当前案件的版本信息
 	public List<Indictment> getCaseVersionInfo(String caseId){
 		List<Indictment> list = mapper.getCaseVersionInfo(caseId);
