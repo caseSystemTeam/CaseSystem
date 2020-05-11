@@ -11,6 +11,7 @@ var vm = new Vue({
         message:"测试用消息",  //消息内容
         userid:'bebede7a-4d27-4dfc-8fd7-35b8bc64f316',
         jstatus:1,   //案件执行到哪一步的状态
+        pstatus:0,
         member1:'',
         member2:'',  //小组成员的id，不是名字
         member3:'',
@@ -112,7 +113,27 @@ var vm = new Vue({
             this.getMember();
         },
         //通用方法开始**************************************************
-
+        endCase: function () {
+            let temp = this;
+            $.ajax({
+                type:'POST', // 规定请求的类型（GET 或 POST）
+                url:'/case/endCase', // 请求的url地址
+                dataType:'text', //预期的服务器响应的数据类型
+                data:{   //规定要发送到服务器的数据
+                    'caseId':temp.caseId,
+                },
+                success: function(result){ // 当请求成功时运行的函数
+                    temp.cartView();
+                    temp.$message({
+                        message: '当前案件已被结束~~',
+                        type: 'warning'
+                    });
+                },
+                error:function(result){ //失败的函数
+                    console.log("结束案件出错！！");
+                }
+            });
+        },
         getUserAll: function () {
             let temp = this;
             $.ajax({
@@ -313,6 +334,7 @@ var vm = new Vue({
                     temp.caseInfo = da.data;
                     temp.member1 = temp.caseInfo.lawerid;//绑定当前案件的组长
                     temp.jstatus = temp.caseInfo.jstatus;
+                    temp.pstatus = temp.caseInfo.p_status;
                     //向富文本编辑器赋值
                     temp.editorInfo.txt.html(temp.caseInfo.content);
                     temp.editorResult.txt.html(temp.caseInfo.resultContent);
@@ -338,7 +360,6 @@ var vm = new Vue({
                 success: function(result){ // 当请求成功时运行的函数
                     //result返回的是string类型的数组
                     let da = JSON.parse(result).data;
-                    console.log(da);
                     temp.lian_info = da.lian_info;
                     temp.lian_faguan = da.lian_faguan;
                     temp.lian_number = da.lian_number;

@@ -264,6 +264,16 @@ public class CaseController {
         return ResultGson.ok("切换新版本成功~~");
     }
 
+    @RequestMapping("endCase")
+    @ResponseBody
+    public ResultGson endCase(@RequestParam("caseId") String caseId){
+        Map<String,Object> map = new HashMap<>();
+        map.put("p_status",1);
+        map.put("id",caseId);
+        caseService.updateCaseInfo(map);
+        return ResultGson.ok("案件已经被结束~~");
+    }
+
 
 
 

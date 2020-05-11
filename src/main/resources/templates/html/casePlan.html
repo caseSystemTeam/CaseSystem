@@ -121,15 +121,15 @@
                     </el-form>
 
                     <el-row>
-                        <el-col :span="16" :offset="8" v-if="jstatus===1">
+                        <el-col :span="16" :offset="8" v-if="jstatus===1&&pstatus!=1">
                             <el-button type="primary" @click="commitCaseResult" round>提交咨询结果</el-button>
                         </el-col>
                     </el-row>
 
-                    <div class="common-position">
+                    <div class="common-position" v-if="pstatus!=1">
                         <el-row>
                             <el-col :span="16" :offset="7" v-if="jstatus===1">
-                                <el-button type="info" round>结束案件</el-button>
+                                <el-button type="info" @click="endCase" round>结束案件</el-button>
                                 <el-button type="primary" @click="lianEnd" round>执行下一个流程</el-button>
                             </el-col>
                         </el-row>
@@ -150,7 +150,6 @@
             <el-card class="box-card" v-if="jstatus>=2">
                 <div slot="header" class="clearfix">
                     <span>律师分配</span>
-                    <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
                 </div>
                 <div class="text item">
                     <!-- 卡片开始内容-->
@@ -204,7 +203,7 @@
                         </el-row>
 
                         <el-row type="flex" class="row-bg" justify="center">
-                            <el-col :span="6"><div class="grid-content" v-if="jstatus===2"></div>
+                            <el-col :span="6"><div class="grid-content" v-if="jstatus===2&&pstatus!=1"></div>
                                 <el-button type="primary" @click="submitPeo">提交选择</el-button>
                             </el-col>
                         </el-row>
@@ -253,7 +252,8 @@
                     <!-- 卡片开始内容-->
 
                     <el-card class="box-card">
-                        <el-row>
+                        <!--   当案件没有被结束时，文件上传才会被显示     -->
+                        <el-row  v-if="pstatus!=1">
                             <el-col :span="8"><div class="grid-content bg-purple"></div>
                                 <el-upload
                                         class="upload-demo"
@@ -263,7 +263,7 @@
                                         :before-upload="beforeFileUpload"
                                         :on-success="FileUploadSuccess"
                                         :on-error="FileUploadError"
-                                        :data="{'caseId':'2'}"
+                                        :data="{'caseId':caseId}"
                                         name="uploadfile"
                                         >
                                     <i class="el-icon-upload"></i>
@@ -279,7 +279,7 @@
                                     </el-form-item>
                                     <el-form-item>
 
-                                        <el-button type="primary" @click="dialogFormVisible = true">选择接收人</el-button>
+                                        <el-button type="primary" @click="dialogFormVisible = true" >选择接收人</el-button>
 
                                         <el-dialog title="接收人列表" :visible.sync="dialogFormVisible">
                                             <!--当前律所下工作人员的列表，用来选择接收消息的人 -->
@@ -402,7 +402,7 @@
                         </el-card>
                     </div>
 
-                    <div v-if="jstatus===3">
+                    <div v-if="jstatus===3&&pstatus!=1">
                         <el-button type="primary" @click="addCaseVersion" round>切换为新版本</el-button>
                         <el-button type="primary" @click="szEnd" round>执行下一个流程</el-button>
                     </div>
@@ -489,7 +489,7 @@
                     </el-form>
 
                     <el-row>
-                        <el-col :span="16" :offset="8" v-if="jstatus===4">
+                        <el-col :span="16" :offset="8" v-if="jstatus===4&&pstatus!=1">
                             <el-button type="primary" @click="saveInfo" round>保存</el-button>
                             <el-button type="primary" @click="laEnd" round>执行下个流程</el-button>
                         </el-col>
@@ -551,7 +551,7 @@
                     </el-form>
 
                     <el-row>
-                        <el-col :span="16" :offset="8" v-if="jstatus===5">
+                        <el-col :span="16" :offset="8" v-if="jstatus===5&&pstatus!=1">
                             <el-button type="primary" @click="saveInfo" round>保存</el-button>
                             <el-button type="primary" @click="ktEnd" round>执行下个流程</el-button>
                         </el-col>
@@ -597,9 +597,9 @@
                     </el-form>
 
                     <el-row>
-                        <el-col :span="16" :offset="8">
+                        <el-col :span="16" :offset="8" v-if="pstatus!=1">
                             <el-button type="primary" @click="saveInfo" round>保存</el-button>
-                            <el-button type="warning" @click="" round>结束当前案件</el-button>
+                            <el-button type="warning" @click="endCase" round>结束当前案件</el-button>
                         </el-col>
                     </el-row>
                     <!-- 卡片结束内容-->
