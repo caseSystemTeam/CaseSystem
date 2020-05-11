@@ -55,7 +55,7 @@ public class CaseListServiceImpl implements CaseListService {
         for(Map<String,Object> cmap:list){
             cmap.put("lawername",cmap.get("lawername")+"("+cmap.get("position")+")");
         }
-        return null;
+        return list;
     }
 
     @Override
