@@ -20,4 +20,9 @@ public interface CaseListMapper {
 
     //修改案件信息
     public void updateCase(@Param("map") Map<String,Object> map);
+
+    //获取小组案件信息
+    public List<Map<String,Object>> getGroupCase(@Param("map") Map<String,Object> map);
+    //获取小组的案件数
+    public int getGroupCaseCount(@Param("map") Map<String,Object> map);
 }

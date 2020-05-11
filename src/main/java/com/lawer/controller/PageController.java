@@ -87,6 +87,12 @@ public class PageController {
         }
         return "html/updateInfo";
     }
+    //跳转到修改密码页面
+    @RequestMapping("casegroup")
+    public String toCaseGroup(String id, HttpSession session){
+
+        return "html/casegroup";
+    }
 
     //跳转至案件详情界面
     @RequestMapping("/tocase")

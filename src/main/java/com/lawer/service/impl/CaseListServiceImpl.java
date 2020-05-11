@@ -48,4 +48,18 @@ public class CaseListServiceImpl implements CaseListService {
     public void transferPerson(Map<String, Object> map) {
         caseListMapper.updateCase(map);
     }
+
+    @Override
+    public List<Map<String, Object>> getGroupCase(Map<String, Object> map) {
+        List<Map<String,Object>> list =caseListMapper.getGroupCase(map);
+        for(Map<String,Object> cmap:list){
+            cmap.put("lawername",cmap.get("lawername")+"("+cmap.get("position")+")");
+        }
+        return null;
+    }
+
+    @Override
+    public int getGroupCaseCount(Map<String, Object> map) {
+        return caseListMapper.getGroupCaseCount(map);
+    }
 }

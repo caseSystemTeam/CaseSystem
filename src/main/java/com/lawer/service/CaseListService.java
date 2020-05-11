@@ -14,4 +14,8 @@ public interface CaseListService {
     public int getCaseCount(Map<String,Object> map);
     //转移案件
     public void transferPerson(Map<String,Object> map);
+    //获取小组案件信息
+    public List<Map<String,Object>> getGroupCase(Map<String,Object> map);
+    //获取小组的案件数
+    public int getGroupCaseCount(Map<String,Object> map);
 }

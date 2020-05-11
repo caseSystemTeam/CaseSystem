@@ -70,6 +70,46 @@ public class CaseListController {
 
 
     }
+    //获取律所所有的案件
+    @RequestMapping("getGroupCase")
+    @ResponseBody
+    public String getGroupCase(String page,String limit, String key, HttpSession session){
+        Map<String,Object> map = new HashMap<>();
+        User user =(User)session.getAttribute("us");
+        JSONObject result = new JSONObject();
+        int pageSize = Integer.parseInt(limit);
+        map.put("busId",user.getBusId());
+        map.put("pageSize", pageSize);
+        map.put("skipCount", (Integer.parseInt(page) - 1) * pageSize);
+        map.put("groupuserid",user.getId());
+        if (key != null) {
+            JSONObject json = JSONObject.parseObject(key);
+            if (!("".equals(json.get("name"))) && !(null == json.get("name"))) {
+                map.put("name", json.getString("name"));
+            }
+            if (!("".equals(json.get("lawerid"))) && !(null == json.get("lawerid"))) {
+                map.put("lawerid", json.getString("lawerid"));
+            }
+            if (!("".equals(json.get("pstatus"))) && !(null == json.get("pstatus"))) {
+                map.put("pstatus", json.getString("pstatus"));
+            }
+            if (!("".equals(json.get("rtime"))) && !(null == json.get("rtime"))) {
+                String[] tricktime = json.get("rtime").toString().split(" - ");
+                map.put("tricktime", tricktime[0]+ " 00:00:00");
+                map.put("tricktime2", tricktime[1]+ " 23:59:59");
+            }
+        }
+
+        List list = caseListService.getGroupCase(map);
+        int count = caseListService.getGroupCaseCount(map);
+        result.put("data",list);
+        result.put("msg","请求成功");
+        result.put("code", 0);
+        result.put("count",count);
+        return  JSON.toJSONString(result);
+
+
+    }
 
     //获取个人的案件
     @RequestMapping("getCaseById")
