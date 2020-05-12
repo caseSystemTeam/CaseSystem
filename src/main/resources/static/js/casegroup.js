@@ -269,6 +269,9 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
             //跳转案件详情页面，id为当前案件id
             window.location.href = path + "/page/tocase?caseId=" + data.Id+"&lawerid="+data.lawerid;
         }
+        if (obj.event === 'create') {
+
+        }
 
     });
 

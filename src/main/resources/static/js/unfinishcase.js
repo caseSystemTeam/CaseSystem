@@ -169,10 +169,13 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
     table.on('tool(saleTable)', function (obj) {
         var data = obj.data; //获得当前行数据
         var tr = obj.tr; //获得当前行 tr 的DOM对象
-        console.info('edit',data);
+
         if (obj.event === 'edit') {
             //跳转案件详情页面，id为当前案件id
             window.location.href = path + "/page/tocase?caseId=" + data.Id+"&lawerid="+data.lawerid;
+        }
+        if (obj.event === 'create') {
+
         }
 
     });
