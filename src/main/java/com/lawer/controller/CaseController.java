@@ -14,16 +14,20 @@ import com.lawer.pojo.Log;
 import com.lawer.pojo.User;
 import com.lawer.service.CaseService;
 import com.lawer.service.LogService;
+import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.io.Serializable;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -38,6 +42,9 @@ public class CaseController {
     private CaseService caseService;
     @Autowired
     private LogService logService;
+
+    @Autowired
+    private ServletContext context;
 
     //跳转至案件详情界面
     @RequestMapping("/getCaseId")
@@ -299,6 +306,20 @@ public class CaseController {
         caseService.updateCaseInfo(map);
         return ResultGson.ok("案件已经被结束~~");
     }
+
+    @RequestMapping("generateWord")
+
+    public String generateWord(@RequestParam("caseId") String caseId, HttpSession session){
+
+       String filepath = caseService.createWord(caseId,context);
+       int index = filepath.lastIndexOf("\\");
+       String filename = filepath.substring(index+1);
+        session.setAttribute("filepath",filepath);
+        session.setAttribute("filename",filename);
+        return "redirect:/comm/downloadFileByUrl";
+    }
+
+
 
 
 

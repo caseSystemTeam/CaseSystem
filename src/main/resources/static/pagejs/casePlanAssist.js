@@ -108,9 +108,7 @@ var vm = new Vue({
             this.getUserAll();
             this.getFileAll();
             this.getCaseInfo();
-            if(this.jstatus>=4){
-                this.getCaseInfoAssist();
-            }
+
             this.getCaseVersionInfo();
             this.getMember();
         },
@@ -319,6 +317,9 @@ var vm = new Vue({
                     //向富文本编辑器赋值
                     temp.editorInfo.txt.html(temp.caseInfo.content);
                     temp.editorResult.txt.html(temp.caseInfo.resultContent);
+                    if(temp.jstatus>=4){
+                        temp.getCaseInfoAssist();
+                    }
 
                 },
                 error:function(result){ //失败的函数
@@ -352,6 +353,7 @@ var vm = new Vue({
                     temp.kt_timeend = da.kt_timeend;
                     temp.ts_info = da.ts_info;
                     temp.ts_time = da.ts_time;
+
                 },
                 error:function(result){ //失败的函数
                     temp.$message({

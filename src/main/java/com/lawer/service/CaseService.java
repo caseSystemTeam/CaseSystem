@@ -3,6 +3,8 @@ package com.lawer.service;
 import com.lawer.pojo.CaseFile;
 import com.lawer.pojo.Indictment;
 import com.lawer.pojo.User;
+
+import javax.servlet.ServletContext;
 import java.util.Map;
 import java.util.List;
 
@@ -31,5 +33,6 @@ public interface CaseService {
 	public void updateCaseJstatus(String caseId,int jstatus);
 	public void addAnjianAssist(String caseId);
 	public void updateAnjianAssist(Map<String,Object> map);
+	public String createWord(String caseId, ServletContext context);  //生成word文件
 
 }

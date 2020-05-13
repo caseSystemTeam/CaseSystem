@@ -90,7 +90,7 @@
 
     <!-- 根据案件ID查询案件版本信息 -->
     <select id="getCaseVersionInfo" resultType="com.lawer.pojo.Indictment" parameterType="String">
-		select * from indictment where caseId=#{caseId}
+		select * from indictment where caseId=#{caseId} order by version
 	</select>
 
 

@@ -15,7 +15,7 @@ public interface UserService {
 	public int sCount();  //查询律师总数
 	public List<User> getList();  //查询所有的律师信息
 	public int IdByname(String name);  //通过姓名查询id
-	public String nameById(int lawerid);  //通过id查询name
+	public String nameById(String lawerid);  //通过id查询name
 	public User userById(String id);  //通过id查询用户信息
 	public String checkUserName(String username); //检查用户名是否存在
 	public int addBusiness(Business bus); //添加律所信息

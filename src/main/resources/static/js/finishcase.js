@@ -176,7 +176,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
             window.location.href = path + "/page/tocase?caseId=" + data.Id+"&lawerid="+data.lawerid;
         }
         if (obj.event === 'create') {
-
+            window.location.href = path + "/case/generateWord?caseId=" + data.Id;
         }
 
     });

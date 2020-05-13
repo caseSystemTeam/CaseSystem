@@ -82,7 +82,7 @@ select * from laweruser
 select id from laweruser where name=#{name}
 </select>
 
-    <select id="nameById" parameterType="int" resultType="string">
+    <select id="nameById" parameterType="String" resultType="string">
 select name from laweruser where id=#{lawerid}
 </select>
 

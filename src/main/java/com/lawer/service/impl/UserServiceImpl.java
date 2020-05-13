@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public String nameById(int lawerid) {
+	public String nameById(String lawerid) {
 
 		return mapper.nameById(lawerid);
 	}

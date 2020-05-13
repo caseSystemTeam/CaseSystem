@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.lawer.common.FileUpAndDown;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -59,6 +60,36 @@ public class CommonController {
         CaseFile cf = caseService.getFileById(fileid);
         String filepath = cf.getUrl();
         String filename = cf.getFilename();
+        filepath.replace("\\","\\\\");
+        //根据url和文件名确定下载文件
+        File file = new File(filepath);
+        String result = null;
+        if (file.exists()) {
+            response.setContentType("application/force-download");// 设置强制下载不打开
+            try {
+                response.addHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(filename,"UTF-8"));// 设置文件名
+                fileCon.fileDownload(file,response,filename);
+                result = ResultGson.ok("ok").toJson();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }else{
+            result = ResultGson.error("文件不存在！！").toJson();
+        }
+        return "";
+    }
+
+    //文件下载rl
+    @RequestMapping("/downloadFileByUrl")
+    @ResponseBody
+    public String downloadFileByUrl(HttpSession session
+            , HttpServletResponse response){
+        FileUpAndDown fileCon = new FileUpAndDown();
+        String filepath = (String) session.getAttribute("filepath");
+        String filename = (String) session.getAttribute("filename");
+        session.removeAttribute("filepath");
+        session.removeAttribute("filename");
         filepath.replace("\\","\\\\");
         //根据url和文件名确定下载文件
         File file = new File(filepath);

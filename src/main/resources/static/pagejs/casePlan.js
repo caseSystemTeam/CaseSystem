@@ -108,9 +108,7 @@ var vm = new Vue({
             this.getUserAll();
             this.getFileAll();
             this.getCaseInfo();
-            if(this.jstatus>=4){
-                this.getCaseInfoAssist();
-            }
+
             this.getCaseVersionInfo();
             this.getMember();
         },
@@ -346,7 +344,9 @@ var vm = new Vue({
                     //向富文本编辑器赋值
                     temp.editorInfo.txt.html(temp.caseInfo.content);
                     temp.editorResult.txt.html(temp.caseInfo.resultContent);
-
+                    if(temp.jstatus>=4){
+                        temp.getCaseInfoAssist();
+                    }
                 },
                 error:function(result){ //失败的函数
                     temp.$message({
@@ -367,8 +367,12 @@ var vm = new Vue({
                 },
                 success: function(result){ // 当请求成功时运行的函数
                     //result返回的是string类型的数组
+                    console.log("信息"+result);
+
                     let da = JSON.parse(result).data;
+                    console.log("信息"+da);
                     temp.lian_info = da.lian_info;
+                    console.log("信息"+temp.lian_info);
                     temp.lian_faguan = da.lian_faguan;
                     temp.lian_number = da.lian_number;
                     temp.lian_didian = da.lian_didian;
@@ -379,6 +383,7 @@ var vm = new Vue({
                     temp.kt_timeend = da.kt_timeend;
                     temp.ts_info = da.ts_info;
                     temp.ts_time = da.ts_time;
+
                 },
                 error:function(result){ //失败的函数
                     temp.$message({
