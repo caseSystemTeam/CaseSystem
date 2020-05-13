@@ -82,6 +82,11 @@ select * from laweruser
 select id from laweruser where name=#{name}
 </select>
 
+    <!--根据username查询用户信息 -->
+    <select id="getByusername" parameterType="string" resultType="user">
+        select * from laweruser where username=#{username}
+   </select>
+
     <select id="nameById" parameterType="String" resultType="string">
 select name from laweruser where id=#{lawerid}
 </select>

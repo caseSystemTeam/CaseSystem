@@ -113,4 +113,11 @@ public class PageController {
 
     }
 
+    //跳转到忘记密码页面
+    @RequestMapping("forgetPs")
+    public String toforgetPs(){
+
+        return "html/forgetps";
+    }
+
 }

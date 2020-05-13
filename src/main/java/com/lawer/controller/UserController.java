@@ -228,6 +228,43 @@ public class UserController {
 		return 0;
 	}
 
+	//通过手机验证码修改密码
+	@RequestMapping("updateVerPs")
+	@ResponseBody
+	public ResultGson updateVerPs(@RequestBody String json,HttpSession session,HttpServletRequest request){
+		Map<String, Object> mapJson = JSON.parseObject(json);
+		String username = (String)mapJson.get("username");
+		String verifyCode = (String)mapJson.get("verifyCode");
+		String password = (String)mapJson.get("password");
+		String phone = (String)mapJson.get("phoneNumber");
+		String code =(String) session.getAttribute("code");
+
+		if(code==null || "".equals(code)){
+			return ResultGson.error("请先获取验证码");
+		}
+		if(!code.equals(verifyCode)){
+			return ResultGson.error("验证码错误，请输入正确的验证码");
+		}
+        User us = userService.getByusername(username);
+		if(!us.getPhonenumber().equals(phone)){
+			return  ResultGson.error("当前用户名和手机号不匹配");
+		}
+		us.setPassword(password);
+		PasswordHelper.encryptPassword(us);
+		try{
+			userService.updatePs(us);
+		}catch (Exception e){
+			Log log =Log.ok(us.getUsername(), IpAdress.getIp(request),1,"修改密码","失败", "无",us.getBusId());
+			logService.addLog(log);
+			return ResultGson.error("修改失败");
+		}
+		session.setAttribute("code","");
+		Log log =Log.ok(us.getUsername(), IpAdress.getIp(request),1,"修改密码","成功", "无",us.getBusId());
+		logService.addLog(log);
+		return ResultGson.ok();
+	}
+
+
 	//获取用户信息
 	@RequestMapping("getUserInfo")
 	@ResponseBody
