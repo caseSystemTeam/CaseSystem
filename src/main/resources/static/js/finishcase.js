@@ -9,7 +9,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
     //监听提交
     form.on('submit(submit)', function (data) {
 
-        data.field.pstatus=1;
+
 
         table.reload('saleTable', {
             page: {
@@ -36,7 +36,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
 
 
     tableload = function () {
-        var datas={pstatus:1}
+
         table.render({
             elem: '#saleTable',
             id: 'saleTable',
@@ -48,9 +48,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
             text: {
                 none: '暂无相关数据' //默认：暂无相关数据。注：该属性为 layui 2.2.5 开始新增
             },
-            where:{
-                key: JSON.stringify(datas)
-            },
+
             cols: [
                 [ //标题栏
 
@@ -88,9 +86,9 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                         return "<div class='layui-elip cursor-p' title='" + d.p_status + "'>" + (d.p_status != 0 ? "已结束" : "正在进行") + "</div>";
                     }
                 }, {
-                    field: 'ftime',
-                    title: '结束时间',
-
+                    field: 'rtime',
+                    title: '登记时间',
+                    width:'14%'
                 },{
                     field: 'cname',
                     title: '登记人名称',

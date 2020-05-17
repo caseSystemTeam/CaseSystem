@@ -272,9 +272,49 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
         var tr = obj.tr; //获得当前行 tr 的DOM对象
         if (obj.event === 'edit') {
             //跳转案件详情页面，id为当前案件id
-            window.location.href = path + "case/tocase?id=" + data.id ;
+            window.location.href = path + "/page/tocase?caseId=" + data.Id+"&lawerid="+data.lawerid;
         }
         if (obj.event === 'create') {
+            window.location.href = path + "/case/generateWord?caseId=" + data.Id;
+        }
+        if(obj.event =="delete"){
+            layer.open({
+                type: 1,
+                title: '提示',
+                offset: 'auto',
+                btnAlign: 'c',
+                area: ['420px', '220px'],
+                offset: 'auto',
+                content: "<div style='text-align:center;padding:42px 0 26px 0;'><span class='layui-badge'>!</span>" + "   " + "确定删除该案件吗？</div><hr class='layui-bg-gray' style='margin:29px 0 0'>",
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+                    $.ajax({
+                        url:path+"/caseList/deleteCase",
+                        type:'post',
+                        data:{id:data.Id},
+                        dataType:'json',
+                        success:function(data){
+                            if(data.status==200){
+                                layer.msg("删除成功");
+                                setTimeout(function() {
+                                    window.location.reload();
+                                },1000);
+                            }else{
+                                layer.msg("删除失败");
+                            }
+
+                        }
+                    })
+                    layer.close(index);
+
+                },
+                success: function (index, layero) {
+                    $(':focus').blur();
+                },
+                no: function (index, layero) {
+
+                }
+            })
 
         }
 

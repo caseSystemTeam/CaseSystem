@@ -38,10 +38,18 @@
                 <div class="layui-input-inline">
                     <input type="text" name="name" required placeholder="输入案件名称或申述人姓名" autocomplete="off" class="layui-input">
                 </div>
-                <label class="layui-form-label" style="width: 60px">结束时间</label>
+                <label class="layui-form-label" style="width: 60px">登记时间</label>
                 <div class="layui-input-inline">
                     <input type="text" name="rtime" class="layui-input" id="time" placeholder="请选择">
 
+                </div>
+                <label class="layui-form-label" style="width: 60px">案件状态</label>
+                <div class="layui-input-inline">
+                    <select name="pstatus" id="pstatus" lay-filter="pstatus">
+                        <option value="">全部</option>
+                        <option value="0">未结束</option>
+                        <option value="1">已结束</option>
+                    </select>
                 </div>
 
                 <button class="layui-btn" lay-submit lay-filter="submit">检索</button>
@@ -52,7 +60,7 @@
         <table class="layui-table" id="saleTable" lay-filter="saleTable"></table>
         <script type="text/html" id="bianjikuang">
             <div class="oper-tab">
-                <a lay-event="edit" class="hover-blue">查看</a>
+                <a lay-event="edit" class="hover-blue">详情</a>
                 <a lay-event="create" class="hover-blue">生成文档</a>
             </div>
         </script>

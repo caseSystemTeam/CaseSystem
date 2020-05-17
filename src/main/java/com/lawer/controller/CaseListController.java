@@ -126,8 +126,10 @@ public class CaseListController {
 
         if (key != null) {
             JSONObject json = JSONObject.parseObject(key);
+            if (!("".equals(json.get("pstatus"))) && !(null == json.get("pstatus"))) {
+                map.put("pstatus", json.getString("pstatus"));
+            }
 
-            map.put("pstatus", json.getString("pstatus"));
 
             if (!("".equals(json.get("name"))) && !(null == json.get("name"))) {
                 map.put("name", json.getString("name"));
@@ -174,6 +176,27 @@ public class CaseListController {
         }
 
         return ResultGson.ok("操作成功");
+
+
+    }
+
+    //删除案件
+    @RequestMapping("deleteCase")
+    @ResponseBody
+    public ResultGson deleteCase(String id, HttpSession session, HttpServletRequest request){
+        User user =(User)session.getAttribute("us");
+        Map<String,Object> map = caseListService.SelectCaseById(id);
+        try{
+            caseListService.deleteCase(id);
+        }catch (Exception e){
+            Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"删除案件","失败", "删除案件\""+map.get("name")+"\"",user.getBusId());
+            logService.addLog(log);
+            return ResultGson.error("删除失败");
+
+        }
+        Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"删除案件","成功", "删除案件\""+map.get("name")+"\"",user.getBusId());
+        logService.addLog(log);
+        return ResultGson.ok("删除成功");
 
 
     }

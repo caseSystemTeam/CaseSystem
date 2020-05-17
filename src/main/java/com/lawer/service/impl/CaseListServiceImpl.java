@@ -62,4 +62,14 @@ public class CaseListServiceImpl implements CaseListService {
     public int getGroupCaseCount(Map<String, Object> map) {
         return caseListMapper.getGroupCaseCount(map);
     }
+
+    @Override
+    public void deleteCase(String id) {
+        caseListMapper.deleteCase(id);
+    }
+
+    @Override
+    public Map<String, Object> SelectCaseById(String id) {
+        return caseListMapper.SelectCaseById(id);
+    }
 }

@@ -18,4 +18,18 @@ public interface CaseListService {
     public List<Map<String,Object>> getGroupCase(Map<String,Object> map);
     //获取小组的案件数
     public int getGroupCaseCount(Map<String,Object> map);
+
+    /**
+     * 通过案件id删除案件
+     * @param id
+     * @return
+     */
+    void deleteCase(String id);
+
+    /**
+     * 通过案件id查询案件信息
+     * @param id
+     * @return
+     */
+    Map<String,Object> SelectCaseById(String id);
 }

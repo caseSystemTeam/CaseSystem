@@ -108,17 +108,17 @@ where aj.business_id=#{map.busId}
             and aj.p_status = #{map.pstatus}
         </if>
         <if test="map.tricktime !=null and map.tricktime !=''">
-            <choose>
-                <when test="map.pstatus==0">
+           <!-- <choose>
+                <when test="map.pstatus==0">-->
                     AND unix_timestamp(aj.rtime) between unix_timestamp(#{map.tricktime}) and
                     unix_timestamp(#{map.tricktime2})
-                </when>
+             <!--   </when>
                 <otherwise>
                     AND unix_timestamp(aj.ftime) between unix_timestamp(#{map.tricktime}) and
                     unix_timestamp(#{map.tricktime2})
                 </otherwise>
 
-            </choose>
+            </choose>-->
         </if>
         order by aj.rtime desc
         <if test="map.pageSize!=null and map.skipCount!=null ">
@@ -205,6 +205,12 @@ where aj.business_id=#{map.busId}
         where Id = #{map.Id}
     </update>
 
+    <delete id="deleteCase" parameterType="string" >
+        delete from anjian where id = #{id}
+    </delete>
+    <select id="SelectCaseById" parameterType="string" resultType="map">
+        select * from anjian where Id=#{id}
+    </select>
 
 
 </mapper>
