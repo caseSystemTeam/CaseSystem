@@ -168,7 +168,70 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
     table.on('tool(saleTable)', function (obj) {
         var data = obj.data; //获得当前行数据
         var tr = obj.tr; //获得当前行 tr 的DOM对象
+        if(obj.event=='look'){
+            layer.open({
+                type: 1,
+                title: '编辑案件',   //标题
+                area: ['700px', '500px'],   //宽高
+                content:$("#anjiandiv").html(),
+                btn: ['确定', '取消'], //按钮组
+                success:function(layero,index){
+                    $("input[name=rname]").val(data.name);
+                    $("input[name=money]").val(data.money);
+                    $("textarea[name=content]").val(data.content);
+                    $("input[name=cusname]").val(data.cusname);
+                    $("input[name=cus_telphone]").val(data.cus_telphone);
+                    $('input[name=rname]').blur(function() {
+                        $('input[name=rname]').val($(this).val())
+                    })
+                    $('input[name=money]').blur(function() {
+                        $('input[name=money]').val($(this).val())
+                    })
+                    $('textarea[name=content]').blur(function() {
+                        $('textarea[name=content]').val($(this).val())
+                    })
+                    $('input[name=cusname]').blur(function() {
+                        $('input[name=cusname]').val($(this).val())
+                    })
+                    $('input[name=cus_telphone]').blur(function() {
+                        $('input[name=cus_telphone]').val($(this).val())
+                    })
 
+                },
+                yes: function(index,layero){//layer.msg('yes');    //点击确定回调
+                    var  name= $("input[name=rname]").val();
+                    var money=$("input[name=money]").val();
+                    var content= $("textarea[name=content]").val();
+                    var cusname =  $("input[name=cusname]").val();
+                    var cus_telphone=  $("input[name=cus_telphone]").val();
+                    var json ={Id:data.Id,name:name,money:money,content:content,cusname:cusname,cus_telphone:cus_telphone};
+                    if(data.Id!=null){
+                        $.ajax({
+                            url: path + "/caseList/updateCase",
+                            type: "POST",
+                            contentType: "application/json",
+                            data: JSON.stringify(json),
+                            success: function (data) {
+                                if (data.status == 200) {
+                                    layer.msg("修改成功");
+                                    setTimeout(function() {
+                                        window.location.reload();
+                                    },1000);
+                                }else{
+                                    layer.msg("修改失败");
+                                }
+                            }
+                        });
+                    }else{
+                        layer.msg("分配失败");
+                    }
+
+                    layer.close(index);
+                },
+
+            });
+            form.render();
+        }
         if (obj.event === 'edit') {
             //跳转案件详情页面，id为当前案件id
             window.location.href = path + "/page/tocase?caseId=" + data.Id+"&lawerid="+data.lawerid;
