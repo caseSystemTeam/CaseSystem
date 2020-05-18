@@ -18,7 +18,12 @@ public class CaseListServiceImpl implements CaseListService {
     public List<Map<String, Object>> getAllCase(Map<String, Object> map) {
         List<Map<String,Object>> list =caseListMapper.getAllCase(map);
         for(Map<String,Object> cmap:list){
-            cmap.put("lawername",cmap.get("lawername")+"("+cmap.get("position")+")");
+            if(cmap.get("lawerid")!=null && !cmap.get("lawerid").equals("")){
+                cmap.put("lawername",cmap.get("lawername")+"("+cmap.get("position")+")");
+            }else{
+                cmap.put("lawername","无");
+            }
+
         }
         return list;
     }
@@ -71,5 +76,20 @@ public class CaseListServiceImpl implements CaseListService {
     @Override
     public Map<String, Object> SelectCaseById(String id) {
         return caseListMapper.SelectCaseById(id);
+    }
+
+    @Override
+    public List<Map<String, Object>> getUnallocation(Map<String, Object> map) {
+        return caseListMapper.getUnallocation(map);
+    }
+
+    @Override
+    public int getUnallocationCount(Map<String, Object> map) {
+        return caseListMapper.getUnallocationCount(map);
+    }
+
+    @Override
+    public void updateCase(Map<String, Object> map) {
+        caseListMapper.updateCase(map);
     }
 }

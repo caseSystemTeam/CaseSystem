@@ -116,8 +116,12 @@ public class PageController {
     //跳转到忘记密码页面
     @RequestMapping("forgetPs")
     public String toforgetPs(){
-
         return "html/forgetps";
+    }
+    //跳转到未分配案件页面
+    @RequestMapping("unallocation")
+    public String toUnallocation(){
+        return "html/unallocation";
     }
 
 }

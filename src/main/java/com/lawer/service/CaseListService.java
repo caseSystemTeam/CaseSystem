@@ -32,4 +32,12 @@ public interface CaseListService {
      * @return
      */
     Map<String,Object> SelectCaseById(String id);
+
+    //获取未分配案件
+    public List<Map<String,Object>> getUnallocation(Map<String,Object> map);
+    //获取未分配案件数量
+    public int getUnallocationCount( Map<String,Object> map);
+
+    //获取当前律所的案件数
+    public void updateCase(Map<String,Object> map);
 }

@@ -1,10 +1,30 @@
-layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
+layui.use(['form', 'laydate', 'table', 'jquery', 'layer','layedit'], function () {
     var form = layui.form,
         laydate = layui.laydate,
         table = layui.table,
         $ = layui.jquery,
-        layer = layui.layer;
+        layer = layui.layer,
+        layedit =layui.layedit;
+   /* var index = layedit.build('editor',{
+        height:125,
+        width:100,
+        tool: [
+            'strong' //加粗
+            , 'italic' //斜体
+            , 'underline' //下划线
+            , 'del' //删除线
+            , '|' //分割线
+            , 'left' //左对齐
+            , 'center' //居中对齐
+            , 'right' //右对齐
+            , '|' //分割线
+           /!*, 'link' //超链接
+            , 'unlink' //清除链接
+            , 'face' //表情
+            , 'image' //插入图片*!/!*!/
 
+        ]
+    });*/
     var sdata = null;
     //获取当前公司所有律师信息
     $.ajax({
@@ -12,10 +32,23 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
         type: "POST",
         success: function (data) {
             $.each(data.data.data, function (i, item) {
-                if(item.role_id != 4){
                     $("#lawerid").append(
                         '<option value="' + item.Id
                         + '">' + item.name+'('+item.position+')'
+                        + '</option>');
+            });
+            form.render();
+        }
+    });
+    $.ajax({
+        url: path + "/userCon/getAllLawer",
+        type: "POST",
+        success: function (data) {
+            $.each(data.data.data, function (i, item) {
+                if(item.role_id != 4) {
+                    $("#rid").append(
+                        '<option value="' + item.Id
+                        + '">' + item.name + '(' + item.position + ')'
                         + '</option>');
                 }
             });
@@ -55,7 +88,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
             elem: '#saleTable',
             id: 'saleTable',
             height: 465,
-            url: path + "/caseList/getAllCase",
+            url: path + "/caseList/getUnallocation",
             method: 'post',
             page:true,
             limit: 10,
@@ -99,17 +132,11 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                         return "<div class='layui-elip cursor-p' title='" + (d.cus_telphone != undefined ? d.cus_telphone : "") + "'>" + (d.cus_telphone != undefined ? d.cus_telphone : "") + "</div>";
                     }
                 },{
-                    field: 'lawername',
-                    title: '责任律师',
-                    templet: function (d) {
-                        return "<div class='layui-elip cursor-p' title='" + d.lawername + "'>" + (d.lawername != null ? d.lawername : "无") + "</div>";
-                    }
-                },{
                     field: 'p_status',
                     title: '案件状态',
 
                     templet: function (d) {
-                        return "<div class='layui-elip cursor-p' title='" + d.p_status + "'>" + (d.p_status ==2  ? "未分配" :(d.p_status == 1?"已结束":"正在进行")) + "</div>";
+                        return "<div class='layui-elip cursor-p' title='" + d.p_status + "'>" + (d.p_status != 2 ? "已分配" : "未分配") + "</div>";
                     }
                 }, {
                     field: 'rtime',
@@ -190,6 +217,11 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
             }
         });
     }
+    var rid=null;
+    form.on("select(rid)",function (data) {
+        rid = data.value;
+        form.render("select");
+    })
     tableload();
 
     //获取当前公司所有律师信息
@@ -229,7 +261,8 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                 yes: function (index, layero) {
                     var json = {
                         "data": checkData,
-                        "lawerid": data.value
+                        "lawerid": data.value,
+                        "p_status":"0"
                     }
 
                     //客户转移
@@ -241,12 +274,12 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                         success: function (data) {
 
                             if (data.status == 200) {
-                                layer.msg("转移成功");
+                                layer.msg("分配成功");
                                 setTimeout(function() {
                                     window.location.reload();
                                 },1000);
                             }else {
-                                layer.msg("转移失败");
+                                layer.msg("分配失败");
                                 setTimeout(function() {
                                     window.location.reload();
                                 },1000);
@@ -268,16 +301,121 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
 
 
 
+
     //监听工具条的操作
     table.on('tool(saleTable)', function (obj) {
         var data = obj.data; //获得当前行数据
         var tr = obj.tr; //获得当前行 tr 的DOM对象
         if (obj.event === 'edit') {
-            //跳转案件详情页面，id为当前案件id
-            window.location.href = path + "/page/tocase?caseId=" + data.Id+"&lawerid="+data.lawerid;
+           /* $('.rname').val(data.name);
+
+            $('#money').val(data.money);
+            // $('#content').val(data.content);
+            $('.cusname').val(data.cusname);
+            $('.cus_telphone').val(data.cus_telphone);
+            form.render();*/
+            layer.open({
+                type: 1,
+                title: '编辑案件',   //标题
+                area: ['700px', '500px'],   //宽高
+                content:$("#anjiandiv").html(),
+                btn: ['确定', '取消'], //按钮组
+                success:function(layero,index){
+                    $("input[name=rname]").val(data.name);
+                    $("input[name=money]").val(data.money);
+                    $("textarea[name=content]").val(data.content);
+                    $("input[name=cusname]").val(data.cusname);
+                    $("input[name=cus_telphone]").val(data.cus_telphone);
+                    $('input[name=rname]').blur(function() {
+                        $('input[name=rname]').val($(this).val())
+                    })
+                    $('input[name=money]').blur(function() {
+                        $('input[name=money]').val($(this).val())
+                    })
+                    $('textarea[name=content]').blur(function() {
+                        $('textarea[name=content]').val($(this).val())
+                    })
+                    $('input[name=cusname]').blur(function() {
+                        $('input[name=cusname]').val($(this).val())
+                    })
+                    $('input[name=cus_telphone]').blur(function() {
+                        $('input[name=cus_telphone]').val($(this).val())
+                    })
+
+                },
+                yes: function(index,layero){//layer.msg('yes');    //点击确定回调
+                   var  name= $("input[name=rname]").val();
+                    var money=$("input[name=money]").val();
+                   var content= $("textarea[name=content]").val();
+                  var cusname =  $("input[name=cusname]").val();
+                  var cus_telphone=  $("input[name=cus_telphone]").val();
+                    var json ={Id:data.Id,name:name,money:money,content:content,cusname:cusname,cus_telphone:cus_telphone};
+                    if(data.Id!=null){
+                        $.ajax({
+                            url: path + "/caseList/updateCase",
+                            type: "POST",
+                            contentType: "application/json",
+                            data: JSON.stringify(json),
+                            success: function (data) {
+                                if (data.status == 200) {
+                                    layer.msg("修改成功");
+                                    setTimeout(function() {
+                                        window.location.reload();
+                                    },1000);
+                                }else{
+                                    layer.msg("修改失败");
+                                }
+                            }
+                        });
+                    }else{
+                        layer.msg("分配失败");
+                    }
+
+                    layer.close(index);
+                },
+
+            });
+
+
+
+            form.render();
         }
-        if (obj.event === 'create') {
-            window.location.href = path + "/case/generateWord?caseId=" + data.Id;
+        if (obj.event === 'fenpei') {
+            layer.open({
+                type: 1,
+                title: '分配律师',   //标题
+                area: ['390px', '400px'],   //宽高
+                content: $("#lawerdiv").html(),
+                btn: ['确定', '取消'], //按钮组
+                yes: function(index){//layer.msg('yes');    //点击确定回调
+
+                    var json ={Id:data.Id,lawerid:rid,p_status:"0"};
+                    if(rid!=null){
+                        $.ajax({
+                            url: path + "/caseList/updateCase",
+                            type: "POST",
+                            contentType: "application/json",
+                            data: JSON.stringify(json),
+                            success: function (data) {
+                                if (data.status == 200) {
+                                    layer.msg(data.info);
+                                    setTimeout(function() {
+                                        window.location.reload();
+                                    },1000);
+                                }else{
+                                    layer.msg(data.info);
+                                }
+                            }
+                        });
+                    }else{
+                        layer.msg("分配失败");
+                    }
+
+                    layer.close(index);
+                },
+
+            });
+            form.render();
         }
         if(obj.event =="delete"){
             layer.open({

@@ -6,9 +6,9 @@
 
     <insert id="addCase">
       insert into anjian(
-      Id,name,content,money,cusname,cus_telphone,rtime,fstatus,lawerid,jstatus,p_status,filelist,business_id,cname)
+      Id,name,content,money,cusname,cus_telphone,rtime,fstatus,lawerid,jstatus,p_status,filelist,business_id,cid,cname)
       values(#{map.id},#{map.name},#{map.content},#{map.money},#{map.cusname},#{map.cus_telphone},#{map.rtime},#{map.fstatus},#{map.mainp},
-      #{map.jstatus},#{map.p_status},#{map.filelist},#{map.busId},#{map.cname})
+      #{map.jstatus},#{map.p_status},#{map.filelist},#{map.busId},#{map.cid},#{map.cname})
     </insert>
 
     <!-- 根据案件ID查询案件包含的文件路径信息 -->

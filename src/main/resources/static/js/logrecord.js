@@ -80,6 +80,13 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                         return "<div class='layui-elip cursor-p' title='" + (d.operateresult != undefined ? d.operateresult : "") + "'>" + (d.operateresult != undefined ? d.operateresult : "") + "</div>";
                     }
                 },{
+                    field: 'descript',
+                    title: '描述信息',
+                    templet: function (d) {
+                        return "<div class='layui-elip cursor-p' title='" + (d.descript != undefined ? d.descript : "无") + "'>" + (d.descript != undefined ? d.descript : "无") + "</div>";
+                    }
+
+                },{
                     field: 'create_time',
                     title: '创建时间',
 

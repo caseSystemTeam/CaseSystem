@@ -39,4 +39,10 @@ public interface CaseListMapper {
      * @return
      */
     Map<String,Object> SelectCaseById(String id);
+
+    //获取未分配案件信息
+    public List<Map<String,Object>> getUnallocation(@Param("map") Map<String,Object> map);
+
+    //获取未分配案件数量
+    public int getUnallocationCount(@Param("map") Map<String,Object> map);
 }

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+    <meta name="renderer" content="webkit">
+    <!--国产浏览器高速模式-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>律师办案协同系统</title>
+
+    <!-- 公共样式 开始 -->
+    <link rel="stylesheet" type="text/css" href="/css/model/base.css">
+    <link rel="stylesheet" type="text/css" href="/css/model/iconfont.css">
+    <script type="text/javascript" src="/framework/jquery-1.11.3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/layui/css/layui.css">
+    <script type="text/javascript" src="/layui/layui.js"></script>
+    <!-- 滚动条插件 -->
+    <link rel="stylesheet" type="text/css" href="/css/model/jquery.mCustomScrollbar.css">
+    <script src="/framework/jquery-ui-1.10.4.min.js"></script>
+    <script src="/framework/jquery.mousewheel.min.js"></script>
+    <script src="/framework/jquery.mCustomScrollbar.min.js"></script>
+    <script src="/framework/cframe.js"></script><!-- 仅供所有子页面使用 -->
+    <!-- 公共样式 结束 -->
+    <script src="/js/home.js"></script>
+    <script src="/js/unallocation.js"></script>
+    <style>
+        .plcz{
+            background-color: #f2f2f2;
+            width: 100%;
+            height: 40px;
+            margin-top: 15px;
+            box-shadow: 1px 1px 5px gray;
+
+        }
+
+
+        .guanbicaozuo{
+            position: absolute;
+            right: 800px;
+            top: 18px;
+            z-index: 1001;
+            cursor: pointer;
+        }
+        .dxalertclose{
+            display:inline-block;
+            margin-top: 45px;
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+
+<body>
+<div class="cBody">
+    <div id="lawerdiv" style="display: none">
+        <form class="layui-form" action="" style="padding-top: 60px;" >
+            <div class="layui-form-item">
+                <label class="layui-form-label">负责人</label>
+                <div class="layui-input-inline">
+                    <select name="rid" id="rid" required lay-verify="required" lay-filter="rid">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="anjiandiv" style="display: none">
+        <form  class="layui-form"  style="padding-top: 30px;">
+            <div class="layui-form-item">
+                <label class="layui-form-label">案件名称</label>
+                <div class="layui-input-inline shortInput">
+                    <input type="text" name="rname" required lay-verify="required" placeholder="请输入案件名称" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">拟定金额</label>
+                <div class="layui-col-xs2">
+                    <input type="number" name="money" id="money" required lay-verify="required"   placeholder="请输入拟定金额" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-col-xs1">
+                    <div class="layui-btn " style="height: 35px;line-height: 35px;border: 1px solid #dcdfe6;background-color: #f5f7fa;margin-left: -1px;color:black" >元</div>
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">案件详情</label>
+                <div class="layui-input-block">
+                    <textarea id="editor" required  rows="15" cols="60" lay-verify="" name="content"></textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">申述人姓名</label>
+                <div class="layui-input-inline shortInput">
+                    <input type="text" name="cusname" required lay-verify="required"  placeholder="请输入申述人姓名" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">申述人联系方式</label>
+                <div class="layui-input-inline shortInput">
+                    <input type="text" name="cus_telphone" required lay-verify="required"  placeholder="请输入申述人联系方式" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" maxlength=11 autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="console">
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 60px">案件名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="name" required placeholder="输入案件名称" autocomplete="off" class="layui-input">
+                </div>
+                <label class="layui-form-label" style="width: 60px">登记时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="rtime" class="layui-input" id="time" placeholder="请选择">
+                </div>
+                <shiro:hasPermission name="case:recordlawer">
+                    <label class="layui-form-label" style="width: 60px">登记律师</label>
+                    <div class="layui-input-inline">
+                        <select name="lawerid" id="lawerid" lay-filter="lawerid">
+                            <option value="">全部</option>
+                        </select>
+                    </div>
+                </shiro:hasPermission>
+                <button class="layui-btn" lay-submit lay-filter="submit">检索</button>
+
+                <!--第三列，批量操作-->
+                <shiro:hasPermission name="case:lawers">
+                    <div class="layui-form-item plcz layui-hide p-r">
+                        <div class="layui-inline plcz-1">
+                            <label class="layui-form-label shezhi"><span>批量操作</span></label>
+                        </div>
+                        <div class="layui-inline change-div" >
+                            <label class="layui-form-label">分配给</label>
+                            <div class="layui-input-inline" style=" margin-top: 2px;">
+                                <select name="transfer" id="transfer" lay-filter="transfer">
+                                    <option value="">请选择责任律师</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="guanbicaozuo"><i class="layui-icon layui-icon-close close-i dxalertclose"></i></div>
+                    </div>
+                </shiro:hasPermission>
+            </div>
+        </form>
+    </div>
+    <div class="tablearea">
+        <table class="layui-table" id="saleTable" lay-filter="saleTable"></table>
+        <script type="text/html" id="bianjikuang">
+            <div class="oper-tab">
+                <a lay-event="edit" class="hover-blue">编辑</a>
+                <shiro:hasPermission name="case:lawer">
+                    <a lay-event="fenpei" class="hover-blue">分配</a>
+                </shiro:hasPermission>
+                <a lay-event="delete" class="hover-blue">删除</a>
+            </div>
+        </script>
+    </div>
+
+</div>
+</body>
+
+</html>
