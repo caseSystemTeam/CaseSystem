@@ -207,6 +207,26 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
 
                 }
             })
+        }else if(obj.event=='look'){
+            layer.open({
+                type: 1,
+                title: '日志信息',   //标题
+                area: ['400px', '350px'],   //宽高
+                content:$("#lookrecord").html(),
+                success:function(layero,index){
+                    $("span[name=zname]").text(data.username);
+                    $("span[name=ip_address]").text(data.ip_address);
+                    $("span[name=operatename]").text(data.operatename);
+                    $("span[name=operateresult]").text(data.operateresult);
+                    if(data.descript==null){
+                        $("span[name=descript]").text("无");
+                    }else{
+                        $("span[name=descript]").text(data.descript);
+                    }
+
+                }
+            });
+            form.render();
         }
 
     });

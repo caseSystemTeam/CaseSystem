@@ -207,20 +207,27 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
 
                 }
             })
-            /*$.ajax({
-                url:path+"/log/deleteLog",
-                type:'post',
-                data:{id:data.id},
-                dataType:'json',
-                success:function(data){
-                    if(data.status==200){
-                        layer.msg("删除成功");
+
+        }else if(obj.event=='look'){
+            layer.open({
+                type: 1,
+                title: '日志信息',   //标题
+                area: ['400px', '350px'],   //宽高
+                content:$("#lookrecord").html(),
+                success:function(layero,index){
+                    $("span[name=zname]").text(data.username);
+                    $("span[name=ip_address]").text(data.ip_address);
+                    $("span[name=operatename]").text(data.operatename);
+                    $("span[name=operateresult]").text(data.operateresult);
+                    if(data.descript==null){
+                        $("span[name=descript]").text("无");
                     }else{
-                        layer.msg("删除失败");
+                        $("span[name=descript]").text(data.descript);
                     }
-                    form.render(); //更新全部
+
                 }
-            })*/
+            });
+            form.render();
         }
 
     });

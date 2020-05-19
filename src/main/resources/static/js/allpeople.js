@@ -84,6 +84,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                     fixed: 'right',
                     title: '操作',
                     align:'center',
+                    width:"14%",
                     unresize:true,
                     toolbar: '#bianjikuang'
                 }
@@ -180,8 +181,25 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
 
         if (obj.event === 'edit') {
             window.location.href = path + "/page/updateInfo?id=" + data.Id ;
-        }
-        else if(obj.event=='delete'){
+        }else if(obj.event=='look'){
+            layer.open({
+                type: 1,
+                title: '用户信息',   //标题
+                area: ['700px', '500px'],   //宽高
+                content:$("#lookpeople").html(),
+                success:function(layero,index){
+                    $("span[name=username]").text(data.username);
+                    $("span[name=zname]").text(data.name);
+                    $("span[name=gender]").text(data.gender);
+                    $("span[name=ption]").text(data.position);
+                    $("span[name=srole]").text(data.role);
+                    $("span[name=solve]").text(data.solve);
+                    $("span[name=unsolve]").text(data.unsolve);
+                    $("span[name=phonenumber]").text(data.phonenumber);
+                }
+            });
+            form.render();
+        } else if(obj.event=='delete'){
             layer.open({
                 type: 1,
                 title: '提示',

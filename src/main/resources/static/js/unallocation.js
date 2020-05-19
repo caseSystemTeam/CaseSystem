@@ -373,7 +373,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                             }
                         });
                     }else{
-                        layer.msg("分配失败");
+                        layer.msg("修改失败");
                     }
 
                     layer.close(index);
