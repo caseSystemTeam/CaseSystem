@@ -101,6 +101,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                 },{
                     field: 'lawername',
                     title: '责任律师',
+                    width: '12%',
                     templet: function (d) {
                         return "<div class='layui-elip cursor-p' title='" + d.lawername + "'>" + (d.lawername != null ? d.lawername : "无") + "</div>";
                     }

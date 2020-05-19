@@ -37,13 +37,13 @@ public class QuartzTask {
                 cmap.put("p_status",0);
                 cmap.put("lawerid",lmap.get("Id"));
                 scount= caseListService.getCaseCount(cmap);
-                cmap.put("j_status",1);
+                cmap.put("p_status",1);
                 ucount= caseListService.getCaseCount(cmap);
                 if(scount!=(int)lmap.get("solve")||ucount!=(int)lmap.get("unsolve")){
                     User user = new User();
                     user.setId((String) lmap.get("Id"));
-                    user.setSolve((int)lmap.get("solve"));
-                    user.setUnsolve((int)lmap.get("unsolve"));
+                    user.setSolve(scount);
+                    user.setUnsolve(ucount);
                     userService.upinfor(user);
 
                 }

@@ -1,30 +1,34 @@
-layui.use(['form', 'laydate', 'table', 'jquery', 'layer','layedit'], function () {
+layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
     var form = layui.form,
         laydate = layui.laydate,
         table = layui.table,
         $ = layui.jquery,
-        layer = layui.layer,
-        layedit =layui.layedit;
-   /* var index = layedit.build('editor',{
-        height:125,
-        width:100,
-        tool: [
-            'strong' //加粗
-            , 'italic' //斜体
-            , 'underline' //下划线
-            , 'del' //删除线
-            , '|' //分割线
-            , 'left' //左对齐
-            , 'center' //居中对齐
-            , 'right' //右对齐
-            , '|' //分割线
-           /!*, 'link' //超链接
-            , 'unlink' //清除链接
-            , 'face' //表情
-            , 'image' //插入图片*!/!*!/
+        layer = layui.layer;
 
-        ]
-    });*/
+   /* layui.use(['layedit'],function () {
+        var layedit= layui.layedit;
+        var index = layedit.build('editor',{
+            height:125,
+            width:100,
+            tool: [
+                'strong' //加粗
+                , 'italic' //斜体
+                , 'underline' //下划线
+                , 'del' //删除线
+                , '|' //分割线
+                , 'left' //左对齐
+                , 'center' //居中对齐
+                , 'right' //右对齐
+                , '|' //分割线
+                /!*, 'link' //超链接
+                 , 'unlink' //清除链接
+                 , 'face' //表情
+                 , 'image' //插入图片*!/
+
+            ]
+        });
+    })*/
+
     var sdata = null;
     //获取当前公司所有律师信息
     $.ajax({
@@ -323,6 +327,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer','layedit'], function ()
                 success:function(layero,index){
                     $("input[name=rname]").val(data.name);
                     $("input[name=money]").val(data.money);
+
                     $("textarea[name=content]").val(data.content);
                     $("input[name=cusname]").val(data.cusname);
                     $("input[name=cus_telphone]").val(data.cus_telphone);
