@@ -3,31 +3,36 @@ layui.use(['upload','form','layer','jquery'], function() {
     var upload = layui.upload;
     var layer = layui.layer;
     var $ = layui.jquery;
-    var s=1;
+    var s=1,n=1;
     //监听提交
     form.on('submit(submitBut)', function(data) {
 
-        if(s!=0){
-            $.ajax({
-                url:path+"/userCon/updateUser",
-                data:JSON.stringify(data.field),
-                type:'post',
-                contentType: "application/json",
-                dataType:'json',
-                success:function(data){
-                    if(data==1){
-                        layer.msg("修改成功");
-                        setTimeout(function(){
-                            location.href = path+"/page/allpeople";
-                        },1000);
-                    }else {
-                        layer.msg("修改失败")
-                    }
-                }
-            })
-        }else{
-            layer.msg('修改失败');
+        if(s==0){
+            layer.msg("请输入正确的手机号");
+            return;
         }
+        if(n==0){
+            layer.msg("该用户名已被使用");
+            return;
+        }
+        $.ajax({
+            url:path+"/userCon/updateSigleUser",
+            data:JSON.stringify(data.field),
+            type:'post',
+            contentType: "application/json",
+            dataType:'json',
+            success:function(data){
+                if(data==1){
+                    layer.msg("修改成功");
+                    setTimeout(function(){
+                        location.href = path+"/page/peopleinfo";
+                    },1000);
+                }else {
+                    layer.msg("修改失败")
+                }
+            }
+        })
+
 
         return false;
     });
@@ -55,7 +60,35 @@ layui.use(['upload','form','layer','jquery'], function() {
         }
     })
 
+    $('input[name=username]').blur(function() {
+        $('input[name=username]').val($(this).val());
+        var username = $(this).val();
+        $.ajax({
+            url:path+"/userCon/checkName",
+            type:'post',
+            data:{username:username},
+            // contentType:"application/json;charset=UTF-8",
+            dataType:'text',
+            success:function(data){
+                if (data == 0 || data==2) {
+                    $('i#ri').removeAttr('hidden');
+                    $('i#wr').attr('hidden','hidden');
+                    n=1;
+                } else {
+                    $('i#wr').removeAttr('hidden');
+                    $('i#ri').attr('hidden','hidden');
+                    n=0;
+                }
 
+            },
+            error:function (e) {
+                console.info("ssaas",e.status)
+                console.info("ssaas",e.statusText)
+            }
+
+        })
+
+    })
 
 
     // $('#pwd').blur(function() {

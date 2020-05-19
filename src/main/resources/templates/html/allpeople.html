@@ -39,6 +39,7 @@
             display: block;
             padding: 9px 0px;
         }
+
     </style>
     <script src="/js/home.js"></script>
     <script src="/js/allpeople.js"></script>
@@ -47,6 +48,68 @@
 
 <body>
 <div class="cBody">
+    <div id="updateInfo" style="display: none;">
+        <form id="addForm" class="layui-form" style="padding-top: 30px;" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-inline shortInput">
+                    <input type="text" name="tname" id="user" required lay-verify="required"  autocomplete="off" class="layui-input">
+                </div>
+                <!-- 对号 -->
+                <div class="layui-inline" style="margin-top: 10px;">
+                    <i class="layui-icon" id="ri" style="color: green;font-weight: bolder;" hidden></i>
+                </div>
+                <!-- 错号 -->
+                <div class="layui-inline" style="margin-top: 10px;margin-left: -15px;">
+                    <i class="layui-icon" id="wr" style="color: red; font-weight: bolder;" hidden>ဆ</i>
+                </div>
+
+            </div>
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">姓名</label>
+                <div class="layui-input-block shortInput">
+                    <input type="text" name="mname" required lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">性别</label>
+                <div class="layui-input-block">
+                    <input id="radio1" type="radio" name="genderv" value="男" title="男"  lay-filter="genderv" >
+                    <input id="radio2" type="radio" name="genderv" value="女" title="女" lay-filter="genderv"  >
+                </div>
+            </div>
+            <shiro:hasPermission name="user:update">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">职称</label>
+                    <div class="layui-input-inline">
+                        <select name="positions" id="positions" required lay-verify="required" lay-filter="positions">
+                            <option value="">请选择</option>
+                            <option value="初级律师" >初级律师</option>
+                            <option value="中级律师">中级律师</option>
+                            <option value="高级律师">高级律师</option>
+                        </select>
+                    </div>
+                </div>
+            </shiro:hasPermission>
+            <div class="layui-form-item">
+                <label class="layui-form-label">联系方式</label>
+                <div class="layui-input-inline shortInput">
+                    <input type="text" name="pnumber" id="pnumber" required  lay-verify="required" placeholder="请输入手机号" autocomplete="off"  onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" maxlength=11 class="layui-input">
+                </div>
+                <!-- 对号 -->
+                <div class="layui-inline"  style="margin-top: 10px">
+                    <i class="layui-icon" id="rprip" style="color: green;font-weight: bolder;" hidden></i>
+                </div>
+                <!-- 错号 -->
+                <div class="layui-inline"  style="margin-top: 10px;margin-left: -15px">
+                    <i class="layui-icon" id="rpwrp" style="color: red; font-weight: bolder;" hidden>ဆ</i>
+                </div>
+            </div>
+        </form>
+    </div>
     <div id="lookpeople" style="display: none">
         <form id="" class="layui-form" action="">
             <div class="layui-form-item">

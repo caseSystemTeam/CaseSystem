@@ -180,12 +180,136 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
         var tr = obj.tr; //获得当前行 tr 的DOM对象
 
         if (obj.event === 'edit') {
-            window.location.href = path + "/page/updateInfo?id=" + data.Id ;
+            var s=1,n=1;
+            layer.open({
+                type: 1,
+                title: '编辑用户信息',   //标题
+                area: ['500px', '400px'],   //宽高
+                content:$("#updateInfo").html(),
+                success:function(layero,index){
+                    $("input[name=tname]").val(data.username);
+                    $("input[name=mname]").val(data.name);
+                    if(data.gender=="男") {
+                        $("input#radio2").removeAttr("checked");
+                        $("input#radio1").attr("checked", true);
+                    }else{
+                        $("input#radio1").removeAttr("checked");
+                        $("input#radio2").attr("checked",true);
+                    }
+                    $("select[name=positions]").val(data.position);
+                    $("input[name=pnumber]").val(data.phonenumber);
+
+                    $('input[name=tname]').blur(function() {
+                        $('input[name=tname]').val($(this).val());
+                        var username = $(this).val();
+                        $.ajax({
+                            url:path+"/userCon/checkName",
+                            type:'post',
+                            data:{username:username},
+                            // contentType:"application/json;charset=UTF-8",
+                            dataType:'text',
+                            success:function(data){
+                                if (data == 0 ||data==2) {
+                                    $('i#ri').removeAttr('hidden');
+                                    $('i#wr').attr('hidden','hidden');
+                                    n=1;
+                                } else {
+                                    $('i#wr').removeAttr('hidden');
+                                    $('i#ri').attr('hidden','hidden');
+                                    n=0;
+                                }
+
+                            },
+                            error:function (e) {
+                                console.info("ssaas",e.status)
+                                console.info("ssaas",e.statusText)
+                            }
+
+                        })
+
+                    })
+                    $('input[name=mname]').blur(function() {
+
+                        $('input[name=mname]').val($(this).val())
+                    })
+                    form.on('radio(genderv)',function(data){
+                        var sex =data.value;
+                        $("input[type=radio]:checked").val(data.value);
+                        if(sex=="男") {
+                            $("input#radio2").removeAttr("checked");
+                            $("input#radio1").attr("checked", true);
+                        }else{
+                            $("input#radio1").removeAttr("checked");
+                            $("input#radio2").attr("checked",true);
+                        }
+                    })
+                    form.on('select(positions)', function (data) {
+                      $("select[name=positions]").val(data.value);
+                    });
+
+
+
+                    //手机号是否合法
+                    $('input[name=pnumber]').blur(function() {
+                        $("input[name=pnumber]").val($(this).val())
+                        if(!isMobileNumber($('input[name=pnumber]').val())){
+                            $('i#rpwrp').removeAttr('hidden');
+                            $('i#rprip').attr('hidden','hidden');
+
+                            s=0;
+                        }else {
+                            $('i#rprip').removeAttr('hidden');
+                            $('i#rpwrp').attr('hidden','hidden');
+                            s=1;
+                        };
+                    });
+
+                },
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+
+                    data.gender=$("input[type=radio]:checked").val();
+                    data.position=$("select[name=positions]").val();
+                    data.username=  $("input[name=tname]").val();
+                    data.name =  $("input[name=mname]").val();
+                    data.phonenumber =$("input[name=pnumber]").val();
+                   data.id = data.Id;
+                   if(n==0){
+                       layer.msg("该用户名已被使用");
+                       return;
+                   }
+                    if(s==0){
+                        layer.msg("请输入正确的手机号");
+                        return;
+                    }
+                    $.ajax({
+                        url: path + "/userCon/updateUser",
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify(data),
+                        success: function (data) {
+                            if (data.status == 200) {
+                                layer.msg("修改成功");
+                                setTimeout(function() {
+                                    window.location.reload();
+                                },1000);
+                            }else{
+                                layer.msg("修改失败");
+
+                            }
+                        }
+                    });
+                    layer.close(index);
+
+                }
+            });
+            form.render();
+            /*window.location.href = path + "/page/updateInfo?id=" + data.Id ;*/
         }else if(obj.event=='look'){
             layer.open({
                 type: 1,
                 title: '用户信息',   //标题
-                area: ['700px', '500px'],   //宽高
+                area: ['500px', '400px'],   //宽高
                 content:$("#lookpeople").html(),
                 success:function(layero,index){
                     $("span[name=username]").text(data.username);
@@ -196,6 +320,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                     $("span[name=solve]").text(data.solve);
                     $("span[name=unsolve]").text(data.unsolve);
                     $("span[name=phonenumber]").text(data.phonenumber);
+
                 }
             });
             form.render();
@@ -284,5 +409,30 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
         }
 
     });
+    function funlawer(){
+
+    }
+    //判断手机号是否合法
+    function isMobileNumber(phone) {
+        var flag = false;
+        var message = "";
+        var myreg = /^(((13[0-9]{1})|(14[0-9]{1})|(17[0-9]{1})|(15[0-3]{1})|(15[4-9]{1})|(18[0-9]{1})|(199))+\d{8})$/;
+        if (phone == '') {
+            // console.log("手机号码不能为空");
+            message = "手机号码不能为空！";
+        } else if (phone.length != 11) {
+            //console.log("请输入11位手机号码！");
+            message = "请输入11位手机号码！";
+        } else if (!myreg.test(phone)) {
+            //console.log("请输入有效的手机号码！");
+            message = "请输入有效的手机号码！";
+        } else {
+            flag = true;
+        }
+        if (message != "") {
+            // alert(message);
+        }
+        return flag;
+    }
 
 });

@@ -50,11 +50,50 @@ layui.use(['jquery','layer','form','layedit'],
                 form.render();
             }
         });
+        var s=1;
+        //手机号是否合法
+        $('#pnumber').blur(function() {
+            if(!isMobileNumber($('#pnumber').val())){
+                $('#rpwrp').removeAttr('hidden');
+                $('#rprip').attr('hidden','hidden');
+
+                s=0;
+            }else {
+                $('#rprip').removeAttr('hidden');
+                $('#rpwrp').attr('hidden','hidden');
+                s=1;
+            };
+        });
+        //判断手机号是否合法
+        function isMobileNumber(phone) {
+            var flag = false;
+            var message = "";
+            var myreg = /^(((13[0-9]{1})|(14[0-9]{1})|(17[0-9]{1})|(15[0-3]{1})|(15[4-9]{1})|(18[0-9]{1})|(199))+\d{8})$/;
+            if (phone == '') {
+                // console.log("手机号码不能为空");
+                message = "手机号码不能为空！";
+            } else if (phone.length != 11) {
+                //console.log("请输入11位手机号码！");
+                message = "请输入11位手机号码！";
+            } else if (!myreg.test(phone)) {
+                //console.log("请输入有效的手机号码！");
+                message = "请输入有效的手机号码！";
+            } else {
+                flag = true;
+            }
+            if (message != "") {
+                // alert(message);
+            }
+            return flag;
+        }
 
         form.on('submit(submitBut)',function (data) {
 
             data.field.content = layedit.getContent(index);
-            console.info("data",data)
+           if(s==0){
+               layer.msg("请输入正确的手机号");
+               return;
+           }
             $.ajax({
                 url:path+"/case/addCase",
                 data:JSON.stringify(data.field),

@@ -47,7 +47,15 @@
         <div class="layui-form-item">
             <label class="layui-form-label">用户名</label>
             <div class="layui-input-inline shortInput">
-                <input type="text" name="username" id="user" required lay-verify="required" readonly="readonly" autocomplete="off" class="layui-input">
+                <input type="text" name="username" id="user" required lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+            <!-- 对号 -->
+            <div class="layui-inline" style="margin-top: 10px;">
+                <i class="layui-icon" id="ri" style="color: green;font-weight: bolder;" hidden></i>
+            </div>
+            <!-- 错号 -->
+            <div class="layui-inline" style="margin-top: 10px;">
+                <i class="layui-icon" id="wr" style="color: red; font-weight: bolder;" hidden>ဆ</i>
             </div>
 
         </div>

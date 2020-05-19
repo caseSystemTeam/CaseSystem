@@ -111,8 +111,16 @@ public class UserController {
 	//检查用户名是否存在
 	@RequestMapping("checkName")
 	@ResponseBody
-	public String checkUserName(String username,HttpServletRequest request){
-
+	public String checkUserName(String username,HttpServletRequest request,HttpSession session){
+		if(username==null || username.equals("")){
+			return "1";
+		}
+        if(session.getAttribute("us")!=null){
+			User user = (User)session.getAttribute("us");
+			if(user.getUsername().equals(username)){
+				return "2";
+			}
+		}
 		return userService.checkUserName(username);
 	}
 
@@ -318,9 +326,9 @@ public class UserController {
 
 
 	//修改个人信息
-	@RequestMapping("updateUser")
+	@RequestMapping("updateSigleUser")
 	@ResponseBody
-	public int updateUser(@RequestBody User user,HttpSession session,HttpServletRequest request){
+	public int updateSigleUser(@RequestBody User user,HttpSession session,HttpServletRequest request){
 		//从session中获取用户信息
 		String id=(String) session.getAttribute("mdfId");
 		//从session中获取用户信息
@@ -338,6 +346,29 @@ public class UserController {
 		}
 
 	}
+
+	//修改员工信息
+	@RequestMapping("updateUser")
+	@ResponseBody
+	public ResultGson updateUser(@RequestBody User user,HttpSession session,HttpServletRequest request){
+
+		//从session中获取用户信息
+		User us=(User) session.getAttribute("us");
+
+		try{
+			int i=userService.upinfor(user);
+			Log log =Log.ok(us.getUsername(), IpAdress.getIp(request),0,"修改信息","成功", "修改"+user.getUsername()+"的个人信息",us.getBusId());
+			logService.addLog(log);
+			return ResultGson.ok("修改成功");
+		}catch (Exception e){
+			User user1 = userService.userById(user.getId());
+			Log log =Log.ok(us.getUsername(), IpAdress.getIp(request),0,"修改信息","失败", "修改"+user1.getUsername()+"的个人信息",us.getBusId());
+			logService.addLog(log);
+			return ResultGson.error("修改失败");
+		}
+
+	}
+
 
 	//获取用户信息
 	@RequestMapping("getUserById")
