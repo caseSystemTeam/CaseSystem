@@ -126,8 +126,10 @@ public class CaseListController {
 
         if (key != null) {
             JSONObject json = JSONObject.parseObject(key);
+            if (!("".equals(json.get("pstatus"))) && !(null == json.get("pstatus"))) {
+                map.put("pstatus", json.getString("pstatus"));
+            }
 
-            map.put("pstatus", json.getString("pstatus"));
 
             if (!("".equals(json.get("name"))) && !(null == json.get("name"))) {
                 map.put("name", json.getString("name"));
@@ -162,6 +164,9 @@ public class CaseListController {
         User us = userService.userById(lawerid);
         for(Map<String,Object> hmap:list){
             hmap.put("lawerid",lawerid);
+            if(map.get("p_status")!=null){
+                hmap.put("p_status", map.get("p_status"));
+            }
             try{
                 caseListService.transferPerson(hmap);
                 Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"转移案件","成功", "将案件\""+hmap.get("name")+"\"转移给\""+us.getName()+"\"成功",user.getBusId());
@@ -175,6 +180,81 @@ public class CaseListController {
 
         return ResultGson.ok("操作成功");
 
+
+    }
+
+    //删除案件
+    @RequestMapping("deleteCase")
+    @ResponseBody
+    public ResultGson deleteCase(String id, HttpSession session, HttpServletRequest request){
+        User user =(User)session.getAttribute("us");
+        Map<String,Object> map = caseListService.SelectCaseById(id);
+        try{
+            caseListService.deleteCase(id);
+        }catch (Exception e){
+            Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"删除案件","失败", "删除案件\""+map.get("name")+"\"",user.getBusId());
+            logService.addLog(log);
+            return ResultGson.error("删除失败");
+
+        }
+        Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"删除案件","成功", "删除案件\""+map.get("name")+"\"",user.getBusId());
+        logService.addLog(log);
+        return ResultGson.ok("删除成功");
+
+
+    }
+
+    //获取未分配案件
+    @RequestMapping("getUnallocation")
+    @ResponseBody
+    public String getUnallocation(String page,String limit, String key, HttpSession session){
+        Map<String,Object> map = new HashMap<>();
+        User user =(User)session.getAttribute("us");
+        JSONObject result = new JSONObject();
+        Map<String,Object> rmap=userService.selectRoleByUserId(user.getId());
+        if(!rmap.get("role_id").equals("1")&&!rmap.get("role_id").equals("2")){
+            map.put("userId",user.getId());
+        }
+        int pageSize = Integer.parseInt(limit);
+        map.put("busId",user.getBusId());
+        map.put("pageSize", pageSize);
+        map.put("skipCount", (Integer.parseInt(page) - 1) * pageSize);
+        if (key != null) {
+            JSONObject json = JSONObject.parseObject(key);
+            if (!("".equals(json.get("name"))) && !(null == json.get("name"))) {
+                map.put("name", json.getString("name"));
+            }
+            if (!("".equals(json.get("lawerid"))) && !(null == json.get("lawerid"))) {
+                map.put("lawerid", json.getString("lawerid"));
+            }
+            if (!("".equals(json.get("rtime"))) && !(null == json.get("rtime"))) {
+                String[] tricktime = json.get("rtime").toString().split(" - ");
+                map.put("tricktime", tricktime[0]+ " 00:00:00");
+                map.put("tricktime2", tricktime[1]+ " 23:59:59");
+            }
+        }
+
+        List list = caseListService.getUnallocation(map);
+        int count = caseListService.getUnallocationCount(map);
+        result.put("data",list);
+        result.put("msg","请求成功");
+        result.put("code", 0);
+        result.put("count",count);
+        return  JSON.toJSONString(result);
+    }
+
+    //删除案件
+    @RequestMapping("updateCase")
+    @ResponseBody
+    public ResultGson updateCase(@RequestBody String json, HttpSession session, HttpServletRequest request) {
+       Map<String,Object> map =JSON.parseObject(json);
+
+       try {
+           caseListService.updateCase(map);
+       }catch (Exception e){
+           return ResultGson.error("分配失败");
+       }
+       return ResultGson.ok("分配成功");
 
     }
 

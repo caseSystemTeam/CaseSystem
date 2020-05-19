@@ -52,8 +52,9 @@ layui.use(['jquery','layer','form','layedit'],
         });
 
         form.on('submit(submitBut)',function (data) {
-            data.field.content = layedit.getContent(index);
 
+            data.field.content = layedit.getContent(index);
+            console.info("data",data)
             $.ajax({
                 url:path+"/case/addCase",
                 data:JSON.stringify(data.field),

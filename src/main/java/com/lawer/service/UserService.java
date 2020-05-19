@@ -42,4 +42,11 @@ public interface UserService {
 	 * @return
 	 */
 	Map<String,Object> selectRoleByUserId(String id);
+
+	/**
+	 * 通过用户username查询用户信息
+	 * @param username
+	 * @return
+	 */
+	User getByusername(String username);
 }

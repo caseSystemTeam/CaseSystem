@@ -32,12 +32,13 @@ public class ShiroService {
         filterChainDefinitionMap.put("/userCon/register", "anon");
         filterChainDefinitionMap.put("/error/**", "anon");
         filterChainDefinitionMap.put("/userCon/index", "anon");
+        filterChainDefinitionMap.put("/page/forgetPs", "anon");
+        filterChainDefinitionMap.put("/userCon/updateVerPs", "anon");
+        filterChainDefinitionMap.put("/sms/sendSms", "anon");
         filterChainDefinitionMap.put("/userCon/toindex", "anon");
         filterChainDefinitionMap.put("/userCon/checkName", "anon");
         filterChainDefinitionMap.put("/userCon/addBusUser", "anon");
         filterChainDefinitionMap.put("/userCon/login", "anon");
-
-
         filterChainDefinitionMap.put("/css/**","anon");
         filterChainDefinitionMap.put("/fonts/**","anon");
         filterChainDefinitionMap.put("/framework/**","anon");

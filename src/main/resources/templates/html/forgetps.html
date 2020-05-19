@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>忘记密码</title>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/index/login.css">
+
+</head>
+<body>
+
+<div class="login-main">
+    <header class="layui-elip" style="width: 82%">忘记密码</header>
+
+    <!-- 表单选项 -->
+    <form class="layui-form">
+
+
+        <div class="layui-input-inline">
+            <!-- 用户名 -->
+            <div class="layui-inline" style="width: 85%">
+
+                <input type="text" id="user" name="username" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+            </div>
+
+            <!-- 对号 -->
+            <div class="layui-inline">
+                <i class="layui-icon" id="ri" style="color: green;font-weight: bolder;" hidden></i>
+            </div>
+            <!-- 错号 -->
+            <div class="layui-inline">
+                <i class="layui-icon" id="wr" style="color: red; font-weight: bolder;" hidden>ဆ</i>
+            </div>
+        </div>
+
+        <!--联系方式-->
+        <div class="layui-input-inline">
+
+            <div class="layui-inline" style="width: 85%">
+                <input type="text" id="pnumber" name="phoneNumber" required  lay-verify="required" placeholder="请输入手机号" autocomplete="off"  onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" maxlength=11 class="layui-input">
+            </div>
+            <!-- 对号 -->
+            <div class="layui-inline">
+                <i class="layui-icon" id="rprip" style="color: green;font-weight: bolder;" hidden></i>
+            </div>
+            <!-- 错号 -->
+            <div class="layui-inline">
+                <i class="layui-icon" id="rpwrp" style="color: red; font-weight: bolder;" hidden>ဆ</i>
+            </div>
+        </div>
+
+        <!--验证码-->
+        <div class="layui-form-item">
+
+            <div class="layui-input-inline" style="width: 46% !important;">
+                <input name="verifyCode" required  lay-verify="required" placeholder="请输入验证码" class="layui-input" >
+            </div>
+            <button style="float: left;width: 36%;" type="button" class="layui-btn sendVerifyCode">发送验证码</button>
+        </div>
+
+        <!-- 密码 -->
+        <div class="layui-input-inline">
+
+            <div class="layui-inline" style="width: 85%">
+
+                <input type="password" id="pwd" name="password" required  lay-verify="required" placeholder="请输入新密码" autocomplete="off" class="layui-input">
+            </div>
+            <!-- 对号 -->
+            <div class="layui-inline">
+                <i class="layui-icon" id="pri" style="color: green;font-weight: bolder;" hidden></i>
+            </div>
+            <!-- 错号 -->
+            <div class="layui-inline">
+                <i class="layui-icon" id="pwr" style="color: red; font-weight: bolder;" hidden>ဆ</i>
+            </div>
+        </div>
+        <div class="layui-input-inline login-btn" style="width: 85%">
+            <button type="submit" lay-submit lay-filter="sub" class="layui-btn">提交</button>
+        </div>
+        <hr style="width: 85%" />
+        <p style="width: 85%"><a href="/userCon/login" class="fl">返回登录</a></p>
+    </form>
+</div>
+
+
+<script src="/layui/layui.js"></script>
+<script src="/js/home.js"></script>
+<script type="text/javascript">
+    layui.use(['form','jquery','layer'], function () {
+        var form   = layui.form;
+        var $ = layui.jquery;
+        var layer  = layui.layer;
+        var i=1,s=1,n=1;
+        //添加表单失焦事件
+        //验证表单
+        $('#user').blur(function() {
+            var username = $(this).val();
+
+
+            $.ajax({
+                url:path+"/userCon/checkName",
+                type:'post',
+                data:{username:username},
+                // contentType:"application/json;charset=UTF-8",
+                dataType:'text',
+                success:function(data){
+                    if (data == 1) {
+                        $('#ri').removeAttr('hidden');
+                        $('#wr').attr('hidden','hidden');
+                        n=1;
+                    } else {
+                        $('#wr').removeAttr('hidden');
+                        $('#ri').attr('hidden','hidden');
+                        n=0;
+                    }
+
+                }
+
+            })
+
+        });
+
+        // you code ...
+        // 为密码添加正则验证
+        $('#pwd').blur(function() {
+            var reg = /^[\w]{6,12}$/;
+            if(!($('#pwd').val().match(reg))){
+                //layer.msg('请输入合法密码');
+                $('#pwr').removeAttr('hidden');
+                $('#pri').attr('hidden','hidden');
+
+                i=0;
+            }else {
+                $('#pri').removeAttr('hidden');
+                $('#pwr').attr('hidden','hidden');
+                i=1;
+            }
+        });
+
+        //手机号是否合法
+        $('#pnumber').blur(function() {
+            if(!isMobileNumber($('#pnumber').val())){
+                $('#rpwrp').removeAttr('hidden');
+                $('#rprip').attr('hidden','hidden');
+                s=0;
+            }else {
+                $('#rprip').removeAttr('hidden');
+                $('#rpwrp').attr('hidden','hidden');
+                s=1;
+            };
+        });
+        //更改页面展示
+        var countdownHandler = function(){
+            var $button = $(".sendVerifyCode");
+            var number = 60;
+            var countdown = function(){
+                if (number == 0) {
+                    $button.attr("disabled",false);
+                    $button.html("发送验证码");
+                    number = 60;
+                    return;
+                } else {
+                    $button.attr("disabled",true);
+                    $button.html(number + "秒 重新发送");
+                    number--;
+                }
+                setTimeout(countdown,1000);
+            }
+            setTimeout(countdown,1000);
+        }
+        //发送短信验证码
+        $(".sendVerifyCode").on("click", function(){
+            var $mobile = $("input[name=phoneNumber]");
+            var data = {};
+            data.mobile = $.trim($mobile.val());
+            if(data.mobile == ''){
+                layer.msg('请输入手机号码');
+                return;
+            }
+            if(i==0){
+                layer.msg("请输入正确的手机号");
+                return;
+            }
+            $.ajax({
+                url: path+"/sms/sendSms",
+                async : true,
+                type: "post",
+                dataType: "json",
+                data: {phonenumber:data.mobile},
+                success: function (data) {
+                    if(data.status =="200"){
+                        countdownHandler();
+                        return ;
+                    }else {
+                        layer.msg(data.info);
+                    }
+
+                }
+            });
+        })
+        //添加表单监听事件,提交注册信息
+        form.on('submit(sub)', function(data) {
+            if(i!=0 && n!=0 &&s!=0){
+
+                $.ajax({
+                    url:path+"/userCon/updateVerPs",
+                    data:JSON.stringify(data.field),
+                    type:'post',
+                    contentType: "application/json",
+                    dataType:'json',
+                    success:function(data){
+
+                        if(data.status=="200"){
+                            layer.msg("修改成功");
+                            setTimeout(function(){
+                                location.href = path+"/userCon/login";
+                            },1000);
+                        }else {
+                            layer.msg(data.info);
+                        }
+                    }
+                })
+            }else{
+                layer.msg("请输入正确信息");
+            }
+
+            //防止页面跳转
+            return false;
+        });
+
+    });
+    //判断手机号是否合法
+    function isMobileNumber(phone) {
+        var flag = false;
+        var message = "";
+        var myreg = /^(((13[0-9]{1})|(14[0-9]{1})|(17[0-9]{1})|(15[0-3]{1})|(15[4-9]{1})|(18[0-9]{1})|(199))+\d{8})$/;
+        if (phone == '') {
+            // console.log("手机号码不能为空");
+            message = "手机号码不能为空！";
+        } else if (phone.length != 11) {
+            //console.log("请输入11位手机号码！");
+            message = "请输入11位手机号码！";
+        } else if (!myreg.test(phone)) {
+            //console.log("请输入有效的手机号码！");
+            message = "请输入有效的手机号码！";
+        } else {
+            flag = true;
+        }
+        if (message != "") {
+            // alert(message);
+        }
+        return flag;
+    }
+
+</script>
+
+</body>
+</html>

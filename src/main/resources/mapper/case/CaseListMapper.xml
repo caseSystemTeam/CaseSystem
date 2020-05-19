@@ -108,17 +108,17 @@ where aj.business_id=#{map.busId}
             and aj.p_status = #{map.pstatus}
         </if>
         <if test="map.tricktime !=null and map.tricktime !=''">
-            <choose>
-                <when test="map.pstatus==0">
+           <!-- <choose>
+                <when test="map.pstatus==0">-->
                     AND unix_timestamp(aj.rtime) between unix_timestamp(#{map.tricktime}) and
                     unix_timestamp(#{map.tricktime2})
-                </when>
+             <!--   </when>
                 <otherwise>
                     AND unix_timestamp(aj.ftime) between unix_timestamp(#{map.tricktime}) and
                     unix_timestamp(#{map.tricktime2})
                 </otherwise>
 
-            </choose>
+            </choose>-->
         </if>
         order by aj.rtime desc
         <if test="map.pageSize!=null and map.skipCount!=null ">
@@ -151,7 +151,6 @@ where aj.business_id=#{map.busId}
                     AND unix_timestamp(aj.ftime) between unix_timestamp(#{map.tricktime}) and
                     unix_timestamp(#{map.tricktime2})
                 </otherwise>
-
             </choose>
         </if>
     </select>
@@ -205,6 +204,53 @@ where aj.business_id=#{map.busId}
         where Id = #{map.Id}
     </update>
 
+    <delete id="deleteCase" parameterType="string" >
+        delete from anjian where id = #{id}
+    </delete>
+    <select id="SelectCaseById" parameterType="string" resultType="map">
+        select * from anjian where Id=#{id}
+    </select>
+
+    <select id="getUnallocation" parameterType="map" resultType="map">
+        select aj.* from anjian aj
+        where aj.business_id=#{map.busId}  and aj.p_status = 2
+        <if test="map.name !=null and map.name !=''">
+            and aj.name like concat('%',#{map.name},'%')
+        </if>
+        <if test="map.lawerid !=null and map.lawerid !=''">
+            and aj.cid = #{map.lawerid}
+        </if>
+
+        <if test="map.userId !=null and map.userId !=''">
+            and aj.cid = #{map.userId}
+        </if>
+        <if test="map.tricktime !=null and map.tricktime !=''">
+            AND unix_timestamp(aj.rtime) between unix_timestamp(#{map.tricktime}) and
+            unix_timestamp(#{map.tricktime2})
+        </if>
+        order by aj.rtime desc
+        <if test="map.pageSize!=null and map.skipCount!=null ">
+            LIMIT #{map.skipCount},#{map.pageSize}
+        </if>
+    </select>
+    <select id="getUnallocationCount" parameterType="map" resultType="int">
+        select count(1) from anjian aj
+        where aj.business_id=#{map.busId}  and aj.p_status = 2
+        <if test="map.name !=null and map.name !=''">
+            and aj.name like concat('%',#{map.name},'%')
+        </if>
+        <if test="map.lawerid !=null and map.lawerid !=''">
+            and aj.cid = #{map.lawerid}
+        </if>
+
+        <if test="map.userId !=null and map.userId !=''">
+            and aj.lawerid = #{map.userId}
+        </if>
+        <if test="map.tricktime !=null and map.tricktime !=''">
+            AND unix_timestamp(aj.rtime) between unix_timestamp(#{map.tricktime}) and
+            unix_timestamp(#{map.tricktime2})
+        </if>
+    </select>
 
 
 </mapper>

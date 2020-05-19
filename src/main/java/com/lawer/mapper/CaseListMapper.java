@@ -25,4 +25,24 @@ public interface CaseListMapper {
     public List<Map<String,Object>> getGroupCase(@Param("map") Map<String,Object> map);
     //获取小组的案件数
     public int getGroupCaseCount(@Param("map") Map<String,Object> map);
+
+    /**
+     * 通过案件id删除案件
+     * @param id
+     * @return
+     */
+    void deleteCase(String id);
+
+    /**
+     * 通过案件id查询案件信息
+     * @param id
+     * @return
+     */
+    Map<String,Object> SelectCaseById(String id);
+
+    //获取未分配案件信息
+    public List<Map<String,Object>> getUnallocation(@Param("map") Map<String,Object> map);
+
+    //获取未分配案件数量
+    public int getUnallocationCount(@Param("map") Map<String,Object> map);
 }

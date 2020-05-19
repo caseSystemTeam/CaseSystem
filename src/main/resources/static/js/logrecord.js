@@ -80,6 +80,13 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                         return "<div class='layui-elip cursor-p' title='" + (d.operateresult != undefined ? d.operateresult : "") + "'>" + (d.operateresult != undefined ? d.operateresult : "") + "</div>";
                     }
                 },{
+                    field: 'descript',
+                    title: '描述信息',
+                    templet: function (d) {
+                        return "<div class='layui-elip cursor-p' title='" + (d.descript != undefined ? d.descript : "无") + "'>" + (d.descript != undefined ? d.descript : "无") + "</div>";
+                    }
+
+                },{
                     field: 'create_time',
                     title: '创建时间',
 
@@ -181,10 +188,13 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                         success:function(data){
                             if(data.status==200){
                                 layer.msg("删除成功");
+                                setTimeout(function() {
+                                    window.location.reload();
+                                },1000);
                             }else{
                                 layer.msg("删除失败");
                             }
-                            form.render(); //更新全部
+
                         }
                     })
                     layer.close(index);

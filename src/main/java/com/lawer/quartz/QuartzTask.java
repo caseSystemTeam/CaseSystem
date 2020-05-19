@@ -28,23 +28,22 @@ public class QuartzTask {
 
         List<Map<String,Object>> list= userService.getAllBusiness();
         Map<String,Object> cmap = new HashMap<>();
-
         for(Map<String,Object> map:list){
             List<Map<String,Object>> lawerList = userService.getAllLawer((String) map.get("Id"));
             cmap.put("busId", map.get("Id"));
             for(Map<String,Object> lmap:lawerList){
                int scount=0;
                int ucount=0;
-                cmap.put("jstatus",0);
+                cmap.put("p_status",0);
                 cmap.put("lawerid",lmap.get("Id"));
                 scount= caseListService.getCaseCount(cmap);
-                cmap.put("jstatus",1);
+                cmap.put("p_status",1);
                 ucount= caseListService.getCaseCount(cmap);
                 if(scount!=(int)lmap.get("solve")||ucount!=(int)lmap.get("unsolve")){
                     User user = new User();
                     user.setId((String) lmap.get("Id"));
-                    user.setSolve((int)lmap.get("solve"));
-                    user.setUnsolve((int)lmap.get("unsolve"));
+                    user.setSolve(scount);
+                    user.setUnsolve(ucount);
                     userService.upinfor(user);
 
                 }

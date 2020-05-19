@@ -208,4 +208,9 @@ public class UserServiceImpl implements UserService {
 		return mapper.selectRoleByUserId(id);
 	}
 
+	@Override
+	public User getByusername(String username) {
+		return mapper.getByusername(username);
+	}
+
 }

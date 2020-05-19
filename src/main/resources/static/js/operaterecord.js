@@ -188,10 +188,13 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                         success:function(data){
                             if(data.status==200){
                                 layer.msg("删除成功");
+                                setTimeout(function() {
+                                    window.location.reload();
+                                },1000);
                             }else{
                                 layer.msg("删除失败");
                             }
-                            form.render(); //更新全部
+
                         }
                     })
                     layer.close(index);
