@@ -526,7 +526,6 @@ var vm = new Vue({
                     let  message = JSON.parse(result);
                     if("office"===message.data.type||"common"===message.data.type){
                         window.open(message.data.filePathHtml);
-                        //window.open("/upload/11.html")
                     }else{
                         temp.$message({
                             type: 'warning',

@@ -99,6 +99,7 @@
     <select id="getCaseMaxVersion" resultType="com.lawer.pojo.Indictment" parameterType="String">
 		select * from indictment where
 		    version=any(select max(version) from indictment where caseId=#{caseId})
+		    and caseId=#{caseId}
 	</select>
 
     <insert id="addAnjianAssist" parameterType="String">
