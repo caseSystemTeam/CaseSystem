@@ -189,6 +189,7 @@ public class CaseListController {
     public ResultGson deleteCase(String id, HttpSession session, HttpServletRequest request){
         User user =(User)session.getAttribute("us");
         Map<String,Object> map = caseListService.SelectCaseById(id);
+
         try{
             caseListService.deleteCase(id);
         }catch (Exception e){
@@ -243,17 +244,35 @@ public class CaseListController {
         return  JSON.toJSONString(result);
     }
 
-    //删除案件
+    //分配案件
     @RequestMapping("updateCase")
     @ResponseBody
     public ResultGson updateCase(@RequestBody String json, HttpSession session, HttpServletRequest request) {
        Map<String,Object> map =JSON.parseObject(json);
-
+        User user =(User)session.getAttribute("us");
+        Map<String,Object> hmap = caseListService.SelectCaseById((String) map.get("Id"));
        try {
            caseListService.updateCase(map);
        }catch (Exception e){
+           if(map.get("lawerid")!=null){
+               User us = userService.userById((String) map.get("lawerid"));
+               Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"分配案件","失败", "将案件\""+hmap.get("name")+"\"分配给\""+us.getName()+"\"失败",user.getBusId());
+               logService.addLog(log);
+           }else{
+               Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"修改案件","失败", "修改案件\""+hmap.get("name")+"失败",user.getBusId());
+               logService.addLog(log);
+           }
+
            return ResultGson.error("分配失败");
        }
+        if(map.get("lawerid")!=null){
+            User us = userService.userById((String) map.get("lawerid"));
+            Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"分配案件","成功", "将案件\""+hmap.get("name")+"\"分配给\""+us.getName()+"\"成功",user.getBusId());
+            logService.addLog(log);
+        }else{
+            Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"修改案件","成功", "修改案件\""+map.get("name")+"成功",user.getBusId());
+            logService.addLog(log);
+        }
        return ResultGson.ok("分配成功");
 
     }

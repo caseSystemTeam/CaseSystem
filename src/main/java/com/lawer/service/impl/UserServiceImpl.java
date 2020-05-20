@@ -126,8 +126,9 @@ public class UserServiceImpl implements UserService {
 	public Map<String, Object> getUserInfo(User user) {
 		Map<String,Object> bmap = businessMapper.getBusinessById(user.getBusId());
 		Map<String,Object> map =  new HashMap<>();
+		User us = userById(user.getId());
 		user.setPassword("");
-		map.put("user",user);
+		map.put("user",us);
 		map.put("business",bmap);
 		return map;
 	}

@@ -94,7 +94,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                 }, {
                     field: 'cus_telphone',
                     title: '联系电话',
-
+                    width: '12%',
                     templet: function (d) {
                         return "<div class='layui-elip cursor-p' title='" + (d.cus_telphone != undefined ? d.cus_telphone : "") + "'>" + (d.cus_telphone != undefined ? d.cus_telphone : "") + "</div>";
                     }
@@ -134,8 +134,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                 ]
             ],
             done: function (res, curr) {
-
-
+                
                 $(".layui-table-fixed-r .layui-table-body").css({
                     'overflow': 'hidden'
                 })
