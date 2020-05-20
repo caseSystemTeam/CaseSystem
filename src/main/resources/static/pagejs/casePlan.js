@@ -621,6 +621,7 @@ var vm = new Vue({
                 }
             });
         },
+        //诉状书写跳转下个步骤方法
         szEnd:function(caseId) {
             caseId = this.caseId;
             let temp = this;
@@ -634,12 +635,19 @@ var vm = new Vue({
                 },
                 success: function(result){ // 当请求成功时运行的函数
                     //状态修改完之后需要做的逻辑
-                    temp.cartView();
-                    temp.$message({
-                        type: 'success',
-                        message: '已切换到下一个状态'
-                    });
-
+                    let data = JSON.parse(result);
+                    if(data.status==200){
+                        temp.cartView();
+                        temp.$message({
+                            type: 'success',
+                            message: '已切换到下一个状态'
+                        });
+                    }else{
+                        temp.$message({
+                            type: 'warning',
+                            message: '组员意见尚未统一！！'
+                        });
+                    }
                 },
                 error:function(result){ //失败的函数
                     console.log("执行出错");
@@ -739,7 +747,6 @@ var vm = new Vue({
             }
             var jsonp = JSON.stringify(obj);
 
-            console.log("json数据"+jsonp);
             $.ajax({
                 type:'POST', // 规定请求的类型（GET 或 POST）
                 url:'/case/saveInfo', // 请求的url地址

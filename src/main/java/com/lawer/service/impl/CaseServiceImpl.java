@@ -196,75 +196,104 @@ public class CaseServiceImpl implements CaseService {
 		datamap.put("ajmoney",map1.get("money"));
 		datamap.put("ajcusname",map1.get("cusname"));
 		datamap.put("ajcustelphone",map1.get("cus_telphone"));
+
 		//将html内容提取为纯文本
 		String tempContent = (String) map1.get("content");
-		tempContent = tempContent.replaceAll("\\<.*?\\>","");
-		tempContent = StringEscapeUtils.unescapeHtml4(tempContent);
+		if(tempContent!=null&&tempContent!=""){
+			tempContent = tempContent.replaceAll("\\<.*?\\>","");
+			tempContent = StringEscapeUtils.unescapeHtml4(tempContent);
+		}
 		datamap.put("ajcontent",tempContent);
+
 		String tempResultContent = (String)map1.get("resultContent");
-		tempResultContent = tempResultContent.replaceAll("\\<.*?\\>","");
-		tempResultContent = StringEscapeUtils.unescapeHtml4(tempResultContent);
+		if(tempResultContent!=null&&tempResultContent!=""){
+			tempResultContent = tempResultContent.replaceAll("\\<.*?\\>","");
+			tempResultContent = StringEscapeUtils.unescapeHtml4(tempResultContent);
+		}
 		datamap.put("ajresultContent",tempResultContent);
 
 
 		//小组成员的信息
 		Map<String,Object> map2 = mapper.getCaseGroup(caseId);
-		datamap.put("user1",name);
-		String name2 = userMapper.nameById((String)map2.get("member2"));
-		String name3 = userMapper.nameById((String)map2.get("member3"));
-		String name4 = userMapper.nameById((String)map2.get("member4"));
-		datamap.put("user2",name2);
-		datamap.put("user3",name3);
-		datamap.put("user4",name4);
+		String name2 = null;
+		String name3 = null;
+		String name4 = null;
+		if(map2!=null){
+			datamap.put("user1",name);
+			if(map2.containsKey("member2")){
+				name2 = userMapper.nameById((String)map2.get("member2"));
+				if(name2!=null&&name2!=""){
+					datamap.put("user2",name2);
+				}
+			}
+			if(map2.containsKey("member3")){
+				name3 = userMapper.nameById((String)map2.get("member3"));
+				if(name3!=null&&name3!=""){
+					datamap.put("user3",name3);
+				}
+			}
+			if(map2.containsKey("member4")){
+				name4 = userMapper.nameById((String)map2.get("member4"));
+				if(name4!=null&&name4!=""){
+					datamap.put("user4",name4);
+				}
+			}
+		}
 
 		//案件版本信息
 		List<Indictment> list = mapper.getCaseVersionInfo(caseId);
-		List<Map<String,Object>> IndiList = new ArrayList<>();
-		for(int i=0;i<list.size();i++){
-			Indictment ind = list.get(i);
-			Map<String,Object> tempmap = new HashMap<>();
-			tempmap.put("version",ind.getVersion());
-			if(map2.get("member2").equals(ind.getHelperId())){
-				tempmap.put("helperid",name2);
-			}else if(map2.get("member3").equals(ind.getHelperId())){
-				tempmap.put("helperid",name3);
-			}else if(map2.get("member4").equals(ind.getHelperId())){
-				tempmap.put("helperid",name4);
+		if(list!=null){
+			List<Map<String,Object>> IndiList = new ArrayList<>();
+			for(int i=0;i<list.size();i++){
+				Indictment ind = list.get(i);
+				Map<String,Object> tempmap = new HashMap<>();
+				tempmap.put("version",ind.getVersion());
+				if(map2.get("member2").equals(ind.getHelperId())){
+					tempmap.put("helperid",name2);
+				}else if(map2.get("member3").equals(ind.getHelperId())){
+					tempmap.put("helperid",name3);
+				}else if(map2.get("member4").equals(ind.getHelperId())){
+					tempmap.put("helperid",name4);
+				}
+				if(ind.getState()==0){
+					tempmap.put("state","不同意");
+				}else if(ind.getState()==1){
+					tempmap.put("state","同意");
+				} else if(ind.getState()==3){
+					tempmap.put("state","未处理");
+				}
+				String message = ind.getMessage();
+				if(message==null||message.equals("")){
+					message = "  ";
+				}
+				tempmap.put("message",message);
+				String idear = ind.getIdear();
+				if(idear==null||idear.equals("")){
+					idear = "  ";
+				}
+				tempmap.put("idear",idear);
+				IndiList.add(tempmap);
 			}
-			if(ind.getState()==0){
-				tempmap.put("state","不同意");
-			}else if(ind.getState()==1){
-				tempmap.put("state","同意");
-			} else if(ind.getState()==3){
-				tempmap.put("state","未处理");
-			}
-			String message = ind.getMessage();
-			if(message==null||message.equals("")){
-				message = "  ";
-			}
-			tempmap.put("message",message);
-			String idear = ind.getIdear();
-			if(idear==null||idear.equals("")){
-				idear = "  ";
-			}
-			tempmap.put("idear",idear);
-			IndiList.add(tempmap);
+			datamap.put("indictment",IndiList);
 		}
-		datamap.put("indictment",IndiList);
+
 
 		//立案审理信息
 		Map<String,Object> map3 = mapper.getCaseInfoAssist(caseId);
-		datamap.put("lianinfo",map3.get("lian_info"));
-		datamap.put("lianfaguan",map3.get("lian_faguan"));
-		datamap.put("liannumber",map3.get("lian_number"));
-		datamap.put("liandidian",map3.get("lian_didian"));
-		datamap.put("liantimestart",map3.get("lian_timestart"));
-		datamap.put("liantimeend",map3.get("lian_timeend"));
-		datamap.put("ktinfo",map3.get("kt_info"));
-		datamap.put("kttimestart",map3.get("kt_timestart"));
-		datamap.put("kttimeend",map3.get("kt_timeend"));
-		datamap.put("tsinfo",map3.get("ts_info"));
-		datamap.put("tstime",map3.get("ts_time"));
+		if(map3!=null){
+			datamap.put("lianinfo",map3.get("lian_info"));
+			datamap.put("lianfaguan",map3.get("lian_faguan"));
+			datamap.put("liannumber",map3.get("lian_number"));
+			datamap.put("liandidian",map3.get("lian_didian"));
+			datamap.put("liantimestart",map3.get("lian_timestart"));
+			datamap.put("liantimeend",map3.get("lian_timeend"));
+			datamap.put("ktinfo",map3.get("kt_info"));
+			datamap.put("kttimestart",map3.get("kt_timestart"));
+			datamap.put("kttimeend",map3.get("kt_timeend"));
+			datamap.put("tsinfo",map3.get("ts_info"));
+			datamap.put("tstime",map3.get("ts_time"));
+		}
+
 
 		String filepath = "D:\\upload\\"+map1.get("name")+".doc";
 		emw.createWord(datamap,"temp.ftl",filepath,context);

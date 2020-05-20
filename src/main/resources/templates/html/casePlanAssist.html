@@ -264,7 +264,9 @@
                                    <el-table-column
                                            label="修改意见">
                                        <template slot-scope="scope">
-                                           <el-button @click="watchIdear(scope.row)" type="text">查 看</el-button>
+
+                                           <el-button @click="watchIdear(scope.row)" type="primary" icon="el-icon-edit" v-if="userid==scope.row.helperId">编 辑</el-button>
+                                           <el-button @click="watchIdear(scope.row)" type="info" icon="el-icon-edit" v-if="userid!=scope.row.helperId">查 看</el-button>
                                            <!--以下是查看修改信息的对话框-->
                                            <!-- dialog会隔绝scope的数据，导致获取不到正确的row，所以不能直接让input绑定scope.row.idear-->
                                            <el-dialog title="修改意见内容：" :visible.sync="dialogCaseVersionVisible">
@@ -287,7 +289,7 @@
                                                        </el-input>
                                                    </el-form-item>
 
-                                                   <el-form-item label="是否同意">
+                                                   <el-form-item label="是否同意" v-if="userid==rowdata.helperId">
                                                        <el-radio-group v-model="attRadio">
                                                            <el-radio :label="1">同意</el-radio>
                                                            <el-radio :label="0">拒绝</el-radio>
@@ -298,7 +300,7 @@
 
                                                <div slot="footer" class="dialog-footer">
                                                    <el-button @click="dialogCaseVersionVisible = false">关 闭</el-button>
-                                                   <el-button @click="backMessage()">回 复</el-button>
+                                                   <el-button @click="backMessage()" v-if="userid==rowdata.helperId">回 复</el-button>
                                                </div>
                                            </el-dialog>
                                        </template>
