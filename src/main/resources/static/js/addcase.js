@@ -1,20 +1,13 @@
-layui.use(['jquery','layer','form','layedit'],
+layui.use(['jquery','layer','form','layedit','upload'],
     function () {
         var layer =layui.layer,$ =layui.jquery,form=layui.form,layedit=layui.layedit;
-        //插入图片接口配置，要求接口返回的格式JSON如下
-        /*{
-          "code": 0 //0表示成功，其它失败
-          ,"msg": "" //提示信息 //一般上传失败后返回
-          ,"data": {
-            "src": "图片路径"
-            ,"title": "图片名称" //可选
-          }
-        }
+
+
         layedit.set({
             uploadImage: {
-                url: '' //接口url
+                url: path+'/comm/ImgUpload' //接口url
             }
-        });*/
+        });
         var index = layedit.build('editor',{
             tool: [
                 'strong' //加粗
@@ -26,10 +19,10 @@ layui.use(['jquery','layer','form','layedit'],
                 , 'center' //居中对齐
                 , 'right' //右对齐
                 , '|' //分割线
-            /*    , 'link' //超链接
+                , 'link' //超链接
                 , 'unlink' //清除链接
                 , 'face' //表情
-                , 'image' //插入图片*/
+                , 'image' //插入图片
 
             ]
         });
@@ -52,8 +45,8 @@ layui.use(['jquery','layer','form','layedit'],
         });
         var s=1;
         //手机号是否合法
-        $('#pnumber').blur(function() {
-            if(!isMobileNumber($('#pnumber').val())){
+        $('input[name=cus_telphone]').blur(function() {
+            if(!isMobileNumber($('input[name=cus_telphone]').val())){
                 $('#rpwrp').removeAttr('hidden');
                 $('#rprip').attr('hidden','hidden');
 
@@ -90,9 +83,14 @@ layui.use(['jquery','layer','form','layedit'],
         form.on('submit(submitBut)',function (data) {
 
             data.field.content = layedit.getContent(index);
+            var text=layedit.getText(index);
+            if(text==null ||text==""){
+                layer.msg("案件描述不能为空");
+                return false;
+            }
            if(s==0){
                layer.msg("请输入正确的手机号");
-               return;
+               return false;
            }
             $.ajax({
                 url:path+"/case/addCase",

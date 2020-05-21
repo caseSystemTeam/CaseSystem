@@ -1,11 +1,13 @@
 package com.lawer.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.lawer.common.FileConvert;
 import com.lawer.common.PoiExcelToHtmlUtil;
 import com.lawer.common.ResultGson;
 import com.lawer.pojo.CaseFile;
 import com.lawer.service.CaseService;
 import com.lawer.service.CommonService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,9 +20,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("comm")
@@ -49,7 +54,34 @@ public class CommonController {
         }
         return result;
     }
+    //图片上传
+    @RequestMapping("/ImgUpload")
+    @ResponseBody
+    public String SingleUpload(@RequestParam("file") MultipartFile uploadfile,HttpServletRequest request){
 
+        FileUpAndDown fileCon = new FileUpAndDown();
+        List<MultipartFile> list = new ArrayList<>();
+        list.add(uploadfile);
+        String targetPath = "D:\\Img\\";
+        CaseFile lf = fileCon.fileUpLoad("", list, request,targetPath);
+        String result = null;
+        if(lf!=null) {
+            String fileUrl =  lf.getUrl();
+            Map<String,Object> map = new HashMap<String,Object>();
+            Map<String,Object> map2 = new HashMap<String,Object>();
+            map.put("code",0);//0表示成功，1失败
+            map.put("msg","上传成功");//提示消息
+            map.put("data",map2);
+           String src= lf.getUrl().substring(7);
+            map2.put("src","/image/"+src);//图片url
+            map2.put("title",lf.getFilename());//图片名称，这个会显示在输入框里
+            result = new JSONObject(map).toString();
+
+        }else{
+            result = ResultGson.error("文件上传失败，请检查文件格式是否符合要求。").toJson();
+        }
+        return result;
+    }
 
     //文件下载
     @RequestMapping("/downloadFile")

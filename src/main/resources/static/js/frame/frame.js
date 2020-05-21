@@ -19,10 +19,10 @@ layui.use( ['jquery', 'layer'],
                             }
                         }
                         if(t==0){
-                            html ="<li ><a class=\"menuFA\" href=\"javascript:void(0)\" onclick=\"menuCAClick('"+item.url+"',this)\"><i class=\"iconfont icon-zhishi left\"></i>"+item.name+"</a><dl>" ;
+                            html ="<li ><a class=\"menuFA\" href=\"javascript:void(0)\" onclick=\"menuCAClick('"+item.url+"',this)\"><i class=\"  left\"></i>"+item.name+"</a><dl>" ;
                         }
                         else{
-                            html="<li><a class=\"menuFA\" href=\"javascript:void(0)\"><i class=\"iconfont icon-liuliangyunpingtaitubiao03 left\"></i>"+item.name+"<i class=\"iconfont icon-dajiantouyou right\"></i></a><dl>"+html;
+                            html="<li><a class=\"menuFA\" href=\"javascript:void(0)\"><i class=\"  left\"></i>"+item.name+"<i class=\"iconfont icon-dajiantouyou right\"></i></a><dl>"+html;
                         }
                         html=html+ "</dl></li>"
                         $("#ulmenu").append(html);

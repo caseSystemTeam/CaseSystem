@@ -201,6 +201,17 @@ public class CaseListController {
         Log log =Log.ok(user.getUsername(), IpAdress.getIp(request),1,"删除案件","成功", "删除案件\""+map.get("name")+"\"",user.getBusId());
         logService.addLog(log);
         return ResultGson.ok("删除成功");
+    }
+
+    //查询案件
+    @RequestMapping("selectCase")
+    @ResponseBody
+    public ResultGson selectCase(HttpSession session, HttpServletRequest request){
+        User user =(User)session.getAttribute("us");
+        String id =(String) session.getAttribute("caseId");
+        Map<String,Object> map = caseListService.SelectCaseById(id);
+
+        return ResultGson.ok(map);
 
 
     }

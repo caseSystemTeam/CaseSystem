@@ -22,10 +22,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-/**
- * @author superzheng
- * @date 2018-07-18
- */
+
 public class KickoutSessionControlFilter extends AccessControlFilter {
 
     /**

@@ -124,4 +124,11 @@ public class PageController {
         return "html/unallocation";
     }
 
+    //跳转到未分配案件页面
+    @RequestMapping("updateCase")
+    public String toUpdateCase(String id,HttpSession session){
+        session.setAttribute("caseId",id);
+        return "html/updateCase";
+    }
+
 }

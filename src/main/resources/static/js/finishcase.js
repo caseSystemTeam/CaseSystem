@@ -79,6 +79,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                 },{
                     field: 'lawername',
                     title: '责任律师',
+                    width:'12%'
                 },{
                     field: 'p_status',
                     title: '案件状态',
@@ -169,7 +170,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
         var data = obj.data; //获得当前行数据
         var tr = obj.tr; //获得当前行 tr 的DOM对象
         if(obj.event=='look'){
-            layer.open({
+          /*  layer.open({
                 type: 1,
                 title: '编辑案件',   //标题
                 area: ['700px', '500px'],   //宽高
@@ -230,7 +231,8 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                 },
 
             });
-            form.render();
+            form.render();*/
+            window.location.href = path + "/page/updateCase?id=" + data.Id;
         }
         if (obj.event === 'edit') {
             //跳转案件详情页面，id为当前案件id

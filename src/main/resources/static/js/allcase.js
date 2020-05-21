@@ -215,7 +215,6 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
     form.on('select(transfer)', function (data) {
         var checkStatus = table.checkStatus('saleTable'),
             checkData = checkStatus.data;
-
         var personValue = $(data.elem).find("option:selected").text();
         if (data.value != "" || data.value != null) {
             layer.open({
@@ -274,7 +273,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
         var data = obj.data; //获得当前行数据
         var tr = obj.tr; //获得当前行 tr 的DOM对象
         if(obj.event=='look'){
-            layer.open({
+          /*  layer.open({
                 type: 1,
                 title: '编辑案件',   //标题
                 area: ['700px', '500px'],   //宽高
@@ -328,14 +327,15 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                             }
                         });
                     }else{
-                        layer.msg("分配失败");
+                        layer.msg("修改失败");
                     }
 
                     layer.close(index);
                 },
 
             });
-            form.render();
+            form.render();*/
+            window.location.href = path + "/page/updateCase?id=" + data.Id;
         }
         if (obj.event === 'edit') {
             //跳转案件详情页面，id为当前案件id

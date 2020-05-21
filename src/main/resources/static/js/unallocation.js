@@ -318,7 +318,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
             $('.cusname').val(data.cusname);
             $('.cus_telphone').val(data.cus_telphone);
             form.render();*/
-            layer.open({
+         /*   layer.open({
                 type: 1,
                 title: '编辑案件',   //标题
                 area: ['700px', '500px'],   //宽高
@@ -383,7 +383,8 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
 
 
 
-            form.render();
+            form.render();*/
+            window.location.href = path + "/page/updateCase?id=" + data.Id;
         }
         if (obj.event === 'fenpei') {
             layer.open({
