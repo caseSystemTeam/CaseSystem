@@ -778,17 +778,8 @@
                         <w:rFonts w:ascii="宋体" w:fareast="宋体" w:h-ansi="宋体"/>
                         <wx:font wx:val="宋体"/>
                     </w:rPr>
-                    <w:t></w:t>
-                </w:r>
-                <w:proofErr w:type="spellStart"/>
-                <w:r wsp:rsidRPr="00C144D4">
-                    <w:rPr>
-                        <w:rFonts w:ascii="宋体" w:fareast="宋体" w:h-ansi="宋体"/>
-                        <wx:font wx:val="宋体"/>
-                    </w:rPr>
                     <w:t>${ajlawerid}</w:t>
                 </w:r>
-                <w:proofErr w:type="spellEnd"/>
             </w:p>
             <w:p wsp:rsidR="005975C3" wsp:rsidRPr="00C144D4" wsp:rsidRDefault="005975C3" wsp:rsidP="005975C3">
                 <w:pPr>
@@ -1236,8 +1227,8 @@
                                     <wx:font wx:val="宋体"/>
                                     <w:b/>
                                     <w:b-cs/>
-                                    <w:sz w:val="28"/>
-                                    <w:sz-cs w:val="28"/>
+                                    <w:sz w:val="18"/>
+                                    <w:sz-cs w:val="18"/>
                                 </w:rPr>
                             </w:pPr>
                             <w:r wsp:rsidRPr="006A56CD">
@@ -1246,8 +1237,8 @@
                                     <wx:font wx:val="宋体"/>
                                     <w:b/>
                                     <w:b-cs/>
-                                    <w:sz w:val="28"/>
-                                    <w:sz-cs w:val="28"/>
+                                    <w:sz w:val="18"/>
+                                    <w:sz-cs w:val="18"/>
                                 </w:rPr>
                                 <w:t>${indi.version}</w:t>
                             </w:r>
@@ -1269,8 +1260,8 @@
                                     <wx:font wx:val="宋体"/>
                                     <w:b/>
                                     <w:b-cs/>
-                                    <w:sz w:val="28"/>
-                                    <w:sz-cs w:val="28"/>
+                                    <w:sz w:val="18"/>
+                                    <w:sz-cs w:val="18"/>
                                 </w:rPr>
                             </w:pPr>
 
@@ -1280,8 +1271,8 @@
                                     <wx:font wx:val="宋体"/>
                                     <w:b/>
                                     <w:b-cs/>
-                                    <w:sz w:val="28"/>
-                                    <w:sz-cs w:val="28"/>
+                                    <w:sz w:val="18"/>
+                                    <w:sz-cs w:val="18"/>
                                 </w:rPr>
                                 <w:t>${indi.helperid}</w:t>
                             </w:r>
@@ -1303,8 +1294,8 @@
                                     <wx:font wx:val="宋体"/>
                                     <w:b/>
                                     <w:b-cs/>
-                                    <w:sz w:val="28"/>
-                                    <w:sz-cs w:val="28"/>
+                                    <w:sz w:val="18"/>
+                                    <w:sz-cs w:val="18"/>
                                 </w:rPr>
                             </w:pPr>
                             <w:r wsp:rsidRPr="006A56CD">
@@ -1313,8 +1304,8 @@
                                     <wx:font wx:val="宋体"/>
                                     <w:b/>
                                     <w:b-cs/>
-                                    <w:sz w:val="28"/>
-                                    <w:sz-cs w:val="28"/>
+                                    <w:sz w:val="18"/>
+                                    <w:sz-cs w:val="18"/>
                                 </w:rPr>
                                 <w:t>${indi.state}</w:t>
                             </w:r>

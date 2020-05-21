@@ -63,8 +63,16 @@ public class CaseController {
     @ResponseBody
     public ResultGson nextCard(@RequestParam("caseId") String caseId,@RequestParam("jstatus") int jstatus){
         if(jstatus==3){
-            caseService.updateCaseJstatus(caseId,jstatus);
-            caseService.addAnjianAssist(caseId);
+            List<Indictment> list = caseService.getCaseMaxVersion(caseId);
+            if(list!=null){
+                if(list.get(0).getState()==1&&list.get(1).getState()==1&&list.get(2).getState()==1){
+                    caseService.updateCaseJstatus(caseId,jstatus);
+                    caseService.addAnjianAssist(caseId);
+                }else{
+                    return ResultGson.error("组员意见尚未统一，无法执行！");
+                }
+            }
+
         }else{
             caseService.updateCaseJstatus(caseId,jstatus);
         }
