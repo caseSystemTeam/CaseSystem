@@ -9,7 +9,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
     //监听提交
     form.on('submit(submit)', function (data) {
 
-        data.field.style=0;
+        data.field.style=2;
         table.reload('saleTable', {
             page: {
                 curr: 1 //重新从第 1 页开始
@@ -35,7 +35,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
 
 
     tableload = function () {
-        var datas={style:0}
+        var datas={style:2}
         table.render({
             elem: '#saleTable',
             id: 'saleTable',
@@ -83,7 +83,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                     field: 'descript',
                     title: '描述信息',
                     templet: function (d) {
-                        return "<div class='layui-elip cursor-p' title='" + (d.descript != '' ? d.descript : "无") + "'>" + (d.descript != '' ? d.descript : "无") + "</div>";
+                        return "<div class='layui-elip cursor-p' title='" + (d.descript != undefined ? d.descript : "无") + "'>" + (d.descript != undefined ? d.descript : "无") + "</div>";
                     }
 
                 },{
@@ -207,6 +207,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
 
                 }
             })
+
         }else if(obj.event=='look'){
             layer.open({
                 type: 1,
@@ -230,6 +231,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
         }
 
     });
+
 
 
 

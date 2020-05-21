@@ -309,7 +309,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
             layer.open({
                 type: 1,
                 title: '用户信息',   //标题
-                area: ['500px', '400px'],   //宽高
+                area: ['300px', '500px'],   //宽高
                 content:$("#lookpeople").html(),
                 success:function(layero,index){
                     $("span[name=username]").text(data.username);

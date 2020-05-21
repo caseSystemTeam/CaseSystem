@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+    <meta name="renderer" content="webkit">
+    <!--国产浏览器高速模式-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>律师办案协同系统</title>
+
+    <!-- 公共样式 开始 -->
+    <link rel="stylesheet" type="text/css" href="/css/model/base.css">
+    <link rel="stylesheet" type="text/css" href="/css/model/iconfont.css">
+    <script type="text/javascript" src="/framework/jquery-1.11.3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/layui/css/layui.css">
+    <script type="text/javascript" src="/layui/layui.js"></script>
+    <!-- 滚动条插件 -->
+    <link rel="stylesheet" type="text/css" href="/css/model/jquery.mCustomScrollbar.css">
+    <script src="/framework/jquery-ui-1.10.4.min.js"></script>
+    <script src="/framework/jquery.mousewheel.min.js"></script>
+    <script src="/framework/jquery.mCustomScrollbar.min.js"></script>
+    <script src="/framework/cframe.js"></script><!-- 仅供所有子页面使用 -->
+    <!-- 公共样式 结束 -->
+    <script src="/js/home.js"></script>
+    <script src="/js/lookNotice.js"></script>
+    <style>
+        .title{
+            text-align: center;
+            font-style: normal;
+            font-variant-ligatures: normal;
+            font-variant-caps: normal;
+            font-variant-numeric: normal;
+            font-variant-east-asian: normal;
+            font-weight: normal;
+            font-stretch: normal;
+            font-size: 27px;
+            line-height: 38px;
+            font-family: 微软雅黑, "Microsoft Yahei", 黑体;
+        }
+        .butxt{
+            margin-top: 10px;
+            margin-bottom: 5px;
+            /* border-bottom: 1px solid gray; */
+            /* float: right; */
+            font-size: 14px;
+            font-family: "微软雅黑",microsoft yahei;
+            line-height: 21px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="cBody">
+        <div style="    border-bottom: 1px solid #aaa;">
+            <div class="title"><span name="title"  id="title"></span></div>
+            <div class="butxt"><span style="margin-left: 800px;">发布人：</span><span  id="name" ></span><span style="margin-left: 20px;">阅读量：</span><span id="scount" ></span><span style="margin-left: 20px;">发布时间：</span><span id="create_time" ></span></div>
+        </div>
+        <div>
+            <div id="content" style="font-size: 18px; margin-top: 15px;margin-bottom: 20px;"></div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>

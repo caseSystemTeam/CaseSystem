@@ -255,7 +255,7 @@ public class CaseListController {
         return  JSON.toJSONString(result);
     }
 
-    //分配案件
+    //修改案件
     @RequestMapping("updateCase")
     @ResponseBody
     public ResultGson updateCase(@RequestBody String json, HttpSession session, HttpServletRequest request) {

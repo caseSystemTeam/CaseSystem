@@ -130,8 +130,7 @@ public class Log {
         this.operatename = operatename;
         this.operateresult = operatename+result;
         this.busid =busid;
-        if(style !=0)
-           this.descript = name;
+        this.descript = name;
         return this;
 
     }

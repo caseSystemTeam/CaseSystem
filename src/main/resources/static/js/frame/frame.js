@@ -1,6 +1,6 @@
-layui.use( ['jquery', 'layer'],
+layui.use( ['jquery', 'layer','form'],
     function () {
-       var layer =layui.layer,$ =layui.jquery;
+       var layer =layui.layer,$ =layui.jquery,form=layui.form;
        /*var lawername = getCookie("lawername")
        $("#username").html("<i class='iconfont icon-yonghu1'></i>"+lawername);*/
         $.ajax({
@@ -31,6 +31,43 @@ layui.use( ['jquery', 'layer'],
 
             }
         });
+        var time = window.setInterval(function(){
+            $.ajax({
+                url:path+"/notice/selectMsg",
+                type:'post',
+                dataType:'json',
+                success:function(data){
+                    if(data.status == 200){
+                        var data = data.data;
+                        layer.open({
+                            type: 1,
+                            title: '公告提醒',
+                            offset: 'auto',
+                            btnAlign: 'c',
+                            area: ['420px', '220px'],
+                            offset: 'auto',
+                            content: "<div style='text-align:center;padding:42px 0 26px 0;'>" +data.descript + "</div><hr class='layui-bg-gray' style='margin:29px 0 0'>",
+                            btn: ['我知道了'],
+                            yes: function (index, layero) {
+
+                                layer.close(index);
+
+                            },
+                            success: function (index, layero) {
+                                $(':focus').blur();
+                            },
+                            no: function (index, layero) {
+
+                            }
+                        })
+                        form.render();
+                    }
+
+
+                }
+            })
+        },3000);
+
 
 
 

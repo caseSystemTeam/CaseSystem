@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lawer.mapper.NoticeMapper">
+  <insert id="addNotice" parameterType="map">
+      insert into notice(id,title,content,isTop,scount,create_userid,create_time,update_time,bus_id,isnew)
+      value(#{map.id},#{map.title},#{map.content},#{map.isTop},#{map.scount},#{map.create_userid},#{map.create_time},#{map.update_time},#{map.busid},#{map.isnew})
+  </insert>
+    <select id="selectNoticeById" parameterType="string" resultType="map">
+        select notice.* ,lu.name as name from notice left join laweruser lu on lu.Id = notice.create_userid where notice.id=#{id}
+    </select>
+    <delete id="deleteNotice" parameterType="string">
+      delete from notice where id=#{id}
+    </delete>
+
+    <update id="updateNotice" parameterType="map">
+        update notice
+        <set>
+            <if test="map.title!=null and map.title !=''">
+                title=#{map.title},
+            </if>
+            <if test="map.content!=null and map.content !=''">
+                content=#{map.content},
+            </if>
+            <if test="map.isTop!=null ">
+                isTop=#{map.isTop},
+            </if>
+            <if test="map.scount!=null ">
+                scount=#{map.scount},
+            </if>
+            <if test="map.create_userid !=null and map.create_userid !=''">
+                create_userid=#{map.create_userid},
+            </if>
+            <if test="map.create_time !=null and map.create_time !=''">
+                create_time=#{map.create_time},
+            </if>
+            <if test="map.update_time!=null and map.update_time !='' ">
+                update_time=#{map.update_time},
+            </if>
+
+            <if test="map.bus_id !=null  and map.bus_id !='' ">
+                bus_id=#{map.bus_id},
+            </if>
+            <if test="map.isnew!=null ">
+                isnew=#{map.isnew}
+            </if>
+        </set>
+        where id= #{map.id}
+    </update>
+    <select id="selectTopCount" parameterType="string" resultType="int">
+        select count(1) from notice where bus_id=#{busid} and isTop=1
+    </select>
+
+    <insert id="addUserNotice" >
+        insert into user_notice(id,lawer_id,notice_id,bus_id,isread)
+        value(#{map.id},#{map.lawerid},#{map.noticeid},#{map.busid},#{map.isread})
+    </insert>
+    <update id="updateUserNotice" >
+        update user_notice set
+            isread=#{map.isread}
+        where lawer_id=#{map.lawerid} and notice_id =#{map.noticeid}
+    </update>
+    <select id="getAllNotice"  resultType="Map">
+        select nt.*,lu.name as createname from notice nt left join laweruser lu on nt.create_userid =lu.id
+        <if test="map.isread !=null ">
+            join user_notice un on un.notice_id = nt.id and un.lawer_id = #{map.lawerid}
+        </if>
+        where nt.bus_id=#{map.busid}
+        <if test="map.title !=null and map.title !=''">
+            and nt.title like concat('%',#{map.title},'%')
+        </if>
+        <if test="map.isread !=null ">
+            and un.isread = #{map.isread}
+        </if>
+        <if test="map.isTop !=null ">
+            and nt.isTop = #{map.isTop}
+        </if>
+        <if test="map.tricktime !=null and map.tricktime !=''">
+            AND unix_timestamp(nt.create_time) between unix_timestamp(#{map.tricktime}) and
+            unix_timestamp(#{map.tricktime2})
+        </if>
+        order by nt.create_time desc
+        <if test="map.pageSize!=null and map.skipCount!=null ">
+            LIMIT #{map.skipCount},#{map.pageSize}
+        </if>
+    </select>
+
+    <select id="getAllNoticeCount"  resultType="int">
+        select count(1) from notice nt left join laweruser lu on nt.create_userid =lu.id
+        <if test="map.isread !=null ">
+            join user_notice un on un.notice_id = nt.id and un.lawer_id = #{map.lawerid}
+        </if>
+        where nt.bus_id=#{map.busid}
+        <if test="map.title !=null and map.title !=''">
+            and nt.title like concat('%',#{map.title},'%')
+        </if>
+        <if test="map.isread !=null ">
+            and un.isread = #{map.isread}
+        </if>
+
+        <if test="map.tricktime !=null and map.tricktime !=''">
+            AND unix_timestamp(nt.create_time) between unix_timestamp(#{map.tricktime}) and
+            unix_timestamp(#{map.tricktime2})
+        </if>
+    </select>
+    <insert id="addMsg" parameterType="map">
+        insert into msg (id,lawerid,descript,isread,create_time) values (#{map.id},#{map.lawerid},#{map.descript},#{map.isread},#{map.create_time});
+    </insert>
+
+    <select id="selectMsg" parameterType="map" resultType="map">
+        select * from msg where lawerid=#{map.lawerid} and isread =#{map.isread} order by create_time limit 1
+    </select>
+
+    <update id="updateMsg" parameterType="map">
+        update msg set isread = #{map.isread} where id =#{map.id}
+    </update>
+
+
+</mapper>

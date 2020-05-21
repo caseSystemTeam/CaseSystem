@@ -6,10 +6,11 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
         layer = layui.layer;
 
 
+
+
     //监听提交
     form.on('submit(submit)', function (data) {
-
-        data.field.style=0;
+        sdata = data.field;
         table.reload('saleTable', {
             page: {
                 curr: 1 //重新从第 1 页开始
@@ -35,77 +36,54 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
 
 
     tableload = function () {
-        var datas={style:0}
         table.render({
             elem: '#saleTable',
             id: 'saleTable',
             height: 465,
-            url: path + "/log/getLog",
+            url: path + "/notice/getAllNotice",
             method: 'post',
             page:true,
             limit: 10,
             text: {
                 none: '暂无相关数据' //默认：暂无相关数据。注：该属性为 layui 2.2.5 开始新增
             },
-            where:{
-                key: JSON.stringify(datas)
-            },
             cols: [
                 [ //标题栏
-
                     {
-                        field: 'username',
-                        title: '用户名',
+                        field: 'title',
+                        title: '标题',
 
-                        templet: function (d) {
-                            return "<div class='layui-elip cursor-p' title='" + d.username + "'>" + d.username + "</div>";
-                        }
                     }, {
-                    field: 'ip_address',
-                    title: 'ip地址',
+                    field: 'createname',
+                    title: '发布人',
+
+                }, {
+                    field: 'scount',
+                    title: '阅读人数',
 
 
                 }, {
-                    field: 'operatename',
-                    title: '操作名称',
-
+                    field: 'isTop',
+                    title: '是否置顶',
                     templet: function (d) {
-                        return "<div class='layui-elip cursor-p' title='" + d.operatename + "'>" + d.operatename + "</div>";
+                        return "<div class='layui-elip cursor-p' title='" + d.isTop + "'>" + (d.isTop ==1  ? "是" :"否") + "</div>";
                     }
-                }, {
-                    field: 'operateresult',
-                    title: '操作结果',
-
-                    templet: function (d) {
-                        return "<div class='layui-elip cursor-p' title='" + (d.operateresult != undefined ? d.operateresult : "") + "'>" + (d.operateresult != undefined ? d.operateresult : "") + "</div>";
-                    }
-                },{
-                    field: 'descript',
-                    title: '描述信息',
-                    templet: function (d) {
-                        return "<div class='layui-elip cursor-p' title='" + (d.descript != '' ? d.descript : "无") + "'>" + (d.descript != '' ? d.descript : "无") + "</div>";
-                    }
-
                 },{
                     field: 'create_time',
-                    title: '创建时间',
+                    title: '发布时间',
 
-                    templet: function (d) {
-                        return "<div class='layui-elip cursor-p' title='" + (d.create_time != undefined ? d.create_time : "") + "'>" + (d.create_time != undefined ? d.create_time : "") + "</div>";
-                    }
-
-                }, {
+                },{
                     filed:'caozuo',
                     fixed: 'right',
                     title: '操作',
                     align:'center',
+                    width:'15%',
                     unresize:true,
                     toolbar: '#bianjikuang'
                 }
                 ]
             ],
             done: function (res, curr) {
-
 
                 $(".layui-table-fixed-r .layui-table-body").css({
                     'overflow': 'hidden'
@@ -164,12 +142,41 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
         });
     }
     tableload();
+
+    //获取当前公司所有律师信息
+    $.ajax({
+        url: path + "/userCon/getAllLawer",
+        type: "POST",
+        success: function (data) {
+
+            $.each(data.data.data, function (i, item) {
+                if(item.role_id != 4){
+                    $("#transfer").append(
+                        '<option value="' + item.Id
+                        + '">' + item.name+'('+item.position+')'
+                        + '</option>');
+                }
+            });
+            form.render();
+        }
+    });
+
+
+
+
     //监听工具条的操作
     table.on('tool(saleTable)', function (obj) {
         var data = obj.data; //获得当前行数据
         var tr = obj.tr; //获得当前行 tr 的DOM对象
-
+        if(obj.event=='look'){
+            window.location.href = path + "/page/lookNotice?id=" + data.id;
+        }
         if (obj.event === 'edit') {
+            //跳转案件详情页面，id为当前案件id
+            window.location.href = path + "/page/updateNotice?id=" + data.id;
+        }
+
+        if(obj.event =="delete"){
             layer.open({
                 type: 1,
                 title: '提示',
@@ -177,16 +184,18 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                 btnAlign: 'c',
                 area: ['420px', '220px'],
                 offset: 'auto',
-                content: "<div style='text-align:center;padding:42px 0 26px 0;'><span class='layui-badge'>!</span>" + "   " + "确定删除该条纪录吗？</div><hr class='layui-bg-gray' style='margin:29px 0 0'>",
+                content: "<div style='text-align:center;padding:42px 0 26px 0;'><span class='layui-badge'>!</span>" + "   " + "确定删除该公告吗？</div><hr class='layui-bg-gray' style='margin:29px 0 0'>",
                 btn: ['确定', '取消'],
                 yes: function (index, layero) {
+                   ;
+
                     $.ajax({
-                        url:path+"/log/deleteLog",
-                        type:'post',
-                        data:{id:data.id},
-                        dataType:'json',
-                        success:function(data){
-                            if(data.status==200){
+                        url: path + "/notice/deleteNotice",
+                        type: "POST",
+                        data: {id:data.id},
+                        success: function (data) {
+                            if (data.status == 200) {
+
                                 layer.msg("删除成功");
                                 setTimeout(function() {
                                     window.location.reload();
@@ -194,9 +203,8 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
                             }else{
                                 layer.msg("删除失败");
                             }
-
                         }
-                    })
+                    });
                     layer.close(index);
 
                 },
@@ -207,29 +215,10 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
 
                 }
             })
-        }else if(obj.event=='look'){
-            layer.open({
-                type: 1,
-                title: '日志信息',   //标题
-                area: ['400px', '350px'],   //宽高
-                content:$("#lookrecord").html(),
-                success:function(layero,index){
-                    $("span[name=zname]").text(data.username);
-                    $("span[name=ip_address]").text(data.ip_address);
-                    $("span[name=operatename]").text(data.operatename);
-                    $("span[name=operateresult]").text(data.operateresult);
-                    if(data.descript==null){
-                        $("span[name=descript]").text("无");
-                    }else{
-                        $("span[name=descript]").text(data.descript);
-                    }
-
-                }
-            });
-            form.render();
         }
 
     });
+
 
 
 

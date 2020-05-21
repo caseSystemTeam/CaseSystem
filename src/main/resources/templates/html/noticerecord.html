@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+    <meta name="renderer" content="webkit">
+    <!--国产浏览器高速模式-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>用户日志</title>
+
+    <!-- 公共样式 开始 -->
+    <link rel="stylesheet" type="text/css" href="/css/model/base.css">
+    <link rel="stylesheet" type="text/css" href="/css/model/iconfont.css">
+    <script type="text/javascript" src="/framework/jquery-1.11.3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/layui/css/layui.css">
+    <script type="text/javascript" src="/layui/layui.js"></script>
+    <!-- 滚动条插件 -->
+    <link rel="stylesheet" type="text/css" href="/css/model/jquery.mCustomScrollbar.css">
+    <script src="/framework/jquery-ui-1.10.4.min.js"></script>
+    <script src="/framework/jquery.mousewheel.min.js"></script>
+    <script src="/framework/jquery.mCustomScrollbar.min.js"></script>
+    <script src="/framework/cframe.js"></script><!-- 仅供所有子页面使用 -->
+    <!-- 公共样式 结束 -->
+    <script src="/js/home.js"></script>
+    <script src="/js/noticerecord.js"></script>
+    <style>
+        .laywidth{
+            width: 100px;
+        }
+        .textsty{
+            font-weight: 400;
+            line-height: 20px;
+            text-align: right;
+            float:left;
+            display: block;
+            padding: 9px 0px;
+            margin-left: 30px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="cBody">
+    <div id="lookrecord" style="display: none">
+        <form id="" class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label laywidth">用户名:</label>
+                <span class="textsty" name="zname"></span>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label laywidth">ip地址:</label>
+                <span class="textsty" name="ip_address"></span>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label laywidth">操作名称:</label>
+                <span class="textsty" name="operatename"></span>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label laywidth">操作结果:</label>
+                <span class="textsty" name="operateresult"></span>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label laywidth">操作描述:</label>
+                <span class="textsty" name="descript"></span>
+            </div>
+
+        </form>
+    </div>
+    <div id="rolediv" style="display: none">
+        <form class="layui-form" action="" style="padding-top: 30px;" >
+            <div class="layui-form-item">
+                <label class="layui-form-label">角色</label>
+                <div class="layui-input-inline">
+                    <select name="urole" id="urole" required lay-verify="required" lay-filter="urole">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="console">
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 60px">用户名</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="username" required placeholder="输入用户名" autocomplete="off" class="layui-input">
+                </div>
+                <label class="layui-form-label" style="width: 60px">创建时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="rtime" class="layui-input" id="time" placeholder="请选择">
+
+                </div>
+
+                <button class="layui-btn" lay-submit lay-filter="submit">检索</button>
+            </div>
+        </form>
+    </div>
+    <div class="tablearea">
+        <table class="layui-table" id="saleTable" lay-filter="saleTable"></table>
+        <script type="text/html" id="bianjikuang">
+            <div class="oper-tab">
+                <a lay-event="look" class="hover-blue">查看</a>
+                <shiro:hasPermission name="log:delete">
+                    <a lay-event="edit" class="hover-blue">删除</a>
+                </shiro:hasPermission>
+            </div>
+        </script>
+
+    </div>
+
+</div>
+</body>
+
+</html>

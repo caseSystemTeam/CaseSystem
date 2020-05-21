@@ -1,12 +1,15 @@
 package com.lawer.controller;
 
 import com.lawer.pojo.User;
+import com.lawer.service.NoticeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 /**
  * 页面跳转
@@ -16,6 +19,9 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("page")
 public class PageController {
+
+    @Autowired
+    private NoticeService noticeService;
     //跳转到案件登记页面
     @RequestMapping("addcase")
     public String Login(){
@@ -124,11 +130,48 @@ public class PageController {
         return "html/unallocation";
     }
 
-    //跳转到未分配案件页面
+    //跳转到忘记密码页面
+    @RequestMapping("noticerecord")
+    public String toNoticeRecord(){
+        return "html/noticerecord";
+    }
+
+    //跳转到公告列表页面
+    @RequestMapping("notice")
+    public String toNotice(){
+        return "html/notice";
+    }
+    //跳转到添加公告页面
+    @RequestMapping("addNotice")
+    public String toAddNotice(){
+        return "html/addNotice";
+    }
+    //跳转到修改案件页面
     @RequestMapping("updateCase")
     public String toUpdateCase(String id,HttpSession session){
         session.setAttribute("caseId",id);
         return "html/updateCase";
+    }
+    //跳转到修改公告页面
+    @RequestMapping("updateNotice")
+    public String toupdateNotice(String id,HttpSession session){
+        session.setAttribute("noticeId",id);
+        return "html/updateNotice";
+    }
+    //跳转到查看公告页面
+    @RequestMapping("lookNotice")
+    public String tolookNotice(String id,HttpSession session){
+
+        session.setAttribute("noticeId",id);
+        User user =(User)session.getAttribute("us");
+        Map<String,Object> map = noticeService.selectNoticeById(id);
+        map.put("scount", (int)map.get("scount")+1);
+        noticeService.updateNotice(map);
+        map.put("lawerid",user.getId());
+        map.put("noticeid",id);
+        map.put("isread",1);
+        noticeService.updateUserNotice(map);
+        return "html/lookNotice";
     }
 
 }
