@@ -157,6 +157,7 @@ public class NoticeController {
     public ResultGson updateNotice(@RequestBody String json, HttpSession session, HttpServletRequest request) {
         Map<String,Object> map =JSON.parseObject(json);
         User user =(User)session.getAttribute("us");
+        map.put("create_userid",user.getId());
 
         try {
             noticeService.updateNotice(map);

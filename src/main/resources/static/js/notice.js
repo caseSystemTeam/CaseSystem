@@ -59,7 +59,7 @@ layui.use(['form', 'laydate', 'table', 'jquery', 'layer'], function () {
 
                 }, {
                     field: 'scount',
-                    title: '阅读人数',
+                    title: '浏览量',
 
 
                 }, {
