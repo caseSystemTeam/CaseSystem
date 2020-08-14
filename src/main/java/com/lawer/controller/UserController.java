@@ -99,7 +99,7 @@ public class UserController {
 	//跳转到主页
 	@RequestMapping("toindex")
 	public String toIndex(){
-		return "/html/frame";
+		return "html/frame";
 	}
 	//退出登录
 //	@RequestMapping("logout")

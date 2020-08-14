@@ -23,7 +23,7 @@ public class QuartzTask {
     @Autowired
     private CaseListService caseListService;
     //按时更新律师已完成和未完成案件数
-    @Scheduled(cron = "0 0 */1 * * ? ")    //每小时执行一次
+    @Scheduled(cron = "0 0 0 * * ? ")    //每天零点执行一次
     public void updateCaseCount() {
 
         List<Map<String,Object>> list= userService.getAllBusiness();
